@@ -2,6 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+
 	<groupId>de.conterra</groupId>
 	<artifactId>babelfish-main</artifactId>
 	<version>0.3.1-SNAPSHOT</version>
@@ -9,6 +10,7 @@
 
 	<name>tRESTle Babelfish main package</name>
 	<url>http://developernetwork.conterra.de</url>
+	<inceptionYear>2016</inceptionYear>
 	<description>The basic package of the tRESTle Babelfish
 
 Includes:
@@ -26,6 +28,7 @@ Includes:
 		<log4j.version>1.2.17</log4j.version>
 		<slf4j.version>1.7.12</slf4j.version>
 		<geotools.version>13.0</geotools.version>
+		<plugin.license.version>1.8</plugin.license.version>
 		<plugin.findbugs.version>3.0.1</plugin.findbugs.version>
 	</properties>
 
@@ -57,28 +60,26 @@ Includes:
 		<pluginManagement>
 			<plugins>
 				<plugin>
-					<groupId>org.eclipse.m2e</groupId>
-					<artifactId>lifecycle-mapping</artifactId>
-					<version>1.0.0</version>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>license-maven-plugin</artifactId>
+					<version>${plugin.license.version}</version>
 					<configuration>
-						<lifecycleMappingMetadata>
-							<pluginExecutions>
-								<pluginExecution>
-									<pluginExecutionFilter>
-										<groupId>org.codehaus.mojo</groupId>
-										<artifactId>findbugs-maven-plugin</artifactId>
-										<versionRange>${plugin.findbugs.version}</versionRange>
-										<goals>
-											<goal>check</goal>
-										</goals>
-									</pluginExecutionFilter>
-									<action>
-										<execute />
-									</action>
-								</pluginExecution>
-							</pluginExecutions>
-						</lifecycleMappingMetadata>
+						<inceptionYear>${project.inceptionYear}</inceptionYear>
+						<organizationName>${project.organization.name}</organizationName>
+						<projectName>${project.name}</projectName>
+						<force>true</force>
+						<licenseFile>${basedir}/LICENSE</licenseFile>
+						<licenseName>apache_v2</licenseName>
 					</configuration>
+					<executions>
+						<execution>
+							<id>update-project-license</id>
+							<goals>
+								<goal>update-project-license</goal>
+							</goals>
+							<phase>generate-resources</phase>
+						</execution>
+					</executions>
 				</plugin>
 				<plugin>
 					<groupId>org.codehaus.mojo</groupId>
@@ -138,6 +139,10 @@ Includes:
 			</plugins>
 		</pluginManagement>
 		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>license-maven-plugin</artifactId>
+			</plugin>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>findbugs-maven-plugin</artifactId>
