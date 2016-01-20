@@ -1,0 +1,67 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>de.conterra</groupId>
+		<artifactId>babelfish-main</artifactId>
+		<version>0.3.1-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>babelfish-sample</artifactId>
+	<packaging>jar</packaging>
+
+	<name>tRESTle Babelfish sample plugin</name>
+	<description>A sample plugin implementation of the tRESTle Babelfish</description>
+
+
+	<dependencies>
+		<dependency>
+			<groupId>de.conterra</groupId>
+			<artifactId>babelfish-api</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.geotools</groupId>
+			<artifactId>gt-opengis</artifactId>
+			<version>${geotools.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.geotools</groupId>
+			<artifactId>gt-geometry</artifactId>
+			<version>${geotools.version}</version>
+			<scope>provided</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-dependency-plugin</artifactId>
+					<version>2.10</version>
+					<configuration>
+						<includeScope>runtime</includeScope>
+						<includes>**/*.class</includes>
+						<excludes>*</excludes>
+						<outputDirectory>${project.build.directory}/classes</outputDirectory>
+						<overWriteReleases>false</overWriteReleases>
+						<overWriteSnapshots>true</overWriteSnapshots>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-javadoc-plugin</artifactId>
+					<configuration>
+						<show>private</show>
+						<links combine.children="append">
+							<link>http://docs.geotools.org/stable/javadocs</link>
+						</links>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+</project>

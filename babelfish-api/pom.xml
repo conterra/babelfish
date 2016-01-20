@@ -1,0 +1,94 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>de.conterra</groupId>
+		<artifactId>babelfish-main</artifactId>
+		<version>0.3.1-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>babelfish-api</artifactId>
+	<packaging>jar</packaging>
+
+	<name>tRESTle Babelfish API</name>
+	<description>The API to develop plugins of the tRESTle Babelfish</description>
+
+	<properties>
+		<json.version>20141113</json.version>
+		<jodatime.version>2.7</jodatime.version>
+		<commonsio.version>2.4</commonsio.version>
+		<commonscodec.version>1.10</commonscodec.version>
+		<josql.version>2.2</josql.version>
+		<jmimemagic.version>0.1.2</jmimemagic.version>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.json</groupId>
+			<artifactId>json</artifactId>
+			<version>${json.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.geotools</groupId>
+			<artifactId>gt-epsg-hsql</artifactId>
+			<version>${geotools.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.geotools</groupId>
+			<artifactId>gt-referencing</artifactId>
+			<version>${geotools.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.geotools</groupId>
+			<artifactId>gt-geometry</artifactId>
+			<version>${geotools.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>joda-time</groupId>
+			<artifactId>joda-time</artifactId>
+			<version>${jodatime.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>${commonsio.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+			<version>${commonscodec.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>net.sf.josql</groupId>
+			<artifactId>josql</artifactId>
+			<version>${josql.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>jmimemagic</groupId>
+			<artifactId>jmimemagic</artifactId>
+			<version>${jmimemagic.version}</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-javadoc-plugin</artifactId>
+					<configuration>
+						<links combine.children="append">
+							<link>http://www.json.org/javadoc</link>
+							<link>http://docs.geotools.org/stable/javadocs</link>
+							<link>http://joda-time.sourceforge.net/apidocs</link>
+							<link>https://commons.apache.org/proper/commons-io/javadocs/api-${commonsio.version}</link>
+							<link>http://commons.apache.org/proper/commons-codec/archives/${commonscodec.version}/apidocs</link>
+							<link>http://josql.sourceforge.net/manual/javadocs</link>
+							<link>http://jmimemagic.sourceforge.net/apidocs</link>
+						</links>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+</project>

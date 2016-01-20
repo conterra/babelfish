@@ -1,0 +1,61 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>de.conterra</groupId>
+		<artifactId>babelfish-main</artifactId>
+		<version>0.3.1-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>babelfish-webapp</artifactId>
+	<packaging>war</packaging>
+
+	<name>tRESTle Babelfish Web-Application</name>
+	<description>The base web application of the tRESTle Babelfish</description>
+
+	<properties>
+		<servlet.version>3.0.1</servlet.version>
+		<jdom.version>2.0.6</jdom.version>
+		<image4j.version>0.7</image4j.version>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>${servlet.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>de.conterra</groupId>
+			<artifactId>babelfish-api</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jdom</groupId>
+			<artifactId>jdom2</artifactId>
+			<version>${jdom.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jclarion</groupId>
+			<artifactId>image4j</artifactId>
+			<version>${image4j.version}</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-javadoc-plugin</artifactId>
+					<configuration>
+						<links combine.children="append">
+							<link>http://www.jdom.org/docs/apidocs</link>
+							<link>http://image4j.sourceforge.net/javadoc</link>
+						</links>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+</project>
