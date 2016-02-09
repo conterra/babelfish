@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * defines a {@link Value}, which stores an array of {@link Value}s
  * 
- * @version 0.1
+ * @version 0.3.1
  * @author chwe
  * @since 0.1
  */
@@ -124,6 +124,16 @@ extends Value
 	public Value removeValue(int index)
 	{
 		return this.values.remove(index);
+	}
+	
+	/**
+	 * removes all {@link Value}s stored in this {@link ArrayValue}
+	 * 
+	 * @since 0.3.1
+	 */
+	public void clear()
+	{
+		this.values.clear();
 	}
 	
 	@Override
