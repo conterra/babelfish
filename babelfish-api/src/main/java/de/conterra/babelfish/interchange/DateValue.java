@@ -16,11 +16,16 @@ extends NumberValue
 	 * constructor, with given {@link DateTime}
 	 * 
 	 * @since 0.1
-	 * 
+	 * 		
 	 * @param value the value to store
 	 */
 	public DateValue(DateTime value)
 	{
 		super(value.getMillis());
+	}
+	
+	public DateTime getTime()
+	{
+		return new DateTime(this.getValue());
 	}
 }

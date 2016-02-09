@@ -49,9 +49,17 @@ public class ClassUtils
 			String className = child.getName();
 			
 			ClassUtils.LOGGER.debug("Adds all superclasses of the given class " + className + " to the result set.");
+			Set<? extends Class<?>> superClasses = ClassUtils.getSuperclasses(child);
 			result.addAll(ClassUtils.getSuperclasses(child));
+			
 			ClassUtils.LOGGER.debug("Adds all interfaces (recursively) of the given class " + className + " to the result list.");
 			result.addAll(ClassUtils.getRecursivlyInterfaces(child));
+			
+			ClassUtils.LOGGER.debug("Adds all interfaces of all super classes to the result list.");
+			for (Class<?> clazz : superClasses)
+			{
+				result.addAll(ClassUtils.getRecursivlyInterfaces(clazz));
+			}
 		}
 		
 		return result;

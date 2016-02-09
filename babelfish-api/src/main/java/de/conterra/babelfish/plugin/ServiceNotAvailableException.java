@@ -34,7 +34,7 @@ extends ExecutionException
 	 * constructor, with given message
 	 * 
 	 * @since 0.1
-	 * 
+	 * 		
 	 * @param message the message with detail information
 	 */
 	public ServiceNotAvailableException(String message)

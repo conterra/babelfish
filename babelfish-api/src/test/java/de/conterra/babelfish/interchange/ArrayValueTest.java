@@ -34,11 +34,12 @@ public class ArrayValueTest
 	};
 	
 	/**
-	 * @throws java.lang.Exception
+	 * initialize the test object
+	 * 
+	 * @since 0.3.1
 	 */
 	@Before
 	public void setUp()
-	throws Exception
 	{
 		this.array = new ArrayValue();
 		

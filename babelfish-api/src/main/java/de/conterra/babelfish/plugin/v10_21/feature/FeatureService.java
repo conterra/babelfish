@@ -12,9 +12,9 @@ import de.conterra.babelfish.plugin.v10_21.RestService;
  * @author chwe
  * @since 0.3.1
  * 
- * @see <a
- *      href="http://resources.arcgis.com/en/help/arcgis-rest-api/index.html#/Feature_Service/02r3000000z2000000/">ArcGIS
- *      REST API</a>
+ * @see <a href=
+ *      "http://resources.arcgis.com/en/help/arcgis-rest-api/index.html#/Feature_Service/02r3000000z2000000/">
+ *      ArcGIS REST API</a>
  */
 public interface FeatureService
 extends de.conterra.babelfish.plugin.v10_11.feature.FeatureService, RestService
