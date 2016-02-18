@@ -16,8 +16,8 @@
 	<description>The API to develop plugins of the tRESTle Babelfish</description>
 
 	<properties>
-		<json.version>20141113</json.version>
-		<jodatime.version>2.7</jodatime.version>
+		<json.version>20160212</json.version>
+		<jodatime.version>2.9.2</jodatime.version>
 		<commonsio.version>2.4</commonsio.version>
 		<commonscodec.version>1.10</commonscodec.version>
 		<josql.version>2.2</josql.version>
