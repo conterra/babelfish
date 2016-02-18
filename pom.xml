@@ -162,7 +162,7 @@ Includes:
 	</reporting>
 
 	<scm>
-		<developerConnection>scm:svn:https://svn01.esri-de.com/svn/PRJ_sdi.suite/produkte/mapapps/incubator/babelfish/babelfish-main/trunk</developerConnection>
+		<developerConnection>scm:git:git@github.com:conterra/babelfish.git</developerConnection>
 	</scm>
 
 	<distributionManagement>
