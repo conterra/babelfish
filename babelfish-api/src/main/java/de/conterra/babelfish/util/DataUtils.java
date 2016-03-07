@@ -16,7 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * defines a utility class with data stream operations
+ * defines an utility class with data stream operations
  * 
  * @version 0.1
  * @author chwe
@@ -44,7 +44,7 @@ public class DataUtils
 	 * encodes the data to a base64 encoded {@link String}
 	 * 
 	 * @since 0.1
-	 * 
+	 * 		
 	 * @param data the data to encode
 	 * @return the base64 encoded {@link String}
 	 */
@@ -57,7 +57,7 @@ public class DataUtils
 	 * decodes a base64 encoded into the bytes
 	 * 
 	 * @since 0.1
-	 * 
+	 * 		
 	 * @param data the encoded {@link String} to decode
 	 * @return the original byte data
 	 */
@@ -70,7 +70,7 @@ public class DataUtils
 	 * converts an {@link InputStream} to the byte data
 	 * 
 	 * @since 0.1
-	 * 
+	 * 		
 	 * @param is the {@link InputStream} to get the byte data from
 	 * @return an array, which contains the byte data
 	 */
@@ -91,12 +91,12 @@ public class DataUtils
 	}
 	
 	/**
-	 * gives a byte array with the rendered data of an {@link Image} in the <a
-	 * href="http://en.wikipedia.org/wiki/Portable_Network_Graphics"
-	 * target="_blank">PNG</a> format
+	 * gives a byte array with the rendered data of an {@link Image} in the
+	 * <a href="http://en.wikipedia.org/wiki/Portable_Network_Graphics" target=
+	 * "_blank">PNG</a> format
 	 * 
 	 * @since 0.1
-	 * 
+	 * 		
 	 * @param img the {@link Image} to get the data from
 	 * @return a byte array, which contains the {@link Image} data
 	 */
@@ -131,7 +131,7 @@ public class DataUtils
 	 * creates an {@link Image} of given raw data
 	 * 
 	 * @since 0.1
-	 * 
+	 * 		
 	 * @param data the content data of the {@link Image}
 	 * @return the {@link Image} representation of <code>data</code><br>
 	 *         If the given data are no valid {@link Image} data, it returns a
@@ -161,7 +161,7 @@ public class DataUtils
 	 * converts an {@link Image} to a {@link BufferedImage}
 	 * 
 	 * @since 0.1
-	 * 
+	 * 		
 	 * @param img the {@link Image} to convert
 	 * @return the converted {@link Image}
 	 */

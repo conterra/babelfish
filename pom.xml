@@ -183,6 +183,7 @@ Includes:
 
 	<scm>
 		<developerConnection>scm:git:git@github.com:conterra/babelfish.git</developerConnection>
+		<url>https://github.com/conterra/babelfish</url>
 	</scm>
 
 	<distributionManagement>

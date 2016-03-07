@@ -7,7 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * utilities class of some function on {@link Class} objects
+ * utility class of some function on {@link Class} objects
  * 
  * @version 0.1
  * @author chwe
@@ -35,7 +35,7 @@ public class ClassUtils
 	 * gives all super {@link Class}es and interfaces of a {@link Class}
 	 * 
 	 * @since 0.1
-	 * 
+	 * 		
 	 * @param child the {@link Class} to get the super types of
 	 * @return a {@link Set}, which contains all super {@link Class}es and
 	 *         interfaces of <code>child</code>
@@ -69,7 +69,7 @@ public class ClassUtils
 	 * gives all super {@link Class}es (recursively) of a {@link Class}
 	 * 
 	 * @since 0.1
-	 * 
+	 * 		
 	 * @param child the {@link Class} to get the super {@link Class}es of
 	 * @return a {@link Set}, which contains all super {@link Class}es of
 	 *         <code>child</code>
@@ -99,7 +99,7 @@ public class ClassUtils
 	 * gives all interfaces (recursively) of a {@link Class}
 	 * 
 	 * @since 0.1
-	 * 
+	 * 		
 	 * @param child the {@link Class} to get all interfaces of
 	 * @return a {@link Set}, which contains all interfaces of
 	 *         <code>child</code>

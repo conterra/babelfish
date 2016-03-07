@@ -1,7 +1,6 @@
 package de.conterra.babelfish.interchange;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -19,19 +18,6 @@ public class BooleanValueTest
 	 * @since 0.3.1
 	 */
 	private BooleanValue value = new BooleanValue(true);
-	
-	/**
-	 * initialize the test object
-	 * 
-	 * @since 0.3.1
-	 * 
-	 * @throws java.lang.Exception
-	 */
-	@Before
-	public void setUp()
-	throws Exception
-	{
-	}
 	
 	/**
 	 * Test method for

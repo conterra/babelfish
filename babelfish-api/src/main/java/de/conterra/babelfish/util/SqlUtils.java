@@ -12,7 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * defines a utility class to extend the JoSQL lib
+ * defines an utility class to extend the JoSQL lib
  * 
  * @version 0.1
  * @author chwe
@@ -25,27 +25,27 @@ public class SqlUtils
 	 * 
 	 * @since 0.1
 	 */
-	public static final Logger LOGGER = LoggerFactory.getLogger(SqlUtils.class);
-	
+	public static final Logger		LOGGER		= LoggerFactory.getLogger(SqlUtils.class);
+												
 	/**
 	 * all SQL operators, where a column name could stand in front to
 	 * 
 	 * @since 0.1
 	 */
-	private static final String[] OPERATORS = new String[]
-	{
-		"=",
-		"<>",
-		"!=",
-		">",
-		"<",
-		">=",
-		"<=",
-		"BETWEEN",
-		"LIKE",
-		"IN",
-	};
-	
+	private static final String[]	OPERATORS	= new String[]
+													{
+															"=",
+															"<>",
+															"!=",
+															">",
+															"<",
+															">=",
+															"<=",
+															"BETWEEN",
+															"LIKE",
+															"IN",
+													};
+													
 	/**
 	 * private standard constructor, to prevent initialization
 	 * 
@@ -59,7 +59,7 @@ public class SqlUtils
 	 * mask a column in a SQL {@link String} to make it unique
 	 * 
 	 * @since 0.1
-	 * 
+	 * 		
 	 * @param exp the expression to mask
 	 * @return the masked expression
 	 */
@@ -75,7 +75,7 @@ public class SqlUtils
 	 * on the left side
 	 * 
 	 * @since 0.1
-	 * 
+	 * 		
 	 * @return gives a {@link Set} of all SQL operators
 	 */
 	private static String[] getOperators()
@@ -90,7 +90,9 @@ public class SqlUtils
 				
 				String notOperator = "NOT " + operator;
 				if ( ! (list.contains(notOperator)))
+				{
 					list.add(notOperator);
+				}
 			}
 		}
 		
@@ -106,7 +108,9 @@ public class SqlUtils
 		String[] result = new String[list.size()];
 		
 		for (int i = 0; i < result.length; i++)
+		{
 			result[i] = list.get(i);
+		}
 		
 		return result;
 	}
@@ -117,7 +121,7 @@ public class SqlUtils
 	 * so it tries to use a getColumnName() method.
 	 * 
 	 * @since 0.1
-	 * 
+	 * 		
 	 * @param sql the SQL {@link String} to replace the column names in
 	 * @param method to enclose the column name with
 	 * @return the prepared SQL {@link String}
@@ -128,7 +132,9 @@ public class SqlUtils
 		SqlUtils.LOGGER.debug("Mask all operators of statement: " + sql);
 		String[] operators = SqlUtils.getOperators();
 		for (String operator : operators)
+		{
 			result = result.replaceAll(operator, SqlUtils.maskSql(operator));
+		}
 		result = result.replaceAll("#@|@#", "#");
 		result = result.replaceAll("@@", "@");
 		SqlUtils.LOGGER.debug("All operators masked. Masked statement: " + result);
@@ -146,12 +152,16 @@ public class SqlUtils
 				String cleanPart = parts[i];
 				
 				while (cleanPart.endsWith(" "))
+				{
 					cleanPart = cleanPart.substring(0, cleanPart.length() - 1);
+				}
 				
 				int spaceIndex = 0;
 				Matcher matcher = Pattern.compile("[^a-zA-Z0-9_]").matcher(cleanPart);
 				while (matcher.find())
+				{
 					spaceIndex = matcher.end();
+				}
 				
 				SqlUtils.LOGGER.debug("Found cloumn id at " + spaceIndex + " in " + cleanPart);
 				
@@ -165,7 +175,9 @@ public class SqlUtils
 		
 		SqlUtils.LOGGER.debug("Unmask all operators of statement: " + result);
 		for (String operator : operators)
+		{
 			result = result.replaceAll(SqlUtils.maskSql(operator), operator);
+		}
 		SqlUtils.LOGGER.debug("All operators unmasked. Result statement: " + result);
 		
 		return result;

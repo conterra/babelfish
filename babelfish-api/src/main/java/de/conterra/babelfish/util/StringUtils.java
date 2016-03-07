@@ -1,7 +1,7 @@
 package de.conterra.babelfish.util;
 
 /**
- * defines a utility class with {@link String} functions
+ * defines an utility class with {@link String} functions
  * 
  * @version 0.3.0
  * @author chwe
@@ -23,9 +23,9 @@ public class StringUtils
 	 * Does not replace national characters (like &auml;, &#293; or &#355;)!
 	 * 
 	 * @since 0.3.0
-	 * 
+	 * 		
 	 * @param content the {@link String} on which the characters would be
-	 *        removed
+	 *            removed
 	 * @param replacement the replacement of the non-alphanumeric characters
 	 * @return <code>content</code>, with replaced non-alphanumeric characters
 	 */
