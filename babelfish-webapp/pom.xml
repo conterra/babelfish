@@ -63,16 +63,6 @@
 		<pluginManagement>
 			<plugins>
 				<plugin>
-					<groupId>org.codehaus.mojo</groupId>
-					<artifactId>license-maven-plugin</artifactId>
-					<configuration>
-						<roots>
-							<root>src/main/java</root>
-							<root>src/test/java</root>
-						</roots>
-					</configuration>
-				</plugin>
-				<plugin>
 					<artifactId>maven-javadoc-plugin</artifactId>
 					<configuration>
 						<links combine.children="append">
