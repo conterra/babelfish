@@ -84,8 +84,8 @@ Includes:
 							<id>update-project-license</id>
 							<goals>
 								<goal>update-project-license</goal>
+								<goal>add-third-party</goal>
 							</goals>
-							<phase>generate-resources</phase>
 						</execution>
 					</executions>
 				</plugin>
