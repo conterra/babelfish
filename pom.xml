@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-
+	
 	<groupId>de.conterra</groupId>
 	<artifactId>babelfish-main</artifactId>
-	<version>0.3.1-SNAPSHOT</version>
+	<version>0.4.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
-
+	
 	<name>tRESTle Babelfish main package</name>
 	<url>http://developernetwork.conterra.de</url>
 	<inceptionYear>2016</inceptionYear>
@@ -20,7 +21,7 @@ Includes:
 		<name>con terra - Gesellschaft für Angewandte Informationstechnologie mbH</name>
 		<url>http://www.conterra.de</url>
 	</organization>
-
+	
 	<licenses>
 		<license>
 			<name>Apache License, Version 2.0</name>
@@ -28,22 +29,22 @@ Includes:
 			<distribution>repo</distribution>
 		</license>
 	</licenses>
-
+	
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>1.8</java.version>
-		<slf4j.version>1.7.21</slf4j.version>
-		<geotools.version>14.4</geotools.version>
+		<slf4j.version>1.7.24</slf4j.version>
+		<geotools.version>16.2</geotools.version>
 		<junit.version>4.12</junit.version>
-		<mockito.version>1.10.19</mockito.version>
-		<plugin.license.version>1.9</plugin.license.version>
+		<mockito.version>2.7.14</mockito.version>
+		<plugin.license.version>1.12</plugin.license.version>
 		<plugin.findbugs.version>3.0.4</plugin.findbugs.version>
-		<plugin.compiler.version>3.5.1</plugin.compiler.version>
+		<plugin.compiler.version>3.6.1</plugin.compiler.version>
 		<plugin.javadoc.version>2.10.4</plugin.javadoc.version>
 		<plugin.source.version>3.0.1</plugin.source.version>
 		<plugin.release.version>2.5.3</plugin.release.version>
 	</properties>
-
+	
 	<dependencies>
 		<dependency>
 			<groupId>org.slf4j</groupId>
@@ -58,12 +59,12 @@ Includes:
 		</dependency>
 		<dependency>
 			<groupId>org.mockito</groupId>
-			<artifactId>mockito-all</artifactId>
+			<artifactId>mockito-core</artifactId>
 			<version>${mockito.version}</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-
+	
 	<build>
 		<pluginManagement>
 			<plugins>
@@ -161,7 +162,7 @@ Includes:
 			</plugin>
 		</plugins>
 	</build>
-
+	
 	<reporting>
 		<outputDirectory>${project.build.directory}/site</outputDirectory>
 		<plugins>
@@ -172,12 +173,12 @@ Includes:
 			</plugin>
 		</plugins>
 	</reporting>
-
+	
 	<scm>
 		<developerConnection>scm:git:https://github.com/conterra/babelfish.git</developerConnection>
 		<url>https://github.com/conterra/babelfish</url>
 	</scm>
-
+	
 	<distributionManagement>
 		<repository>
 			<id>ct-dist-releases-file</id>
@@ -190,7 +191,7 @@ Includes:
 			<url>${snapshot.deployment.url}</url>
 		</snapshotRepository>
 	</distributionManagement>
-
+	
 	<profiles>
 		<profile>
 			<id>create-javadoc-and-attach-sources</id>
@@ -222,7 +223,7 @@ Includes:
 			</build>
 		</profile>
 	</profiles>
-
+	
 	<modules>
 		<module>babelfish-api</module>
 		<module>babelfish-webapp</module>

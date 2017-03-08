@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-
+	
 	<parent>
 		<groupId>de.conterra</groupId>
 		<artifactId>babelfish-main</artifactId>
-		<version>0.3.1-SNAPSHOT</version>
+		<version>0.4.0-SNAPSHOT</version>
 	</parent>
-
+	
 	<artifactId>babelfish-api</artifactId>
 	<packaging>jar</packaging>
-
+	
 	<name>tRESTle Babelfish API</name>
 	<description>The API to develop plugins of the tRESTle Babelfish</description>
-
+	
 	<properties>
-		<json.version>20160212</json.version>
-		<jodatime.version>2.9.4</jodatime.version>
+		<json.version>20160810</json.version>
+		<jodatime.version>2.9.7</jodatime.version>
 		<commonsio.version>2.5</commonsio.version>
 		<commonscodec.version>1.10</commonscodec.version>
 		<josql.version>2.2</josql.version>
 		<jmimemagic.version>0.1.2</jmimemagic.version>
 	</properties>
-
+	
 	<dependencies>
 		<dependency>
 			<groupId>org.json</groupId>
@@ -70,7 +70,7 @@
 			<version>${jmimemagic.version}</version>
 		</dependency>
 	</dependencies>
-
+	
 	<build>
 		<pluginManagement>
 			<plugins>
