@@ -1,32 +1,28 @@
 package de.conterra.babelfish.plugin.v10_02.object.symbol;
 
-import java.awt.Image;
+import java.awt.*;
 
 /**
  * defines a Picture Marker Symbol
- * 
- * @version 0.1
- * @author chwe
- * @since 0.1
+ *
+ * @author ChrissW-R1
+ * @version 0.1.0
+ * @since 0.1.0
  */
 public class PictureMarkerSymbol
-extends PictureSymbol
-{
+		extends PictureSymbol {
 	/**
 	 * constructor, with given {@link Image}
-	 * 
-	 * @since 0.1
-	 * 
+	 *
 	 * @param image the {@link Image}
+	 * @since 0.1.0
 	 */
-	public PictureMarkerSymbol(Image image)
-	{
+	public PictureMarkerSymbol(Image image) {
 		super(image);
 	}
 	
 	@Override
-	public String getType()
-	{
+	public String getType() {
 		return super.getType() + "PMS";
 	}
 }

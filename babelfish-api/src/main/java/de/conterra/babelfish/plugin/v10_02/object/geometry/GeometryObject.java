@@ -1,35 +1,29 @@
 package de.conterra.babelfish.plugin.v10_02.object.geometry;
 
+import de.conterra.babelfish.util.GeoUtils;
+import de.conterra.babelfish.util.MathUtils;
 import org.opengis.geometry.Geometry;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.operation.TransformException;
 
-import de.conterra.babelfish.util.GeoUtils;
-import de.conterra.babelfish.util.MathUtils;
-
 /**
  * defines a Geometry Object
- * 
- * @version 0.1
- * @author chwe
- * @since 0.1
- * 
- * @see <a
- *      href="http://help.arcgis.com/en/arcgisserver/10.0/apis/rest/geometry.html">ArcGIS
- *      REST API</a>
+ *
+ * @author ChrissW-R1
+ * @version 0.1.0
+ * @see <a href="http://help.arcgis.com/en/arcgisserver/10.0/apis/rest/geometry.html">ArcGIS REST API</a>
+ * @since 0.1.0
  */
-public abstract class GeometryObject
-{
+public abstract class GeometryObject {
 	/**
 	 * gives the ESRI type
-	 * 
-	 * @since 0.1
-	 * 
+	 *
 	 * @param type the {@link GeometryObject} class to get the type of
-	 * @return the ESRI type or <code>null</code>, if the type is unknown
+	 * @return the ESRI type or {@code null}, if the type is unknown
+	 *
+	 * @since 0.1.0
 	 */
-	public static String getType(Class<? extends GeometryObject> type)
-	{
+	public static String getType(Class<? extends GeometryObject> type) {
 		String result = "esriGeometry";
 		
 		if (Point.class.isAssignableFrom(type))
@@ -49,75 +43,62 @@ public abstract class GeometryObject
 	}
 	
 	/**
-	 * gives the {@link CoordinateReferenceSystem} of this complete
-	 * {@link GeometryObject}
-	 * 
-	 * @since 0.1
-	 * 
+	 * gives the {@link CoordinateReferenceSystem} of this complete {@link GeometryObject}
+	 *
 	 * @return the {@link CoordinateReferenceSystem}
+	 *
+	 * @since 0.1.0
 	 */
 	public abstract CoordinateReferenceSystem getCoordinateReferenceSystem();
 	
 	/**
-	 * gives the {@link org.opengis.geometry.Envelope}, which contains this
-	 * {@link Geometry}
-	 * 
-	 * @since 0.1
-	 * 
-	 * @return the {@link org.opengis.geometry.Envelope} of this
-	 *         {@link Geometry}
+	 * gives the {@link org.opengis.geometry.Envelope}, which contains this {@link Geometry}
+	 *
+	 * @return the {@link org.opengis.geometry.Envelope} of this {@link Geometry}
+	 *
+	 * @since 0.1.0
 	 */
 	public abstract org.opengis.geometry.Envelope getEnvelope();
 	
 	/**
-	 * converts this {@link GeometryObject} to a JTS
-	 * {@link com.vividsolutions.jts.geom.Geometry}
-	 * 
-	 * @since 0.1
-	 * 
+	 * converts this {@link GeometryObject} to a JTS {@link com.vividsolutions.jts.geom.Geometry}
+	 *
 	 * @param crs the {@link CoordinateReferenceSystem} to transform the result
-	 * @return the equivalent {@link com.vividsolutions.jts.geom.Geometry} of
-	 *         this or <code>null</code>, if an error occurred on converting
+	 * @return the equivalent {@link com.vividsolutions.jts.geom.Geometry} of this or {@code null}, if an error occurred on converting
+	 *
+	 * @since 0.1.0
 	 */
 	public abstract com.vividsolutions.jts.geom.Geometry toGeometry(CoordinateReferenceSystem crs);
 	
 	/**
-	 * converts this {@link GeometryObject} to a JTS
-	 * {@link com.vividsolutions.jts.geom.Geometry} with its own
-	 * {@link CoordinateReferenceSystem}
-	 * 
-	 * @since 0.1
-	 * 
-	 * @return the equivalent {@link com.vividsolutions.jts.geom.Geometry} of
-	 *         this or <code>null</code>, if an error occurred on converting
+	 * converts this {@link GeometryObject} to a JTS {@link com.vividsolutions.jts.geom.Geometry} with its own {@link CoordinateReferenceSystem}
+	 *
+	 * @return the equivalent {@link com.vividsolutions.jts.geom.Geometry} of this or {@code null}, if an error occurred on converting
+	 *
+	 * @since 0.1.0
 	 */
-	public com.vividsolutions.jts.geom.Geometry toGeometry()
-	{
+	public com.vividsolutions.jts.geom.Geometry toGeometry() {
 		return this.toGeometry(this.getCoordinateReferenceSystem());
 	}
 	
 	/**
 	 * checks, if this spatially contains another {@link GeometryObject}
-	 * 
-	 * @since 0.1
-	 * 
+	 *
 	 * @param o the other {@link GeometryObject}
-	 * @return <code>true</code>, if this contains <code>o</code>
+	 * @return {@code true}, if this contains {@code o}
+	 *
+	 * @since 0.1.0
 	 */
-	public boolean overlaps(GeometryObject o)
-	{
+	public boolean overlaps(GeometryObject o) {
 		if (o == null || o instanceof SpatialReference)
 			return false;
-		else if (this instanceof Envelope || o instanceof Envelope)
-		{
-			if (o instanceof Envelope && this instanceof Envelope)
-			{
-				try
-				{
+		else if (this instanceof Envelope || o instanceof Envelope) {
+			if (o instanceof Envelope && this instanceof Envelope) {
+				try {
 					CoordinateReferenceSystem crs = this.getCoordinateReferenceSystem();
 					
-					Envelope thisEnv = (Envelope)this;
-					Envelope otherEnv = (Envelope)o;
+					Envelope thisEnv = (Envelope) this;
+					Envelope otherEnv = (Envelope) o;
 					
 					double[] l1 = GeoUtils.transform(thisEnv.getLowerCorner(), crs).getCoordinate();
 					double[] u1 = GeoUtils.transform(thisEnv.getUpperCorner(), crs).getCoordinate();
@@ -125,39 +106,35 @@ public abstract class GeometryObject
 					double[] u2 = GeoUtils.transform(otherEnv.getUpperCorner(), crs).getCoordinate();
 					
 					int dim = MathUtils.min(new Integer[]
-					{
-							l1.length,
-							u1.length,
-							l2.length,
-							u2.length,
-					}).intValue();
+							{
+									l1.length,
+									u1.length,
+									l2.length,
+									u2.length,
+							}).intValue();
 					
-					for (int i = 0; i < dim; i++)
-					{
-						if ( (u1[i] < u2[i]
-						&& u1[i] < l2[i])
-						||
-						(u2[i] < u1[i]
-						&& u2[i] < l1[i]))
+					for (int i = 0; i < dim; i++) {
+						if ((u1[i] < u2[i]
+								&& u1[i] < l2[i])
+								||
+								(u2[i] < u1[i]
+										&& u2[i] < l1[i]))
 							return false;
 					}
 					
 					return true;
+				} catch (TransformException e) {
 				}
-				catch (TransformException e)
-				{
-				}
-			}
-			else
+			} else
 				return new Envelope(this.getEnvelope()).overlaps(new Envelope(o.getEnvelope()));
 		}
 		
-		if ( ! ( (new Envelope(this.getEnvelope())).overlaps(o)))
+		if (!((new Envelope(this.getEnvelope())).overlaps(o)))
 			return false;
 		
 		com.vividsolutions.jts.geom.Geometry thisGeo = this.toGeometry();
 		com.vividsolutions.jts.geom.Geometry otherGeo =
-		o.toGeometry(this.getCoordinateReferenceSystem());
+				o.toGeometry(this.getCoordinateReferenceSystem());
 		
 		if (thisGeo == null || otherGeo == null)
 			return false;

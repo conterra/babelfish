@@ -1,43 +1,42 @@
 package de.conterra.babelfish.plugin.v10_02.feature;
 
-import java.awt.Image;
-import java.io.File;
-
 import de.conterra.babelfish.plugin.v10_02.object.feature.GeometryFeatureObject;
+
+import java.awt.*;
+import java.io.File;
 
 /**
  * defines an {@link Attachment} of a {@link GeometryFeatureObject}
- * 
- * @version 0.1
- * @author chwe
- * @since 0.1
+ *
+ * @author ChrissW-R1
+ * @version 0.1.0
+ * @since 0.1.0
  */
-public interface Attachment
-{
+public interface Attachment {
 	/**
 	 * gives the unique identifier
-	 * 
-	 * @since 0.1
-	 * 
+	 *
 	 * @return the unique id
+	 *
+	 * @since 0.1.0
 	 */
 	public int getId();
 	
 	/**
 	 * gives the name, which will be shown to the user
-	 * 
-	 * @since 0.1
-	 * 
+	 *
 	 * @return the name
+	 *
+	 * @since 0.1.0
 	 */
 	public String getName();
 	
 	/**
 	 * gives the data (like the content of a {@link File} or an {@link Image})
-	 * 
-	 * @since 0.1
-	 * 
+	 *
 	 * @return the data, which will be sent to the client for download
+	 *
+	 * @since 0.1.0
 	 */
 	public byte[] getData();
 }

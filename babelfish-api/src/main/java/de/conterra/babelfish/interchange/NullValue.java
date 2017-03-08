@@ -2,17 +2,15 @@ package de.conterra.babelfish.interchange;
 
 /**
  * defines an empty value
- * 
- * @version 0.1
- * @author chwe
- * @since 1.0
+ *
+ * @author ChrissW-R1
+ * @version 0.1.0
+ * @since 0.1.0
  */
 public class NullValue
-extends ObjectValue
-{
+		extends ObjectValue {
 	@Override
-	public boolean isEmpty()
-	{
+	public boolean isEmpty() {
 		return true;
 	}
 }

@@ -1,15 +1,6 @@
 package de.conterra.babelfish.plugin.v10_11.feature.builder;
 
-import org.opengis.referencing.crs.CoordinateReferenceSystem;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import de.conterra.babelfish.interchange.ArrayValue;
-import de.conterra.babelfish.interchange.BooleanValue;
-import de.conterra.babelfish.interchange.NumberValue;
-import de.conterra.babelfish.interchange.ObjectValue;
-import de.conterra.babelfish.interchange.StringValue;
-import de.conterra.babelfish.interchange.Value;
+import de.conterra.babelfish.interchange.*;
 import de.conterra.babelfish.plugin.v10_02.feature.Feature;
 import de.conterra.babelfish.plugin.v10_02.feature.wrapper.LayerWrapper;
 import de.conterra.babelfish.plugin.v10_02.object.feature.FeatureObject;
@@ -19,49 +10,45 @@ import de.conterra.babelfish.plugin.v10_11.feature.FeatureLayer;
 import de.conterra.babelfish.plugin.v10_11.feature.FeatureService;
 import de.conterra.babelfish.plugin.v10_11.feature.Layer;
 import de.conterra.babelfish.plugin.v10_11.feature.Relationship;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * a class to build the overview page of a {@link Layer}
- * 
- * @version 0.1
- * @author chwe
- * @since 0.1
+ *
+ * @author ChrissW-R1
+ * @version 0.1.0
+ * @since 0.1.0
  */
-public class LayerBuilder
-{
+public class LayerBuilder {
 	/**
 	 * the {@link Logger} of this class
-	 * 
-	 * @since 0.1
+	 *
+	 * @since 0.1.0
 	 */
 	public static final Logger LOGGER = LoggerFactory.getLogger(LayerBuilder.class);
 	
 	/**
 	 * private standard constructor, to prevent initialization
-	 * 
-	 * @since 0.1
+	 *
+	 * @since 0.1.0
 	 */
-	private LayerBuilder()
-	{
+	private LayerBuilder() {
 	}
 	
 	/**
 	 * builds the overview of a {@link Layer}
-	 * 
-	 * @since 0.1
-	 * 
-	 * @param <T> the {@link FeatureObject} type
-	 * @param layer the {@link Layer} to build the overview of
-	 * @param service the {@link FeatureService}, which contains
-	 *        <code>layer</code>
-	 * @param crs the target {@link CoordinateReferenceSystem} or
-	 *        <code>null</code>, if the {@link CoordinateReferenceSystem} of the
-	 *        {@link Feature}s should be used
-	 * @return an {@link ObjectValue}, which contains the overview of
-	 *         <code>layer</code>
+	 *
+	 * @param <T>     the {@link FeatureObject} type
+	 * @param layer   the {@link Layer} to build the overview of
+	 * @param service the {@link FeatureService}, which contains {@code layer}
+	 * @param crs     the target {@link CoordinateReferenceSystem} or {@code null}, if the {@link CoordinateReferenceSystem} of the {@link Feature}s should be used
+	 * @return an {@link ObjectValue}, which contains the overview of {@code layer}
+	 *
+	 * @since 0.1.0
 	 */
-	public static <T extends FeatureObject> ObjectValue build(Layer<T> layer, FeatureService service, CoordinateReferenceSystem crs)
-	{
+	public static <T extends FeatureObject> ObjectValue build(Layer<T> layer, FeatureService service, CoordinateReferenceSystem crs) {
 		ObjectValue result = de.conterra.babelfish.plugin.v10_02.feature.builder.LayerBuilder.build(layer, service, crs);
 		
 		result.addContent("defaultVisibility", new BooleanValue(layer.isDefaultVisible()), "relationships", true);
@@ -80,17 +67,13 @@ public class LayerBuilder
 		result.addContent("syncCanReturnChanges", new BooleanValue(layer.syncCanReturnChanges()), "relationships", true);
 		
 		ArrayValue rels = (ArrayValue) (result.getValue("relationships"));
-		if (rels != null)
-		{
-			for (Value relValue : rels.getValues())
-			{
-				ObjectValue relObject = (ObjectValue)relValue;
+		if (rels != null) {
+			for (Value relValue : rels.getValues()) {
+				ObjectValue relObject = (ObjectValue) relValue;
 				int relId = ((NumberValue) (relObject.getValue(""))).getValue().intValue();
 				
-				for (Relationship<? extends FeatureObject, ? extends FeatureObject> rel : service.getRelationships())
-				{
-					if (rel.getId() == relId)
-					{
+				for (Relationship<? extends FeatureObject, ? extends FeatureObject> rel : service.getRelationships()) {
+					if (rel.getId() == relId) {
 						LayerBuilder.LOGGER.debug("Extends relation " + rel.getOriginLayer().getName() + " --> " + rel.getDestinationLayer().getName() + ".");
 						
 						if (rel.getCardinality() != null)
@@ -113,22 +96,21 @@ public class LayerBuilder
 			result.addContent("relationships", rels, "relationships", false);
 		}
 		
-		// TODO add directly AFTER relationships
+		// ToDo add directly AFTER relationships
 		result.addContent("isDataVersioned", new BooleanValue(layer.isDataVersioned()), "relationships", true);
 		result.addContent("supportsRollbackOnFailureParameter", new BooleanValue(layer.supportsRollbackOnFailureParameter()), "relationships", true);
 		result.addContent("supportsStatistics", new BooleanValue(layer.supportsStatistics()), "relationships", true);
 		result.addContent("supportsAdvancedQueries", new BooleanValue(layer.supportsAdvancedQueries()), "relationships", true);
 		
-		if (layer instanceof FeatureLayer<?, ?>)
-		{
+		if (layer instanceof FeatureLayer<?, ?>) {
 			LayerBuilder.LOGGER.debug("Layer " + layer.getName() + " is a feature layer.");
 			
-			FeatureLayer<? extends GeometryObject, ? extends GeometryFeatureObject<? extends GeometryObject>> featureLayer = (FeatureLayer<?, ?>)layer;
+			FeatureLayer<? extends GeometryObject, ? extends GeometryFeatureObject<? extends GeometryObject>> featureLayer = (FeatureLayer<?, ?>) layer;
 			
 			result.addContent("effectiveMinScale", new NumberValue(featureLayer.getEffectiveMinScale()), "extent", true);
 			result.addContent("effectiveMaxScale", new NumberValue(featureLayer.getEffectiveMaxScale()), "extent", true);
 			result.addContent("hasM", new BooleanValue(false), "hasAttachments", false);
-			result.addContent("hasZ", new BooleanValue( (new LayerWrapper<>(featureLayer)).getEnvelope().getDimension() >= 3), "hasAttachments", false);
+			result.addContent("hasZ", new BooleanValue((new LayerWrapper<>(featureLayer)).getEnvelope().getDimension() >= 3), "hasAttachments", false);
 			
 			Double defaultZValue = featureLayer.defaultZValue();
 			if (defaultZValue == null)

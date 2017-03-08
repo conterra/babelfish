@@ -1,17 +1,5 @@
 package de.conterra.babelfish.sample.feature;
 
-import java.awt.Color;
-import java.util.LinkedHashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-
-import org.geotools.geometry.DirectPosition2D;
-import org.geotools.geometry.iso.coordinate.LineStringImpl;
-import org.opengis.geometry.coordinate.Position;
-import org.opengis.referencing.FactoryException;
-import org.opengis.referencing.crs.CoordinateReferenceSystem;
-
 import de.conterra.babelfish.plugin.v10_02.feature.Feature;
 import de.conterra.babelfish.plugin.v10_02.object.feature.GeometryFeatureObject;
 import de.conterra.babelfish.plugin.v10_02.object.geometry.Polyline;
@@ -21,34 +9,39 @@ import de.conterra.babelfish.plugin.v10_02.object.renderer.UniqueValueRenderer;
 import de.conterra.babelfish.plugin.v10_02.object.symbol.SimpleLineSymbol;
 import de.conterra.babelfish.plugin.v10_02.object.symbol.style.SLSStyle;
 import de.conterra.babelfish.util.GeoUtils;
+import org.geotools.geometry.DirectPosition2D;
+import org.geotools.geometry.iso.coordinate.LineStringImpl;
+import org.opengis.geometry.coordinate.Position;
+import org.opengis.referencing.FactoryException;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+
+import java.awt.*;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
 
 /**
  * defines a {@link SimpleFeatureLayer} with {@link Polyline}s
- * 
- * @version 0.1
- * @author chwe
- * @since 0.1
+ *
+ * @author ChrissW-R1
+ * @version 0.1.0
+ * @since 0.1.0
  */
 public class SimpleLineLayer
-extends SimpleFeatureLayer<Polyline, GeometryFeatureObject<Polyline>>
-{
+		extends SimpleFeatureLayer<Polyline, GeometryFeatureObject<Polyline>> {
 	/**
-	 * a {@link Set} of all {@link Polyline}s, which are in a
-	 * {@link SimpleLineLayer}
-	 * 
-	 * @since 0.1
+	 * a {@link Set} of all {@link Polyline}s, which are in a {@link SimpleLineLayer}
+	 *
+	 * @since 0.1.0
 	 */
 	private static final Set<Feature<GeometryFeatureObject<Polyline>>> lines = new LinkedHashSet<>();
 	
-	static
-	{
+	static {
 		CoordinateReferenceSystem crs;
-		try
-		{
+		try {
 			crs = GeoUtils.decodeCrs("4326");
-		}
-		catch (FactoryException e)
-		{
+		} catch (FactoryException e) {
 			crs = null;
 		}
 		
@@ -107,27 +100,23 @@ extends SimpleFeatureLayer<Polyline, GeometryFeatureObject<Polyline>>
 	
 	/**
 	 * constructor, with all necessary attributes
-	 * 
-	 * @since 0.1
-	 * 
-	 * @param id the unique identifier
+	 *
+	 * @param id   the unique identifier
 	 * @param name the name shown to the user
 	 * @param desc the layer description
+	 * @since 0.1.0
 	 */
-	public SimpleLineLayer(int id, String name, String desc)
-	{
+	public SimpleLineLayer(int id, String name, String desc) {
 		super(id, name, desc);
 	}
 	
 	@Override
-	public Class<Polyline> getGeometryType()
-	{
+	public Class<Polyline> getGeometryType() {
 		return Polyline.class;
 	}
 	
 	@Override
-	public RendererObject getRenderer()
-	{
+	public RendererObject getRenderer() {
 		UniqueValueRenderer result = new UniqueValueRenderer(new SimpleLineSymbol(SLSStyle.Solid, Color.ORANGE, 1), "Other " + this.getName());
 		
 		result.addField(SimpleField.TYPE_FIELD);
@@ -138,8 +127,7 @@ extends SimpleFeatureLayer<Polyline, GeometryFeatureObject<Polyline>>
 	}
 	
 	@Override
-	public Set<? extends Feature<GeometryFeatureObject<Polyline>>> getFeatures()
-	{
+	public Set<? extends Feature<GeometryFeatureObject<Polyline>>> getFeatures() {
 		return new LinkedHashSet<>(SimpleLineLayer.lines);
 	}
 }

@@ -4,20 +4,19 @@ import de.conterra.babelfish.plugin.v10_02.object.symbol.style.SymbolStyle;
 
 /**
  * superclass of simple {@link SymbolObject}s
- * 
- * @version 0.1
- * @author chwe
- * @since 0.1
+ *
+ * @author ChrissW-R1
+ * @version 0.1.0
+ * @since 0.1.0
  */
 public abstract class SimpleSymbol
-extends BaseSymbol
-{
+		extends BaseSymbol {
 	/**
 	 * gives the {@link SymbolStyle}
-	 * 
-	 * @since 0.1
-	 * 
+	 *
 	 * @return the {@link SymbolStyle}
+	 *
+	 * @since 0.1.0
 	 */
 	public abstract SymbolStyle getStyle();
 }

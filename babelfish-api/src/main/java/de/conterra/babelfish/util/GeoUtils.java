@@ -1,10 +1,9 @@
 package de.conterra.babelfish.util;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
+import com.vividsolutions.jts.geom.Coordinate;
+import de.conterra.babelfish.plugin.v10_02.object.geometry.GeometryObject;
+import de.conterra.babelfish.plugin.v10_02.object.geometry.MultiLine;
+import de.conterra.babelfish.plugin.v10_02.object.geometry.SpatialReference;
 import org.geotools.geometry.DirectPosition2D;
 import org.geotools.geometry.iso.coordinate.EnvelopeImpl;
 import org.geotools.geometry.iso.coordinate.LineSegmentImpl;
@@ -27,75 +26,62 @@ import org.opengis.referencing.operation.TransformException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.vividsolutions.jts.geom.Coordinate;
-
-import de.conterra.babelfish.plugin.v10_02.object.geometry.GeometryObject;
-import de.conterra.babelfish.plugin.v10_02.object.geometry.MultiLine;
-import de.conterra.babelfish.plugin.v10_02.object.geometry.SpatialReference;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 /**
- * defines an utility class, which extends the functions of the <a
- * href="http://www.geotools.org/">GeoTools</a> library
- * 
- * @version 0.1
- * @author chwe
- * @since 0.1
+ * defines an utility class, which extends the functions of the <a href="http://www.geotools.org/">GeoTools</a> library
+ *
+ * @author ChrissW-R1
+ * @version 0.1.0
+ * @since 0.1.0
  */
-public class GeoUtils
-{
+public class GeoUtils {
 	/**
 	 * the {@link Logger} of this class
-	 * 
-	 * @since 0.1
+	 *
+	 * @since 0.1.0
 	 */
 	public static final Logger LOGGER = LoggerFactory.getLogger(GeoUtils.class);
 	
 	/**
-	 * a {@link Map} of all ESRI specific reference identifiers, mapped to the
-	 * real EPSG codes
-	 * 
-	 * @since 0.1
+	 * a {@link Map} of all ESRI specific reference identifiers, mapped to the real EPSG codes
+	 *
+	 * @since 0.1.0
 	 */
 	public static final Map<Integer, Integer> ESRI_IDS = new HashMap<>();
 	
-	static
-	{
+	static {
 		GeoUtils.ESRI_IDS.put(102100, 3857);
 	}
 	
 	/**
 	 * private standard constructor, to prevent initialization
-	 * 
-	 * @since 0.1
+	 *
+	 * @since 0.1.0
 	 */
-	private GeoUtils()
-	{
+	private GeoUtils() {
 	}
 	
 	/**
-	 * transform a {@link DirectPosition} into another
-	 * {@link CoordinateReferenceSystem}
-	 * 
-	 * @since 0.1
-	 * 
-	 * @param srcPos the {@link DirectPosition} to transform
-	 * @param destCrs the {@link CoordinateReferenceSystem} to transform the
-	 *        <code>srcPos</code> into
-	 * @return the transformed {@link DirectPosition} or <code>srcPos</code> if
-	 *         it is already referenced in <code>destCrs</code>
-	 * @throws TransformException if the {@link DirectPosition} could not
-	 *         transformed into <code>destCrs</code>
+	 * transform a {@link DirectPosition} into another {@link CoordinateReferenceSystem}
+	 *
+	 * @param srcPos  the {@link DirectPosition} to transform
+	 * @param destCrs the {@link CoordinateReferenceSystem} to transform the {@code srcPos} into
+	 * @return the transformed {@link DirectPosition} or {@code srcPos} if it is already referenced in {@code destCrs}
+	 *
+	 * @throws TransformException if the {@link DirectPosition} could not transformed into {@code destCrs}
+	 * @since 0.1.0
 	 */
 	public static DirectPosition transform(DirectPosition srcPos, CoordinateReferenceSystem destCrs)
-	throws TransformException
-	{
-		try
-		{
+			throws TransformException {
+		try {
 			GeoUtils.LOGGER.debug("Get source CRS.");
 			CoordinateReferenceSystem srcCrs = srcPos.getCoordinateReferenceSystem();
 			
-			if (srcCrs == destCrs || srcPos.getDimension() < 2)
-			{
+			if (srcCrs == destCrs || srcPos.getDimension() < 2) {
 				GeoUtils.LOGGER.debug("Source and target CRS are the same. Return source position.");
 				
 				return srcPos;
@@ -113,9 +99,7 @@ public class GeoUtils
 				destPos.setOrdinate(i, srcPos.getOrdinate(i));
 			
 			return destPos;
-		}
-		catch (NullPointerException | FactoryException e)
-		{
+		} catch (NullPointerException | FactoryException e) {
 			String msg = e.getMessage();
 			GeoUtils.LOGGER.error(msg, e);
 			throw new TransformException(msg, e);
@@ -124,29 +108,24 @@ public class GeoUtils
 	
 	/**
 	 * decodes a {@link String} to a {@link CoordinateReferenceSystem}
-	 * 
-	 * @since 0.1
-	 * 
+	 *
 	 * @param crsString the {@link String} to decode (could be a WKT or a WKID)
-	 * @return the {@link CoordinateReferenceSystem}, represented by
-	 *         <code>crsString</code>
-	 * @throws FactoryException if the {@link String} didn't represent a valid
-	 *         {@link CoordinateReferenceSystem}
+	 * @return the {@link CoordinateReferenceSystem}, represented by {@code crsString}
+	 *
+	 * @throws FactoryException if the {@link String} didn't represent a valid {@link CoordinateReferenceSystem}
 	 * @see CRS#decode(String)
+	 * @since 0.1.0
 	 */
 	public static CoordinateReferenceSystem decodeCrs(String crsString)
-	throws FactoryException
-	{
+			throws FactoryException {
 		String resString;
 		
-		try
-		{
+		try {
 			int epsg = Integer.parseInt(crsString);
 			
 			GeoUtils.LOGGER.debug("Given text of CRS is only a WKID.");
 			
-			if (GeoUtils.ESRI_IDS.containsKey(epsg))
-			{
+			if (GeoUtils.ESRI_IDS.containsKey(epsg)) {
 				int realEpsg = GeoUtils.ESRI_IDS.get(epsg);
 				
 				GeoUtils.LOGGER.debug("Changed ESRI-WKID " + epsg + " to real EPSG code " + realEpsg + ".");
@@ -155,9 +134,7 @@ public class GeoUtils
 			}
 			
 			resString = "EPSG:" + epsg;
-		}
-		catch (NumberFormatException e)
-		{
+		} catch (NumberFormatException e) {
 			GeoUtils.LOGGER.debug("Couldn't parse text as WKID. Try to parse it as WKT.", e);
 			
 			resString = crsString;
@@ -168,22 +145,19 @@ public class GeoUtils
 	
 	/**
 	 * gives the EPSG code of the root element of a WKT
-	 * 
-	 * @since 0.1
-	 * 
+	 *
 	 * @param wkt the well-known-text (WKT) to parse
 	 * @return the EPSG code or a negative value, if no code was found
+	 *
+	 * @since 0.1.0
 	 */
-	public static int decodeEpsg(String wkt)
-	{
+	public static int decodeEpsg(String wkt) {
 		String str = wkt.substring(wkt.indexOf("[") + 1, wkt.lastIndexOf("]"));
 		
 		int count = 0;
 		boolean run = true;
-		for (int i = 0; run && i < str.length(); i++)
-		{
-			switch (str.substring(i, i + 1))
-			{
+		for (int i = 0; run && i < str.length(); i++) {
+			switch (str.substring(i, i + 1)) {
 				case "[":
 					count++;
 					break;
@@ -192,22 +166,17 @@ public class GeoUtils
 					break;
 				default:
 					String checkStr = str.substring(i);
-					if (count <= 0 && checkStr.startsWith("AUTHORITY"))
-					{
+					if (count <= 0 && checkStr.startsWith("AUTHORITY")) {
 						GeoUtils.LOGGER.debug("Found authority of the root WKT element.");
 						
 						String authStr = checkStr.substring(checkStr.indexOf("[") + 1, checkStr.indexOf("]"));
 						authStr = authStr.replaceAll("[ \"]", "");
 						String[] strs = authStr.split(",");
 						
-						if (strs.length >= 2 && strs[0].equalsIgnoreCase("EPSG"))
-						{
-							try
-							{
+						if (strs.length >= 2 && strs[0].equalsIgnoreCase("EPSG")) {
+							try {
 								return Integer.parseInt(strs[1]);
-							}
-							catch (NumberFormatException e)
-							{
+							} catch (NumberFormatException e) {
 								GeoUtils.LOGGER.error("The authority EPSG code couldn't parsed to a number.", e);
 							}
 						}
@@ -223,94 +192,68 @@ public class GeoUtils
 	
 	/**
 	 * gives the EPSG code of a {@link CoordinateReferenceSystem}
-	 * 
-	 * @since 0.1
-	 * 
+	 *
 	 * @param crs the {@link CoordinateReferenceSystem}
-	 * @return the EPSG code of <code>crs</code> or a negative value, if no code
-	 *         was found
+	 * @return the EPSG code of {@code crs} or a negative value, if no code was found
+	 *
+	 * @since 0.1.0
 	 */
-	public static int decodeEpsg(CoordinateReferenceSystem crs)
-	{
+	public static int decodeEpsg(CoordinateReferenceSystem crs) {
 		return GeoUtils.decodeEpsg(crs.toWKT());
 	}
 	
 	/**
 	 * creates a {@link GeometryObject} from a given {@link String}, which could
 	 * be a {@link JSONObject} or a simple representation
-	 * 
-	 * @since 0.1
-	 * 
-	 * @param string the {@link String} representation of a {@link JSONObject},
-	 *        a {@link Point} (format: <code>doubleX,doubleY</code>) or an
-	 *        {@link Envelope} (format:
-	 *        <code>doubleXmin,doubleYmin,doubleXmax,doubleYmin</code>)
-	 * @param crs the used {@link CoordinateReferenceSystem}<br>
-	 *        Only needed, if the given {@link String} contains no
-	 *        {@link CoordinateReferenceSystem}
+	 *
+	 * @param string the {@link String} representation of a {@link JSONObject}, a {@link Point} (format: {@code doubleX,doubleY}) or an {@link Envelope} (format: {@code doubleXmin,doubleYmin,doubleXmax,doubleYmin})
+	 * @param crs    the used {@link CoordinateReferenceSystem}<br>
+	 *               Only needed, if the given {@link String} contains no {@link CoordinateReferenceSystem}
 	 * @return the generated {@link GeometryObject}
-	 * @throws IllegalArgumentException if the {@link JSONObject} has no and the
-	 *         call gives no valid {@link CoordinateReferenceSystem} of the
-	 *         given {@link String} has an unknown syntax
+	 *
+	 * @throws IllegalArgumentException if the {@link JSONObject} has no and the call gives no valid {@link CoordinateReferenceSystem} of the given {@link String} has an unknown syntax
+	 * @since 0.1.0
 	 */
 	public static GeometryObject parseGeometry(String string, CoordinateReferenceSystem crs)
-	throws IllegalArgumentException
-	{
-		if (string != null && ! (string.isEmpty()))
-		{
-			try
-			{
+			throws IllegalArgumentException {
+		if (string != null && !(string.isEmpty())) {
+			try {
 				JSONObject json = new JSONObject(string);
 				
-				try
-				{
+				try {
 					GeoUtils.LOGGER.debug("Try parsing as polygon.");
 					
 					return new de.conterra.babelfish.plugin.v10_02.object.geometry.Polygon(JsonParser.parsePolygon(json, crs));
-				}
-				catch (JSONException e)
-				{
+				} catch (JSONException e) {
 				}
 				
-				try
-				{
+				try {
 					GeoUtils.LOGGER.debug("Try parsing as envelope.");
 					
 					return new de.conterra.babelfish.plugin.v10_02.object.geometry.Envelope(JsonParser.parseEnvelope(json, crs));
-				}
-				catch (JSONException e)
-				{
+				} catch (JSONException e) {
 				}
 				
-				try
-				{
+				try {
 					GeoUtils.LOGGER.debug("Try parsing as multi line.");
 					
 					return new MultiLine(JsonParser.parseMultiLine(json, crs));
-				}
-				catch (JSONException e)
-				{
+				} catch (JSONException e) {
 				}
 				
-				try
-				{
+				try {
 					GeoUtils.LOGGER.debug("Try parsing as point.");
 					
 					return new de.conterra.babelfish.plugin.v10_02.object.geometry.Point(JsonParser.parsePoint(json, crs));
-				}
-				catch (JSONException e)
-				{
+				} catch (JSONException e) {
 				}
 				
 				return new SpatialReference(JsonParser.parseCrs(json));
-			}
-			catch (JSONException | IllegalArgumentException e)
-			{
+			} catch (JSONException | IllegalArgumentException e) {
 				GeoUtils.LOGGER.debug("The given string is not a valid JSON object.", e);
 			}
 			
-			if (crs == null)
-			{
+			if (crs == null) {
 				String msg = "No valid CRS found or given!";
 				GeoUtils.LOGGER.error(msg);
 				throw new IllegalArgumentException(msg);
@@ -318,33 +261,27 @@ public class GeoUtils
 			
 			String[] coords = string.split(",");
 			
-			try
-			{
+			try {
 				if (coords.length != 2)
 					throw new IndexOutOfBoundsException("The string has not exact two doubles!");
 				
 				GeoUtils.LOGGER.debug("Try parsing as raw point (no JSON).");
 				
 				return new de.conterra.babelfish.plugin.v10_02.object.geometry.Point(new PointImpl(new DirectPosition2D(crs, Double.parseDouble(coords[0]), Double.parseDouble(coords[1]))));
-			}
-			catch (IndexOutOfBoundsException | NumberFormatException e)
-			{
+			} catch (IndexOutOfBoundsException | NumberFormatException e) {
 			}
 			
-			try
-			{
+			try {
 				if (coords.length != 4)
 					throw new IndexOutOfBoundsException("The String has not exact four doubles!");
 				
 				GeoUtils.LOGGER.debug("Try parsing as raw envelope (no JSON).");
 				
 				return new de.conterra.babelfish.plugin.v10_02.object.geometry.Envelope(new EnvelopeImpl(
-				new DirectPosition2D(crs, Double.parseDouble(coords[0]), Double.parseDouble(coords[1])),
-				new DirectPosition2D(crs, Double.parseDouble(coords[2]), Double.parseDouble(coords[3]))
+						new DirectPosition2D(crs, Double.parseDouble(coords[0]), Double.parseDouble(coords[1])),
+						new DirectPosition2D(crs, Double.parseDouble(coords[2]), Double.parseDouble(coords[3]))
 				));
-			}
-			catch (IndexOutOfBoundsException | NumberFormatException e)
-			{
+			} catch (IndexOutOfBoundsException | NumberFormatException e) {
 			}
 		}
 		
@@ -355,24 +292,20 @@ public class GeoUtils
 	
 	/**
 	 * converts a {@link Position} to a JTS {@link Coordinate}
-	 * 
-	 * @since 0.1
-	 * 
+	 *
 	 * @param position the {@link Position} to convert
-	 * @return the {@link Coordinate} representation of <code>position</code>
+	 * @return the {@link Coordinate} representation of {@code position}
+	 *
+	 * @since 0.1.0
 	 */
-	public static Coordinate getJtsCoordinate(Position position)
-	{
+	public static Coordinate getJtsCoordinate(Position position) {
 		DirectPosition pos = position.getDirectPosition();
 		
-		if (pos.getDimension() >= 3)
-		{
+		if (pos.getDimension() >= 3) {
 			GeoUtils.LOGGER.debug("Create new 3D JTS coordinate.");
 			
 			return new Coordinate(pos.getOrdinate(0), pos.getOrdinate(1), pos.getOrdinate(2));
-		}
-		else
-		{
+		} else {
 			GeoUtils.LOGGER.debug("Create new 2D JTS coordinate.");
 			
 			return new Coordinate(pos.getOrdinate(0), pos.getOrdinate(1));
@@ -381,21 +314,19 @@ public class GeoUtils
 	
 	/**
 	 * creates a {@link Ring} from an array of linked {@link Position}s
-	 * 
-	 * @since 0.1
-	 * 
+	 *
 	 * @param positions the array of linked {@link Position}s
 	 * @return the {@link Ring}
+	 *
+	 * @since 0.1.0
 	 */
-	public static Ring createRing(Position[] positions)
-	{
+	public static Ring createRing(Position[] positions) {
 		List<OrientableCurve> curves = new LinkedList<>();
 		
 		GeoUtils.LOGGER.debug("Adds lines between all points to the ring.");
 		for (int i = 0; i < positions.length - 1; i++)
 			curves.add(new CurveImpl(new LineSegmentImpl(positions[i].getDirectPosition(), positions[i + 1].getDirectPosition(), 0)));
-		if (positions.length >= 2)
-		{
+		if (positions.length >= 2) {
 			GeoUtils.LOGGER.debug("Adds a line from the last to the first point to the ring.");
 			
 			curves.add(new CurveImpl(new LineSegmentImpl(positions[positions.length - 1].getDirectPosition(), positions[0].getDirectPosition(), 0)));

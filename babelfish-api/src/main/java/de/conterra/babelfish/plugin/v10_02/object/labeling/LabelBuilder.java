@@ -1,42 +1,33 @@
 package de.conterra.babelfish.plugin.v10_02.object.labeling;
 
-import de.conterra.babelfish.interchange.ArrayValue;
-import de.conterra.babelfish.interchange.BooleanValue;
-import de.conterra.babelfish.interchange.NumberValue;
-import de.conterra.babelfish.interchange.ObjectValue;
-import de.conterra.babelfish.interchange.StringValue;
+import de.conterra.babelfish.interchange.*;
 import de.conterra.babelfish.plugin.v10_02.object.symbol.SymbolBuilder;
 
 /**
- * defines a class, which creates an {@link ObjectValue} of a {@link LabelClass}
- * and an {@link ArrayValue} of a {@link LabelingInfo}
- * 
- * @version 0.1
- * @author chwe
- * @since 0.1
+ * defines a class, which creates an {@link ObjectValue} of a {@link LabelClass} and an {@link ArrayValue} of a {@link LabelingInfo}
+ *
+ * @author ChrissW-R1
+ * @version 0.1.0
+ * @since 0.1.0
  */
-public class LabelBuilder
-{
+public class LabelBuilder {
 	/**
 	 * private standard constructor, to prevent initialization
-	 * 
-	 * @since 0.1
+	 *
+	 * @since 0.1.0
 	 */
-	private LabelBuilder()
-	{
+	private LabelBuilder() {
 	}
 	
 	/**
 	 * builds an {@link ObjectValue} of a given {@link LabelClass}
-	 * 
-	 * @since 0.1
-	 * 
-	 * @param lblClass the {@link LabelClass} to build the {@link ObjectValue}
-	 *        from
+	 *
+	 * @param lblClass the {@link LabelClass} to build the {@link ObjectValue} from
 	 * @return the created {@link ObjectValue}
+	 *
+	 * @since 0.1.0
 	 */
-	public static ObjectValue build(LabelClass lblClass)
-	{
+	public static ObjectValue build(LabelClass lblClass) {
 		ObjectValue result = new ObjectValue();
 		
 		result.addContent("labelPlacement", new StringValue(lblClass.getPlacement().toString()));
@@ -51,14 +42,13 @@ public class LabelBuilder
 	
 	/**
 	 * build an {@link ArrayValue} of a given {@link LabelingInfo}
-	 * 
-	 * @since 0.1
-	 * 
+	 *
 	 * @param info the {@link LabelingInfo} to build
 	 * @return the created {@link ArrayValue}
+	 *
+	 * @since 0.1.0
 	 */
-	public static ArrayValue build(LabelingInfo info)
-	{
+	public static ArrayValue build(LabelingInfo info) {
 		if (info == null)
 			return null;
 		

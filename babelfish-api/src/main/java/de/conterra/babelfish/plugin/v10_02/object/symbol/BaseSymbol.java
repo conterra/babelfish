@@ -2,54 +2,49 @@ package de.conterra.babelfish.plugin.v10_02.object.symbol;
 
 /**
  * defines the base version of a {@link SymbolObject}
- * 
- * @version 0.1
- * @author chwe
- * @since 0.1
+ *
+ * @author ChrissW-R1
+ * @version 0.1.0
+ * @since 0.1.0
  */
 public abstract class BaseSymbol
-extends SymbolObject
-{
+		extends SymbolObject {
 	/**
 	 * the {@link ColorSymbol}
-	 * 
-	 * @since 0.1
+	 *
+	 * @since 0.1.0
 	 */
 	private ColorSymbol color = null;
 	
 	/**
 	 * gives the ESRI type
-	 * 
-	 * @since 0.1
-	 * 
+	 *
 	 * @return the ESRI type
+	 *
+	 * @since 0.1.0
 	 */
-	public String getType()
-	{
+	public String getType() {
 		return "esri";
 	}
 	
 	/**
 	 * gives the {@link ColorSymbol}
-	 * 
-	 * @since 0.1
-	 * 
+	 *
 	 * @return the {@link ColorSymbol}
+	 *
+	 * @since 0.1.0
 	 */
-	public ColorSymbol getColor()
-	{
+	public ColorSymbol getColor() {
 		return this.color;
 	}
 	
 	/**
 	 * sets the {@link ColorSymbol}
-	 * 
-	 * @since 0.1
-	 * 
+	 *
 	 * @param color the {@link ColorSymbol} to set
+	 * @since 0.1.0
 	 */
-	public void setColor(ColorSymbol color)
-	{
+	public void setColor(ColorSymbol color) {
 		this.color = color;
 	}
 }

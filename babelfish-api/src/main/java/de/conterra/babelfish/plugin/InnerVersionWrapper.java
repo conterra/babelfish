@@ -1,33 +1,25 @@
 package de.conterra.babelfish.plugin;
 
-import java.lang.annotation.Annotation;
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Inherited;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.lang.annotation.*;
 
 /**
  * defines an {@link Annotation} to separate different API versions
- * 
- * @version 0.1
- * @author chwe
- * @since 0.1
+ *
+ * @author ChrissW-R1
+ * @version 0.1.0
+ * @since 0.1.0
  */
 @Inherited
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 @Documented
-public @interface InnerVersionWrapper
-{
+public @interface InnerVersionWrapper {
 	/**
-	 * the {@link Class} of the {@link ServiceWrapper}, which handles version
-	 * specific request
-	 * 
-	 * @since 0.1
-	 * 
+	 * the {@link Class} of the {@link ServiceWrapper}, which handles version specific request
+	 *
 	 * @return the {@link Class} of the version specified request
+	 *
+	 * @since 0.1.0
 	 */
 	Class<? extends ServiceWrapper> value();
 }

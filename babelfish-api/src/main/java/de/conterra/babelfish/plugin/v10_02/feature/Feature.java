@@ -1,44 +1,42 @@
 package de.conterra.babelfish.plugin.v10_02.feature;
 
-import java.util.Set;
-
 import de.conterra.babelfish.plugin.v10_02.object.feature.FeatureObject;
+
+import java.util.Set;
 
 /**
  * defines a {@link FeatureObject} with {@link Attachment}s
- * 
- * @version 0.1
- * @author chwe
- * @since 0.1
- * 
+ *
  * @param <T> the type of the {@link FeatureObject}
+ * @author ChrissW-R1
+ * @version 0.1.0
+ * @since 0.1.0
  */
-public interface Feature<T extends FeatureObject>
-{
+public interface Feature<T extends FeatureObject> {
 	/**
 	 * gives the {@link FeatureObject}
-	 * 
-	 * @since 0.1
-	 * 
+	 *
 	 * @return the {@link FeatureObject}
+	 *
+	 * @since 0.1.0
 	 */
 	public T getFeature();
 	
 	/**
 	 * gives a {@link Set} of all {@link Attachment}s
-	 * 
-	 * @since 0.1
-	 * 
+	 *
 	 * @return a {@link Set} of all {@link Attachment}s
+	 *
+	 * @since 0.1.0
 	 */
 	public Set<? extends Attachment> getAttachments();
 	
 	/**
 	 * gives the popup with meta information
-	 * 
-	 * @since 0.1
-	 * 
+	 *
 	 * @return the popup
+	 *
+	 * @since 0.1.0
 	 */
 	public Popup getPopup();
 }

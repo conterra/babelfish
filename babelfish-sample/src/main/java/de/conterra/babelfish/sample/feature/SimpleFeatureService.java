@@ -1,98 +1,83 @@
 package de.conterra.babelfish.sample.feature;
 
-import java.awt.Image;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.Map;
-import java.util.Set;
-
 import de.conterra.babelfish.plugin.Plugin;
-import de.conterra.babelfish.plugin.v10_02.feature.FeatureLayer;
-import de.conterra.babelfish.plugin.v10_02.feature.FeatureService;
-import de.conterra.babelfish.plugin.v10_02.feature.Layer;
-import de.conterra.babelfish.plugin.v10_02.feature.Relationship;
-import de.conterra.babelfish.plugin.v10_02.feature.Table;
+import de.conterra.babelfish.plugin.v10_02.feature.*;
 import de.conterra.babelfish.plugin.v10_02.object.feature.FeatureObject;
 import de.conterra.babelfish.plugin.v10_02.object.feature.GeometryFeatureObject;
 import de.conterra.babelfish.sample.SimplePlugin;
 
+import java.awt.*;
+import java.util.*;
+
 /**
  * defines a very simple {@link FeatureService}
- * 
+ *
+ * @author ChrissW-R1
  * @version 0.1.1
- * @author chwe
- * @since 0.1
+ * @since 0.1.0
  */
 public class SimpleFeatureService
-implements FeatureService
-{
+		implements FeatureService {
 	/**
 	 * the only instance of a {@link SimpleFeatureService}<br>
 	 * (singelton pattern)
-	 * 
-	 * @since 0.1
+	 *
+	 * @since 0.1.0
 	 */
 	public static final SimpleFeatureService INSTANCE = new SimpleFeatureService();
 	/**
 	 * {@link Map} of all {@link Layer}s
-	 * 
-	 * @since 0.1
+	 *
+	 * @since 0.1.0
 	 */
 	private static final Map<Integer, Layer<? extends FeatureObject>> layers = new LinkedHashMap<>();
 	/**
 	 * an instance of {@link SimplePolygonLayer}
-	 * 
+	 *
 	 * @since 0.1.1
 	 */
 	private static final SimplePolygonLayer polygonLayer = new SimplePolygonLayer(2, "Polygons", "");
 	/**
 	 * an instance of {@link SimpleTable}
-	 * 
+	 *
 	 * @since 0.1.1
 	 */
 	private static final SimpleTable table = new SimpleTable(10, "Companies", "");
 	
-	static
-	{
+	static {
 		Layer<? extends FeatureObject>[] layers = new Layer<?>[]
-		{
-		new SimplePointLayer(0, "Points", ""),
-		new SimpleLineLayer(1, "Lines", ""),
-		SimpleFeatureService.polygonLayer,
-		SimpleFeatureService.table,
-		};
+				{
+						new SimplePointLayer(0, "Points", ""),
+						new SimpleLineLayer(1, "Lines", ""),
+						SimpleFeatureService.polygonLayer,
+						SimpleFeatureService.table,
+				};
 		
-		for (Layer<? extends FeatureObject> layer : layers)
-		{
+		for (Layer<? extends FeatureObject> layer : layers) {
 			SimpleFeatureService.layers.put(layer.getId(), layer);
 		}
 	}
 	
 	/**
 	 * standard constructor
-	 * 
-	 * @since 0.1
+	 *
+	 * @since 0.1.0
 	 */
-	private SimpleFeatureService()
-	{
+	private SimpleFeatureService() {
 	}
 	
 	@Override
-	public Image getIcon()
-	{
+	public Image getIcon() {
 		return null;
 	}
 	
 	@Override
-	public String getServiceDescription()
-	{
+	public String getServiceDescription() {
 		return "con terra GmbH and outside area";
 	}
 	
 	@Override
-	public Set<? extends Layer<? extends FeatureObject>> getLayers()
-	{
+	public Set<? extends Layer<? extends FeatureObject>> getLayers() {
 		Set<Layer<? extends FeatureObject>> result = new LinkedHashSet<>();
 		
 		result.addAll(this.getFeatureLayers());
@@ -102,16 +87,13 @@ implements FeatureService
 	}
 	
 	@Override
-	public Set<? extends FeatureLayer<?, ? extends GeometryFeatureObject<?>>> getFeatureLayers()
-	{
+	public Set<? extends FeatureLayer<?, ? extends GeometryFeatureObject<?>>> getFeatureLayers() {
 		Set<FeatureLayer<?, ? extends GeometryFeatureObject<?>>> result = new LinkedHashSet<>();
 		
-		for (Layer<? extends FeatureObject> layer : SimpleFeatureService.layers.values())
-		{
-			if (layer instanceof SimpleFeatureLayer<?, ?>)
-			{
+		for (Layer<? extends FeatureObject> layer : SimpleFeatureService.layers.values()) {
+			if (layer instanceof SimpleFeatureLayer<?, ?>) {
 				@SuppressWarnings("unchecked")
-				SimpleFeatureLayer<?, ? extends GeometryFeatureObject<?>> featureLayer = (SimpleFeatureLayer<?, ? extends GeometryFeatureObject<?>>)layer;
+				SimpleFeatureLayer<?, ? extends GeometryFeatureObject<?>> featureLayer = (SimpleFeatureLayer<?, ? extends GeometryFeatureObject<?>>) layer;
 				result.add(featureLayer);
 			}
 		}
@@ -120,15 +102,12 @@ implements FeatureService
 	}
 	
 	@Override
-	public Set<? extends Table<? extends FeatureObject>> getTables()
-	{
+	public Set<? extends Table<? extends FeatureObject>> getTables() {
 		Set<Table<? extends FeatureObject>> result = new LinkedHashSet<>();
 		
-		for (Layer<? extends FeatureObject> layer : SimpleFeatureService.layers.values())
-		{
-			if (layer instanceof Table)
-			{
-				result.add((Table<?>)layer);
+		for (Layer<? extends FeatureObject> layer : SimpleFeatureService.layers.values()) {
+			if (layer instanceof Table) {
+				result.add((Table<?>) layer);
 			}
 		}
 		
@@ -136,8 +115,7 @@ implements FeatureService
 	}
 	
 	@Override
-	public Set<? extends Relationship<? extends FeatureObject, ? extends FeatureObject>> getRelationships()
-	{
+	public Set<? extends Relationship<? extends FeatureObject, ? extends FeatureObject>> getRelationships() {
 		Set<Relationship<? extends FeatureObject, ? extends FeatureObject>> result = new HashSet<>();
 		
 		result.add(new SimpleRelationship(1, "Buildings_Companies", SimpleFeatureService.polygonLayer, SimpleFeatureService.table));
@@ -146,14 +124,12 @@ implements FeatureService
 	}
 	
 	@Override
-	public Plugin getPlugin()
-	{
+	public Plugin getPlugin() {
 		return SimplePlugin.getInstance();
 	}
 	
 	@Override
-	public String getId()
-	{
+	public String getId() {
 		return "Simple Feature Service";
 	}
 }

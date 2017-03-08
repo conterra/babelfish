@@ -1,45 +1,42 @@
 package de.conterra.babelfish.plugin.v10_02.object.symbol;
 
-import java.awt.Image;
+import java.awt.*;
 
 /**
  * defines a picture based {@link BaseSymbol}
- * 
- * @version 0.1
- * @author chwe
- * @since 0.1
+ *
+ * @author ChrissW-R1
+ * @version 0.1.0
+ * @since 0.1.0
  */
 public abstract class PictureSymbol
-extends MovableSymbol
-{
+		extends MovableSymbol {
 	/**
 	 * the {@link Image} to show
-	 * 
-	 * @since 0.1
+	 *
+	 * @since 0.1.0
 	 */
 	private Image image;
 	/**
 	 * the width to show the {@link Image}
-	 * 
-	 * @since 0.1
+	 *
+	 * @since 0.1.0
 	 */
 	private double width;
 	/**
 	 * the height to show the {@link Image}
-	 * 
-	 * @since 0.1
+	 *
+	 * @since 0.1.0
 	 */
 	private double height;
 	
 	/**
 	 * constructor, with given {@link Image}
-	 * 
-	 * @since 0.1
-	 * 
+	 *
 	 * @param image the {@link Image}
+	 * @since 0.1.0
 	 */
-	public PictureSymbol(Image image)
-	{
+	public PictureSymbol(Image image) {
 		this.image = image;
 		this.width = image.getWidth(null);
 		this.height = image.getHeight(null);
@@ -52,51 +49,45 @@ extends MovableSymbol
 	
 	/**
 	 * gives the {@link Image}
-	 * 
-	 * @since 0.1
-	 * 
+	 *
 	 * @return the {@link Image}
+	 *
+	 * @since 0.1.0
 	 */
-	public Image getImage()
-	{
+	public Image getImage() {
 		return this.image;
 	}
 	
 	/**
 	 * sets the {@link Image}
-	 * 
-	 * @since 0.1
-	 * 
+	 *
 	 * @param image the {@link Image} to set
+	 * @since 0.1.0
 	 */
-	public void setImage(Image image)
-	{
+	public void setImage(Image image) {
 		this.image = image;
 	}
 	
 	/**
 	 * gives the width
-	 * 
-	 * @since 0.1
-	 * 
+	 *
 	 * @return the width
+	 *
+	 * @since 0.1.0
 	 */
-	public double getWidth()
-	{
+	public double getWidth() {
 		return this.width;
 	}
 	
 	/**
 	 * sets the width
-	 * 
-	 * @since 0.1
-	 * 
+	 *
 	 * @param width the width to set
-	 * @throws IllegalArgumentException if <code>width</code> is negative
+	 * @throws IllegalArgumentException if {@code width} is negative
+	 * @since 0.1.0
 	 */
 	public void setWidth(double width)
-	throws IllegalArgumentException
-	{
+			throws IllegalArgumentException {
 		if (width < 0)
 			throw new IllegalArgumentException("The width could not be negative!");
 		
@@ -105,27 +96,24 @@ extends MovableSymbol
 	
 	/**
 	 * gives the height
-	 * 
-	 * @since 0.1
-	 * 
+	 *
 	 * @return the height
+	 *
+	 * @since 0.1.0
 	 */
-	public double getHeight()
-	{
+	public double getHeight() {
 		return this.height;
 	}
 	
 	/**
 	 * sets the height
-	 * 
-	 * @since 0.1
-	 * 
+	 *
 	 * @param height the height to set
-	 * @throws IllegalArgumentException if <code>heigth</code> is negative
+	 * @throws IllegalArgumentException if {@code height} is negative
+	 * @since 0.1.0
 	 */
 	public void setHeight(double height)
-	throws IllegalArgumentException
-	{
+			throws IllegalArgumentException {
 		if (height < 0)
 			throw new IllegalArgumentException("The height could not be negative!");
 		

@@ -1,66 +1,60 @@
 package de.conterra.babelfish.output;
 
-import java.io.IOException;
-import java.io.PrintWriter;
+import de.conterra.babelfish.Initializer;
+import de.conterra.babelfish.util.ServletUtils;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import de.conterra.babelfish.Initializer;
-import de.conterra.babelfish.util.ServletUtils;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 /**
  * A {@link BaseServlet}, which provides an about site
- * 
+ *
+ * @author ChrissW-R1
  * @version 0.2.3
- * @author chwe
- * @since 0.1
+ * @since 0.1.0
  */
 @WebServlet(description = "A Servlet, which provides an about site", urlPatterns =
-{
-		"/about",
-		"/about/*"
-})
+		{
+				"/about",
+				"/about/*"
+		})
 public class AboutServlet
-extends BaseServlet
-{
+		extends BaseServlet {
 	/**
 	 * generated serial unique version identifier
-	 * 
-	 * @since 0.1
+	 *
+	 * @since 0.1.0
 	 */
 	private static final long serialVersionUID = -9045519926848091839L;
 	
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-	throws ServletException, IOException
-	{
+			throws ServletException, IOException {
 		this.doRequest(request, response);
 	}
 	
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-	throws ServletException, IOException
-	{
+			throws ServletException, IOException {
 		this.doRequest(request, response);
 	}
 	
 	/**
 	 * handles the {@link HttpServletRequest}, same on GET and POST
-	 * 
-	 * @since 0.1
-	 * 
-	 * @param request the {@link HttpServletRequest}
+	 *
+	 * @param request  the {@link HttpServletRequest}
 	 * @param response the {@link HttpServletResponse}
 	 * @throws IOException if an input or output exception occurs
 	 * @see AboutServlet#doGet(HttpServletRequest, HttpServletResponse)
 	 * @see AboutServlet#doPost(HttpServletRequest, HttpServletResponse)
+	 * @since 0.1.0
 	 */
 	private void doRequest(HttpServletRequest request, HttpServletResponse response)
-	throws IOException
-	{
+			throws IOException {
 		Initializer.init(this, false);
 		
 		PrintWriter writer = response.getWriter();

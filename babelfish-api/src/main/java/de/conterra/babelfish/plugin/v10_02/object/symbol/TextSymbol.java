@@ -1,278 +1,248 @@
 package de.conterra.babelfish.plugin.v10_02.object.symbol;
 
-import java.awt.Color;
-import java.awt.Font;
-
 import de.conterra.babelfish.plugin.v10_02.object.symbol.style.HorizontalAlignment;
 import de.conterra.babelfish.plugin.v10_02.object.symbol.style.VerticalAlignment;
 
+import java.awt.*;
+
 /**
  * defines a Text Symbol
- * 
- * @version 0.1
- * @author chwe
- * @since 0.1
+ *
+ * @author ChrissW-R1
+ * @version 0.1.0
+ * @since 0.1.0
  */
 public class TextSymbol
-extends MovableSymbol
-{
+		extends MovableSymbol {
 	/**
 	 * the text color
-	 * 
-	 * @since 0.1
+	 *
+	 * @since 0.1.0
 	 */
 	private ColorSymbol textColor = new ColorSymbol(Color.BLACK);
 	/**
 	 * the background color
-	 * 
-	 * @since 0.1
+	 *
+	 * @since 0.1.0
 	 */
 	private ColorSymbol bgColor = null;
 	/**
 	 * the color of the border line
-	 * 
-	 * @since 0.1
+	 *
+	 * @since 0.1.0
 	 */
 	private ColorSymbol borderLineColor = null;
 	/**
 	 * the {@link VerticalAlignment}
-	 * 
-	 * @since 0.1
+	 *
+	 * @since 0.1.0
 	 */
 	private VerticalAlignment vAlign = VerticalAlignment.BASELINE;
 	/**
 	 * the {@link HorizontalAlignment}
-	 * 
-	 * @since 0.1
+	 *
+	 * @since 0.1.0
 	 */
 	private HorizontalAlignment hAlign = HorizontalAlignment.LEFT;
 	/**
 	 * should the text written from right left?
-	 * 
-	 * @since 0.1
+	 *
+	 * @since 0.1.0
 	 */
 	private boolean rightToLeft = false;
 	/**
 	 * should a kerning applied to the text?
-	 * 
-	 * @since 0.1
+	 *
+	 * @since 0.1.0
 	 */
 	private boolean kerning = true;
 	/**
 	 * the {@link Font}
-	 * 
-	 * @since 0.1
+	 *
+	 * @since 0.1.0
 	 */
 	private Font font;
 	
 	/**
 	 * constructor, with given {@link Font}
-	 * 
-	 * @since 0.1
-	 * 
+	 *
 	 * @param font the {@link Font}
+	 * @since 0.1.0
 	 */
-	public TextSymbol(Font font)
-	{
+	public TextSymbol(Font font) {
 		this.font = font;
 	}
 	
 	@Override
-	public String getType()
-	{
+	public String getType() {
 		return super.getType() + "TS";
 	}
 	
 	/**
 	 * gives the text color
-	 * 
-	 * @since 0.1
-	 * 
+	 *
 	 * @return the text color
+	 *
+	 * @since 0.1.0
 	 */
-	public ColorSymbol getTextColor()
-	{
+	public ColorSymbol getTextColor() {
 		return this.textColor;
 	}
 	
 	/**
 	 * sets the text color
-	 * 
-	 * @since 0.1
-	 * 
+	 *
 	 * @param textColor the text color to set
+	 * @since 0.1.0
 	 */
-	public void setTextColor(ColorSymbol textColor)
-	{
+	public void setTextColor(ColorSymbol textColor) {
 		this.textColor = textColor;
 	}
 	
 	/**
 	 * gives the background color
-	 * 
-	 * @since 0.1
-	 * 
+	 *
 	 * @return the background color
+	 *
+	 * @since 0.1.0
 	 */
-	public ColorSymbol getBgColor()
-	{
+	public ColorSymbol getBgColor() {
 		return this.bgColor;
 	}
 	
 	/**
 	 * sets the background color
-	 * 
-	 * @since 0.1
-	 * 
+	 *
 	 * @param bgColor the background color to set
+	 * @since 0.1.0
 	 */
-	public void setBgColor(ColorSymbol bgColor)
-	{
+	public void setBgColor(ColorSymbol bgColor) {
 		this.bgColor = bgColor;
 	}
 	
 	/**
 	 * gives the color of the border line
-	 * 
-	 * @since 0.1
-	 * 
+	 *
 	 * @return the color of the border line
+	 *
+	 * @since 0.1.0
 	 */
-	public ColorSymbol getBorderLineColor()
-	{
+	public ColorSymbol getBorderLineColor() {
 		return this.borderLineColor;
 	}
 	
 	/**
 	 * sets the color of the border line
-	 * 
-	 * @since 0.1
-	 * 
+	 *
 	 * @param borderLineColor the color to set
+	 * @since 0.1.0
 	 */
-	public void setBorderLineColor(ColorSymbol borderLineColor)
-	{
+	public void setBorderLineColor(ColorSymbol borderLineColor) {
 		this.borderLineColor = borderLineColor;
 	}
 	
 	/**
 	 * gives the {@link VerticalAlignment}
-	 * 
-	 * @since 0.1
-	 * 
+	 *
 	 * @return the {@link VerticalAlignment}
+	 *
+	 * @since 0.1.0
 	 */
-	public VerticalAlignment getvAlign()
-	{
+	public VerticalAlignment getvAlign() {
 		return this.vAlign;
 	}
 	
 	/**
 	 * sets the {@link VerticalAlignment}
-	 * 
-	 * @since 0.1
-	 * 
+	 *
 	 * @param vAlign the {@link VerticalAlignment} to set
+	 * @since 0.1.0
 	 */
-	public void setvAlign(VerticalAlignment vAlign)
-	{
+	public void setvAlign(VerticalAlignment vAlign) {
 		this.vAlign = vAlign;
 	}
 	
 	/**
 	 * gives the {@link HorizontalAlignment}
-	 * 
-	 * @since 0.1
-	 * 
+	 *
 	 * @return the {@link HorizontalAlignment}
+	 *
+	 * @since 0.1.0
 	 */
-	public HorizontalAlignment gethAlign()
-	{
+	public HorizontalAlignment gethAlign() {
 		return this.hAlign;
 	}
 	
 	/**
 	 * sets the {@link HorizontalAlignment}
-	 * 
-	 * @since 0.1
-	 * 
+	 *
 	 * @param hAlign the {@link HorizontalAlignment} to set
+	 * @since 0.1.0
 	 */
-	public void sethAlign(HorizontalAlignment hAlign)
-	{
+	public void sethAlign(HorizontalAlignment hAlign) {
 		this.hAlign = hAlign;
 	}
 	
 	/**
 	 * should the text written from right left?
-	 * 
-	 * @since 0.1
-	 * 
-	 * @return <code>true</code>, if the text should be written from right left
+	 *
+	 * @return {@code true}, if the text should be written from right left
+	 *
+	 * @since 0.1.0
 	 */
-	public boolean isRightToLeft()
-	{
+	public boolean isRightToLeft() {
 		return this.rightToLeft;
 	}
 	
 	/**
 	 * sets if the text should be written from right left
-	 * 
-	 * @since 0.1
-	 * 
-	 * @param rightToLeft <code>true</code>, if the text should be written from
-	 *        right to left
+	 *
+	 * @param rightToLeft {@code true}, if the text should be written from right to left
+	 * @since 0.1.0
 	 */
-	public void setRightToLeft(boolean rightToLeft)
-	{
+	public void setRightToLeft(boolean rightToLeft) {
 		this.rightToLeft = rightToLeft;
 	}
 	
 	/**
 	 * should a kerning applied to the text?
-	 * 
-	 * @since 0.1
-	 * 
-	 * @return <code>true</code>, if a kerning should applied to the text
+	 *
+	 * @return {@code true}, if a kerning should applied to the text
+	 *
+	 * @since 0.1.0
 	 */
-	public boolean isKerning()
-	{
+	public boolean isKerning() {
 		return this.kerning;
 	}
 	
 	/**
 	 * sets if a kerning should applied to the text
-	 * 
-	 * @since 0.1
-	 * 
-	 * @param kerning <code>true</code>, if a kerning should applied to the text
+	 *
+	 * @param kerning {@code true}, if a kerning should applied to the text
+	 * @since 0.1.0
 	 */
-	public void setKerning(boolean kerning)
-	{
+	public void setKerning(boolean kerning) {
 		this.kerning = kerning;
 	}
 	
 	/**
 	 * gives the font
-	 * 
-	 * @since 0.1
-	 * 
+	 *
 	 * @return the font
+	 *
+	 * @since 0.1.0
 	 */
-	public Font getFont()
-	{
+	public Font getFont() {
 		return this.font;
 	}
 	
 	/**
 	 * sets the {@link Font}
-	 * 
-	 * @since 0.1
-	 * 
+	 *
 	 * @param font the {@link Font} to set
+	 * @since 0.1.0
 	 */
-	public void setFont(Font font)
-	{
+	public void setFont(Font font) {
 		this.font = font;
 	}
 }

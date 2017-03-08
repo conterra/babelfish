@@ -1,89 +1,79 @@
 package de.conterra.babelfish.util;
 
-import java.awt.Graphics2D;
-import java.awt.Image;
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import javax.imageio.ImageIO;
-
-import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.io.IOUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  * defines an utility class with data stream operations
- * 
- * @version 0.1
- * @author chwe
- * @since 0.1
+ *
+ * @author ChrissW-R1
+ * @version 0.1.0
+ * @since 0.1.0
  */
-public class DataUtils
-{
+public class DataUtils {
 	/**
 	 * the {@link Logger} of this class
-	 * 
-	 * @since 0.1
+	 *
+	 * @since 0.1.0
 	 */
 	public static final Logger LOGGER = LoggerFactory.getLogger(DataUtils.class);
 	
 	/**
 	 * private standard constructor, to prevent initialization
-	 * 
-	 * @since 0.1
+	 *
+	 * @since 0.1.0
 	 */
-	private DataUtils()
-	{
+	private DataUtils() {
 	}
 	
 	/**
 	 * encodes the data to a base64 encoded {@link String}
-	 * 
-	 * @since 0.1
-	 * 		
+	 *
 	 * @param data the data to encode
 	 * @return the base64 encoded {@link String}
+	 *
+	 * @since 0.1.0
 	 */
-	public static String encodeBase64(byte[] data)
-	{
+	public static String encodeBase64(byte[] data) {
 		return new String(Base64.encodeBase64(data));
 	}
 	
 	/**
 	 * decodes a base64 encoded into the bytes
-	 * 
-	 * @since 0.1
-	 * 		
+	 *
 	 * @param data the encoded {@link String} to decode
 	 * @return the original byte data
+	 *
+	 * @since 0.1.0
 	 */
-	public static byte[] decodeBase64(String data)
-	{
+	public static byte[] decodeBase64(String data) {
 		return Base64.decodeBase64(data.getBytes());
 	}
 	
 	/**
 	 * converts an {@link InputStream} to the byte data
-	 * 
-	 * @since 0.1
-	 * 		
+	 *
 	 * @param is the {@link InputStream} to get the byte data from
 	 * @return an array, which contains the byte data
+	 *
+	 * @since 0.1.0
 	 */
-	public static byte[] toByteArray(InputStream is)
-	{
+	public static byte[] toByteArray(InputStream is) {
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
 		
-		try
-		{
+		try {
 			IOUtils.copy(is, os);
-		}
-		catch (IOException e)
-		{
+		} catch (IOException e) {
 			DataUtils.LOGGER.warn("An exception occurred while copy from input to output stream!", e);
 		}
 		
@@ -91,36 +81,27 @@ public class DataUtils
 	}
 	
 	/**
-	 * gives a byte array with the rendered data of an {@link Image} in the
-	 * <a href="http://en.wikipedia.org/wiki/Portable_Network_Graphics" target=
-	 * "_blank">PNG</a> format
-	 * 
-	 * @since 0.1
-	 * 		
+	 * gives a byte array with the rendered data of an {@link Image} in the <a href="http://en.wikipedia.org/wiki/Portable_Network_Graphics" target="_blank">PNG</a> format
+	 *
 	 * @param img the {@link Image} to get the data from
 	 * @return a byte array, which contains the {@link Image} data
+	 *
+	 * @since 0.1.0
 	 */
-	public static byte[] toByteArray(Image img)
-	{
+	public static byte[] toByteArray(Image img) {
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
 		
-		try
-		{
+		try {
 			ImageIO.write(DataUtils.toBufferedImage(img), "png", os);
-		}
-		catch (IOException e)
-		{
+		} catch (IOException e) {
 			DataUtils.LOGGER.warn("An exception occurred while writing the image to the output stream!", e);
 		}
 		
 		byte[] result = os.toByteArray();
 		
-		try
-		{
+		try {
 			os.close();
-		}
-		catch (IOException e)
-		{
+		} catch (IOException e) {
 			DataUtils.LOGGER.warn("An exception occurred while close the output stream!", e);
 		}
 		
@@ -129,26 +110,21 @@ public class DataUtils
 	
 	/**
 	 * creates an {@link Image} of given raw data
-	 * 
-	 * @since 0.1
-	 * 		
+	 *
 	 * @param data the content data of the {@link Image}
-	 * @return the {@link Image} representation of <code>data</code><br>
-	 *         If the given data are no valid {@link Image} data, it returns a
-	 *         empty {@link Image}
+	 * @return the {@link Image} representation of {@code data}<br>
+	 * If the given data are no valid {@link Image} data, it returns a empty {@link Image}
+	 *
+	 * @since 0.1.0
 	 */
-	public static Image toImage(byte[] data)
-	{
+	public static Image toImage(byte[] data) {
 		BufferedImage result;
 		
-		try
-		{
+		try {
 			result = ImageIO.read(new ByteArrayInputStream(data));
 			
 			DataUtils.LOGGER.debug("Image successfully created.");
-		}
-		catch (IllegalArgumentException | IOException e)
-		{
+		} catch (IllegalArgumentException | IOException e) {
 			DataUtils.LOGGER.warn("Used empty image, because the input is not a valid one!", e);
 			
 			result = new BufferedImage(0, 0, BufferedImage.TYPE_INT_ARGB);
@@ -159,19 +135,17 @@ public class DataUtils
 	
 	/**
 	 * converts an {@link Image} to a {@link BufferedImage}
-	 * 
-	 * @since 0.1
-	 * 		
+	 *
 	 * @param img the {@link Image} to convert
 	 * @return the converted {@link Image}
+	 *
+	 * @since 0.1.0
 	 */
-	public static BufferedImage toBufferedImage(Image img)
-	{
-		if (img instanceof BufferedImage)
-		{
+	public static BufferedImage toBufferedImage(Image img) {
+		if (img instanceof BufferedImage) {
 			DataUtils.LOGGER.debug("The given image is already a buffered image. Return the input.");
 			
-			return (BufferedImage)img;
+			return (BufferedImage) img;
 		}
 		
 		DataUtils.LOGGER.debug("Create a buffered image with transparency.");

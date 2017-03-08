@@ -1,18 +1,6 @@
 package de.conterra.babelfish.plugin.v10_11.feature.builder;
 
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
-import org.geotools.referencing.crs.DefaultGeographicCRS;
-import org.opengis.geometry.Envelope;
-import org.opengis.referencing.crs.CoordinateReferenceSystem;
-
-import de.conterra.babelfish.interchange.ArrayValue;
-import de.conterra.babelfish.interchange.BooleanValue;
-import de.conterra.babelfish.interchange.NumberValue;
-import de.conterra.babelfish.interchange.ObjectValue;
-import de.conterra.babelfish.interchange.StringValue;
+import de.conterra.babelfish.interchange.*;
 import de.conterra.babelfish.plugin.v10_02.feature.wrapper.LayerWrapper;
 import de.conterra.babelfish.plugin.v10_02.object.feature.GeometryFeatureObject;
 import de.conterra.babelfish.plugin.v10_02.object.geometry.GeometryBuilder;
@@ -22,39 +10,42 @@ import de.conterra.babelfish.plugin.v10_11.ServiceWrapper;
 import de.conterra.babelfish.plugin.v10_11.feature.FeatureLayer;
 import de.conterra.babelfish.plugin.v10_11.feature.FeatureService;
 import de.conterra.babelfish.util.ContainerEnvelope;
+import org.geotools.referencing.crs.DefaultGeographicCRS;
+import org.opengis.geometry.Envelope;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * defines a class to build the overview page of a {@link FeatureService}
- * 
- * @version 0.2
- * @author chwe
- * @since 0.1
+ *
+ * @author ChrissW-R1
+ * @version 0.2.0
+ * @since 0.1.0
  */
-public class ServiceOverviewBuilder
-{
+public class ServiceOverviewBuilder {
 	/**
 	 * private standard constructor, to prevent initialization
-	 * 
-	 * @since 0.1
+	 *
+	 * @since 0.1.0
 	 */
-	private ServiceOverviewBuilder()
-	{
+	private ServiceOverviewBuilder() {
 	}
 	
 	/**
 	 * builds the overview page of a {@link FeatureService}
-	 * 
-	 * @since 0.1
-	 * 
+	 *
 	 * @param service the {@link FeatureService} to build the overview of
-	 * @return an {@link ObjectValue}, which contains the overview of
-	 *         <code>service</code>
+	 * @return an {@link ObjectValue}, which contains the overview of {@code service}
+	 *
+	 * @since 0.1.0
 	 */
-	public static ObjectValue build(FeatureService service)
-	{
+	public static ObjectValue build(FeatureService service) {
 		ObjectValue result = de.conterra.babelfish.plugin.v10_02.feature.builder.ServiceOverviewBuilder.build(service);
 		
-		result.addContent("currentVersion", new NumberValue( (new ServiceWrapper()).getVersion()), "serviceDescription", true);
+		result.addContent("currentVersion", new NumberValue((new ServiceWrapper()).getVersion()), "serviceDescription", true);
 		result.addContent("hasVersionedData", new BooleanValue(service.hasVersionedData()), "layers", true);
 		result.addContent("supportsDisconnectedEditing", new BooleanValue(false), "layers", true);
 		result.addContent("supportedQueryFormats", new StringValue("JSON"), "layers", true);
@@ -69,9 +60,8 @@ public class ServiceOverviewBuilder
 		Envelope initialExtent = service.getInitialExtent();
 		Set<Envelope> extents = new HashSet<>();
 		boolean allowGeometryUpdates = false;
-		for (FeatureLayer<? extends GeometryObject, ? extends GeometryFeatureObject<? extends GeometryObject>> layer : service.getFeatureLayers())
-		{
-			if ( ( !allowGeometryUpdates) && layer.allowGeometryUpdates())
+		for (FeatureLayer<? extends GeometryObject, ? extends GeometryFeatureObject<? extends GeometryObject>> layer : service.getFeatureLayers()) {
+			if ((!allowGeometryUpdates) && layer.allowGeometryUpdates())
 				allowGeometryUpdates = true;
 			
 			Envelope env = (new LayerWrapper<>(layer)).getEnvelope();
@@ -91,7 +81,7 @@ public class ServiceOverviewBuilder
 		result.addContent("fullExtent", GeometryBuilder.build(new de.conterra.babelfish.plugin.v10_02.object.geometry.Envelope(fullExtent), crs), "layers", true);
 		
 		result.addContent("allowGeometryUpdates", new BooleanValue(allowGeometryUpdates), "layers", false);
-		// TODO result.addContent("units", new StringValue(service.));
+		// ToDo result.addContent("units", new StringValue(service.));
 		ObjectValue docInfo = new ObjectValue();
 		Map<? extends String, ? extends String> docMap = service.getDocumentInfo();
 		for (String doc : docMap.keySet())

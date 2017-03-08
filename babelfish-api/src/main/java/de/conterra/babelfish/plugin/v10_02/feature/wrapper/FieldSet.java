@@ -1,62 +1,53 @@
 package de.conterra.babelfish.plugin.v10_02.feature.wrapper;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedHashSet;
-import java.util.Set;
-
 import de.conterra.babelfish.plugin.v10_02.feature.Field;
+
+import java.util.*;
 
 /**
  * defines a {@link Set} of {@link Field}s, which have every name only one time
- * 
- * @version 0.1
- * @author chwe
- * @since 0.1
+ *
+ * @author ChrissW-R1
+ * @version 0.1.0
+ * @since 0.1.0
  */
 public class FieldSet
-implements Set<Field>
-{
+		implements Set<Field> {
 	/**
 	 * a {@link Set} of all {@link Field}s
-	 * 
-	 * @since 0.1
+	 *
+	 * @since 0.1.0
 	 */
 	private final Set<Field> fields = new LinkedHashSet<>();
 	/**
 	 * a {@link Set} of all stored field names
-	 * 
-	 * @since 0.1
+	 *
+	 * @since 0.1.0
 	 */
 	private final Set<String> names = new HashSet<>();
 	
 	/**
 	 * standard constructor
-	 * 
-	 * @since 0.1
+	 *
+	 * @since 0.1.0
 	 */
-	public FieldSet()
-	{
+	public FieldSet() {
 	}
 	
 	/**
 	 * constructor, with given {@link Collection} of {@link Field}s to add
-	 * 
-	 * @since 0.1
-	 * 
+	 *
 	 * @param fields a {@link Collection} of {@link Field}s to add
+	 * @since 0.1.0
 	 */
-	public FieldSet(Collection<? extends Field> fields)
-	{
+	public FieldSet(Collection<? extends Field> fields) {
 		this();
 		
 		this.addAll(fields);
 	}
 	
 	@Override
-	public boolean add(Field e)
-	{
+	public boolean add(Field e) {
 		String name = e.getName();
 		
 		if (this.contains(name))
@@ -66,12 +57,10 @@ implements Set<Field>
 	}
 	
 	@Override
-	public boolean addAll(Collection<? extends Field> c)
-	{
+	public boolean addAll(Collection<? extends Field> c) {
 		boolean result = false;
 		
-		for (Field field : c)
-		{
+		for (Field field : c) {
 			if (this.add(field))
 				result = true;
 		}
@@ -80,15 +69,13 @@ implements Set<Field>
 	}
 	
 	@Override
-	public void clear()
-	{
+	public void clear() {
 		this.names.clear();
 		this.fields.clear();
 	}
 	
 	@Override
-	public boolean contains(Object o)
-	{
+	public boolean contains(Object o) {
 		if (o instanceof String)
 			return this.names.contains(o);
 		
@@ -96,11 +83,9 @@ implements Set<Field>
 	}
 	
 	@Override
-	public boolean containsAll(Collection<?> c)
-	{
-		for (Object o : c)
-		{
-			if ( ! (this.contains(o)))
+	public boolean containsAll(Collection<?> c) {
+		for (Object o : c) {
+			if (!(this.contains(o)))
 				return false;
 		}
 		
@@ -108,42 +93,34 @@ implements Set<Field>
 	}
 	
 	@Override
-	public boolean equals(Object o)
-	{
-		if ( ! (o instanceof FieldSet))
+	public boolean equals(Object o) {
+		if (!(o instanceof FieldSet))
 			return false;
 		
-		return this.fields.equals( ((FieldSet)o).fields);
+		return this.fields.equals(((FieldSet) o).fields);
 	}
 	
 	@Override
-	public int hashCode()
-	{
+	public int hashCode() {
 		return this.fields.hashCode();
 	}
 	
 	@Override
-	public boolean isEmpty()
-	{
+	public boolean isEmpty() {
 		return this.fields.isEmpty();
 	}
 	
 	@Override
-	public Iterator<Field> iterator()
-	{
+	public Iterator<Field> iterator() {
 		return this.fields.iterator();
 	}
 	
 	@Override
-	public boolean remove(Object o)
-	{
-		if (o instanceof String)
-		{
-			if (this.names.remove(o))
-			{
-				for (Field field : this.fields)
-				{
-					if (field.getName().equalsIgnoreCase((String)o))
+	public boolean remove(Object o) {
+		if (o instanceof String) {
+			if (this.names.remove(o)) {
+				for (Field field : this.fields) {
+					if (field.getName().equalsIgnoreCase((String) o))
 						return true;
 				}
 			}
@@ -151,9 +128,8 @@ implements Set<Field>
 			return false;
 		}
 		
-		if (o instanceof Field)
-		{
-			Field field = (Field)o;
+		if (o instanceof Field) {
+			Field field = (Field) o;
 			
 			if (this.fields.remove(field))
 				return this.names.remove(field.getName());
@@ -165,12 +141,10 @@ implements Set<Field>
 	}
 	
 	@Override
-	public boolean removeAll(Collection<?> c)
-	{
+	public boolean removeAll(Collection<?> c) {
 		boolean result = false;
 		
-		for (Object o : c)
-		{
+		for (Object o : c) {
 			if (this.remove(o))
 				result = true;
 		}
@@ -179,14 +153,11 @@ implements Set<Field>
 	}
 	
 	@Override
-	public boolean retainAll(Collection<?> c)
-	{
+	public boolean retainAll(Collection<?> c) {
 		boolean result = false;
 		
-		for (Field field : this.fields)
-		{
-			if ( ! (c.contains(field)))
-			{
+		for (Field field : this.fields) {
+			if (!(c.contains(field))) {
 				if (this.remove(field))
 					result = true;
 			}
@@ -196,37 +167,30 @@ implements Set<Field>
 	}
 	
 	@Override
-	public int size()
-	{
+	public int size() {
 		return this.fields.size();
 	}
 	
 	@Override
-	public Object[] toArray()
-	{
+	public Object[] toArray() {
 		return this.fields.toArray();
 	}
 	
 	@Override
-	public <T> T[] toArray(T[] a)
-	{
+	public <T> T[] toArray(T[] a) {
 		return this.fields.toArray(a);
 	}
 	
 	/**
 	 * gives the {@link Field} of the given name
-	 * 
-	 * @since 0.1
-	 * 
+	 *
 	 * @param name the name of the {@link Field} to search
-	 * @return the {@link Field} with name <code>name</code> or
-	 *         <code>null</code>, if this {@link Set} contains no {@link Field}
-	 *         with the given name
+	 * @return the {@link Field} with name {@code name} or {@code null}, if this {@link Set} contains no {@link Field} with the given name
+	 *
+	 * @since 0.1.0
 	 */
-	public Field get(String name)
-	{
-		for (Field field : this.fields)
-		{
+	public Field get(String name) {
+		for (Field field : this.fields) {
 			if (field.getName().equalsIgnoreCase(name))
 				return field;
 		}

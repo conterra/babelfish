@@ -8,53 +8,45 @@ import de.conterra.babelfish.plugin.v10_02.object.labeling.LabelingInfo;
 
 /**
  * defines a very simple {@link FeatureLayer}
- * 
- * @version 0.1
- * @author chwe
- * @since 0.1
- * 
+ *
  * @param <G> the geometry type
  * @param <F> the {@link FeatureObject} type
+ * @author ChrissW-R1
+ * @version 0.1.0
+ * @since 0.1.0
  */
 public abstract class SimpleFeatureLayer<G extends GeometryObject, F extends GeometryFeatureObject<G>>
-extends SimpleLayer<F>
-implements FeatureLayer<G, F>
-{
+		extends SimpleLayer<F>
+		implements FeatureLayer<G, F> {
 	/**
 	 * constructor, with all necessary attributes
-	 * 
-	 * @since 0.1
-	 * 
-	 * @param id the unique identifier
+	 *
+	 * @param id   the unique identifier
 	 * @param name the name shown to the user
 	 * @param desc the layer description
+	 * @since 0.1.0
 	 */
-	public SimpleFeatureLayer(int id, String name, String desc)
-	{
+	public SimpleFeatureLayer(int id, String name, String desc) {
 		super(id, name, desc);
 	}
 	
 	@Override
-	public int getMinScale()
-	{
+	public int getMinScale() {
 		return 0;
 	}
 	
 	@Override
-	public int getMaxScale()
-	{
+	public int getMaxScale() {
 		return 0;
 	}
 	
 	@Override
-	public int getTranparency()
-	{
+	public int getTranparency() {
 		return 0;
 	}
 	
 	@Override
-	public LabelingInfo getLabelingInfo()
-	{
+	public LabelingInfo getLabelingInfo() {
 		return null;
 	}
 }

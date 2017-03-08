@@ -1,85 +1,78 @@
 package de.conterra.babelfish.plugin;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.net.URLClassLoader;
 import java.util.jar.JarFile;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  * defines a wrapper class of a {@link Plugin}
- * 
- * @version 0.1
- * @author chwe
- * @since 0.1
+ *
+ * @author ChrissW-R1
+ * @version 0.1.0
+ * @since 0.1.0
  */
 public class PluginWrapper
-implements Plugin
-{
+		implements Plugin {
 	/**
 	 * the {@link Logger} of this class
-	 * 
-	 * @since 0.1
+	 *
+	 * @since 0.1.0
 	 */
 	public static final Logger LOGGER = LoggerFactory.getLogger(PluginWrapper.class);
 	
 	/**
 	 * the {@link Plugin}
-	 * 
-	 * @since 0.1
+	 *
+	 * @since 0.1.0
 	 */
 	private final Plugin plugin;
 	/**
 	 * the {@link JarFile}
-	 * 
-	 * @since 0.1
+	 *
+	 * @since 0.1.0
 	 */
 	private final JarFile file;
 	/**
 	 * the {@link URLClassLoader}
-	 * 
-	 * @since 0.1
+	 *
+	 * @since 0.1.0
 	 */
 	private final URLClassLoader classLoader;
 	
 	/**
 	 * constructor, with given {@link Plugin}
-	 * 
-	 * @since 0.1
-	 * 
-	 * @param plugin the {@link Plugin}
-	 * @param file the {@link JarFile}
+	 *
+	 * @param plugin      the {@link Plugin}
+	 * @param file        the {@link JarFile}
 	 * @param classLoader the {@link URLClassLoader}
+	 * @since 0.1.0
 	 */
-	public PluginWrapper(Plugin plugin, JarFile file, URLClassLoader classLoader)
-	{
+	public PluginWrapper(Plugin plugin, JarFile file, URLClassLoader classLoader) {
 		this.plugin = plugin;
 		this.file = file;
 		this.classLoader = classLoader;
 	}
 	
 	@Override
-	public String toString()
-	{
+	public String toString() {
 		return this.getPlugin().toString();
 	}
 	
 	@Override
-	public String getName()
-	{
+	public String getName() {
 		return this.getPlugin().getName();
 	}
 	
 	@Override
-	public boolean init()
-	{
+	public boolean init() {
 		return this.getPlugin().init();
 	}
 	
 	@Override
-	public boolean shutdown()
-	{
+	public boolean shutdown() {
 		String name = this.getName();
 		boolean result = this.getPlugin().shutdown();
 		
@@ -89,14 +82,11 @@ implements Plugin
 			PluginWrapper.LOGGER.error("Couldn't shutdown the plugin " + name + " itself!");
 		
 		boolean notUsedByOther = true;
-		for (Plugin plugin : PluginAdapter.getPlugins())
-		{
-			if (plugin != this.getPlugin())
-			{
+		for (Plugin plugin : PluginAdapter.getPlugins()) {
+			if (plugin != this.getPlugin()) {
 				PluginWrapper wrapper = PluginAdapter.getPluginWrapper(plugin);
 				
-				if (wrapper.getClassLoader() == this.getClassLoader() || wrapper.getFile() == this.getFile())
-				{
+				if (wrapper.getClassLoader() == this.getClassLoader() || wrapper.getFile() == this.getFile()) {
 					PluginWrapper.LOGGER.debug("Couldn't unload class loader and file of the plugin " + name + ", because them are although used by the plugin " + plugin.getName() + ".");
 					notUsedByOther = false;
 					break;
@@ -104,15 +94,11 @@ implements Plugin
 			}
 		}
 		
-		if (notUsedByOther)
-		{
-			try
-			{
+		if (notUsedByOther) {
+			try {
 				this.getClassLoader().close();
 				this.getFile().close();
-			}
-			catch (IOException e)
-			{
+			} catch (IOException e) {
 				PluginWrapper.LOGGER.error("Couldn't unload plugin " + name + "!", e);
 				
 				return false;
@@ -124,37 +110,34 @@ implements Plugin
 	
 	/**
 	 * gives the {@link Plugin}
-	 * 
-	 * @since 0.1
-	 * 
+	 *
 	 * @return the {@link Plugin}
+	 *
+	 * @since 0.1.0
 	 */
-	public Plugin getPlugin()
-	{
+	public Plugin getPlugin() {
 		return this.plugin;
 	}
 	
 	/**
 	 * gives the {@link JarFile}
-	 * 
-	 * @since 0.1
-	 * 
+	 *
 	 * @return the {@link JarFile}
+	 *
+	 * @since 0.1.0
 	 */
-	public JarFile getFile()
-	{
+	public JarFile getFile() {
 		return this.file;
 	}
 	
 	/**
 	 * gives the {@link URLClassLoader}
-	 * 
-	 * @since 0.1
-	 * 
+	 *
 	 * @return the {@link URLClassLoader}
+	 *
+	 * @since 0.1.0
 	 */
-	public URLClassLoader getClassLoader()
-	{
+	public URLClassLoader getClassLoader() {
 		return this.classLoader;
 	}
 }

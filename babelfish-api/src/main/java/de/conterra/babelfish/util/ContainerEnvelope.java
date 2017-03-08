@@ -1,10 +1,5 @@
 package de.conterra.babelfish.util;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
-
 import org.geotools.geometry.GeneralDirectPosition;
 import org.geotools.geometry.iso.coordinate.PointArrayImpl;
 import org.opengis.geometry.DirectPosition;
@@ -15,50 +10,50 @@ import org.opengis.referencing.operation.TransformException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
+
 /**
- * defines an {@link Envelope}, which contains a {@link List} of
- * {@link DirectPosition}s
- * 
- * @version 0.1
- * @author chwe
- * @since 0.1
+ * defines an {@link Envelope}, which contains a {@link List} of {@link DirectPosition}s
+ *
+ * @author ChrissW-R1
+ * @version 0.1.0
+ * @since 0.1.0
  */
 public class ContainerEnvelope
-implements Envelope
-{
+		implements Envelope {
 	/**
 	 * the {@link Logger} of this class
-	 * 
-	 * @since 0.1
+	 *
+	 * @since 0.1.0
 	 */
 	public static final Logger LOGGER = LoggerFactory.getLogger(ContainerEnvelope.class);
 	
 	/**
 	 * the lower corner of the {@link Envelope}
-	 * 
-	 * @since 0.1
+	 *
+	 * @since 0.1.0
 	 */
 	private final GeneralDirectPosition lowerCorner;
 	/**
 	 * the upper corner of the {@link Envelope}
-	 * 
-	 * @since 0.1
+	 *
+	 * @since 0.1.0
 	 */
 	private final GeneralDirectPosition upperCorner;
 	
 	/**
 	 * basic constructor of initialization
-	 * 
-	 * @since 0.1
-	 * 
+	 *
 	 * @param crs the {@link CoordinateReferenceSystem} to use
-	 * @throws IllegalArgumentException if <code>crs</code> is <code>null</code>
+	 * @throws IllegalArgumentException if {@code crs} is {@code null}
+	 * @since 0.1.0
 	 */
 	private ContainerEnvelope(CoordinateReferenceSystem crs)
-	throws IllegalArgumentException
-	{
-		if (crs == null)
-		{
+			throws IllegalArgumentException {
+		if (crs == null) {
 			String msg = "The coordinate reference system have to be set!";
 			ContainerEnvelope.LOGGER.debug(msg);
 			throw new IllegalArgumentException(msg);
@@ -69,8 +64,7 @@ implements Envelope
 		this.upperCorner = new GeneralDirectPosition(crs);
 		
 		ContainerEnvelope.LOGGER.debug("Fill every existing ordinate with infinity values.");
-		for (int i = 0; i < this.getDimension(); i++)
-		{
+		for (int i = 0; i < this.getDimension(); i++) {
 			this.lowerCorner.setOrdinate(i, Double.POSITIVE_INFINITY);
 			this.upperCorner.setOrdinate(i, Double.NEGATIVE_INFINITY);
 		}
@@ -78,17 +72,14 @@ implements Envelope
 	
 	/**
 	 * constructor, with given {@link Collection} of {@link Position}s
-	 * 
-	 * @since 0.1
-	 * 
-	 * @param positions a {@link List} of all {@link Position}s, to get the
-	 *        {@link Envelope} from
-	 * @throws IllegalArgumentException if <code>crs</code> is <code>null</code>
+	 *
+	 * @param positions a {@link List} of all {@link Position}s, to get the {@link Envelope} from
+	 * @throws IllegalArgumentException if {@code crs} is {@code null}
+	 * @since 0.1.0
 	 */
 	public ContainerEnvelope(Collection<? extends Position> positions)
-	throws IllegalArgumentException
-	{
-		this( (new PointArrayImpl(new LinkedList<>(positions))).getCoordinateReferenceSystem());
+			throws IllegalArgumentException {
+		this((new PointArrayImpl(new LinkedList<>(positions))).getCoordinateReferenceSystem());
 		
 		ContainerEnvelope.LOGGER.debug("Set the extrem ordinates of all given positions.");
 		this.addPositions(positions);
@@ -96,16 +87,14 @@ implements Envelope
 	
 	/**
 	 * constructor, with given {@link Envelope}s
-	 * 
-	 * @since 0.1
-	 * 
-	 * @param crs the {@link CoordinateReferenceSystem} to use
+	 *
+	 * @param crs       the {@link CoordinateReferenceSystem} to use
 	 * @param envelopes a {@link Collection} of {@link Envelope}s to add
-	 * @throws IllegalArgumentException if <code>crs</code> is <code>null</code>
+	 * @throws IllegalArgumentException if {@code crs} is {@code null}
+	 * @since 0.1.0
 	 */
 	public ContainerEnvelope(CoordinateReferenceSystem crs, Collection<? extends Envelope> envelopes)
-	throws IllegalArgumentException
-	{
+			throws IllegalArgumentException {
 		this(crs);
 		
 		ContainerEnvelope.LOGGER.debug("Set the extreme ordinates of all given envelopes.");
@@ -114,21 +103,18 @@ implements Envelope
 	}
 	
 	/**
-	 * creates a valid {@link DirectPosition}, which was cleaned of
-	 * initialization values
-	 * 
-	 * @since 0.1
-	 * 
+	 * creates a valid {@link DirectPosition}, which was cleaned of initialization values
+	 *
 	 * @param pos the {@link DirectPosition} to clean
-	 * @return the cleaned <code>pos</code>
+	 * @return the cleaned {@code pos}
+	 *
+	 * @since 0.1.0
 	 */
-	private static DirectPosition cleanPosition(DirectPosition pos)
-	{
+	private static DirectPosition cleanPosition(DirectPosition pos) {
 		GeneralDirectPosition result = new GeneralDirectPosition(pos);
 		
 		ContainerEnvelope.LOGGER.debug("Set the infinity values to 0.");
-		for (int i = 0; i < result.getDimension(); i++)
-		{
+		for (int i = 0; i < result.getDimension(); i++) {
 			double ordinate = result.getOrdinate(i);
 			
 			if (Double.isInfinite(ordinate))
@@ -139,103 +125,87 @@ implements Envelope
 	}
 	
 	@Override
-	public CoordinateReferenceSystem getCoordinateReferenceSystem()
-	{
+	public CoordinateReferenceSystem getCoordinateReferenceSystem() {
 		return this.lowerCorner.getCoordinateReferenceSystem();
 	}
 	
 	@Override
-	public int getDimension()
-	{
+	public int getDimension() {
 		return this.lowerCorner.getDimension();
 	}
 	
 	@Override
-	public DirectPosition getLowerCorner()
-	{
+	public DirectPosition getLowerCorner() {
 		ContainerEnvelope.LOGGER.debug("Return cleaned position (no infinity values).");
 		return ContainerEnvelope.cleanPosition(this.lowerCorner);
 	}
 	
 	@Override
-	public DirectPosition getUpperCorner()
-	{
+	public DirectPosition getUpperCorner() {
 		ContainerEnvelope.LOGGER.debug("Return cleaned position (no infinity values).");
 		return ContainerEnvelope.cleanPosition(this.upperCorner);
 	}
 	
 	@Override
 	public double getMinimum(int arg0)
-	throws IndexOutOfBoundsException
-	{
+			throws IndexOutOfBoundsException {
 		return this.getLowerCorner().getOrdinate(arg0);
 	}
 	
 	@Override
 	public double getMaximum(int arg0)
-	throws IndexOutOfBoundsException
-	{
+			throws IndexOutOfBoundsException {
 		return this.getUpperCorner().getOrdinate(arg0);
 	}
 	
 	@Override
 	public double getMedian(int dimension)
-	throws IndexOutOfBoundsException
-	{
+			throws IndexOutOfBoundsException {
 		return (this.getMinimum(dimension) + this.getMaximum(dimension)) / 2;
 	}
 	
 	@Override
 	public double getSpan(int dimension)
-	throws IndexOutOfBoundsException
-	{
+			throws IndexOutOfBoundsException {
 		return this.getMaximum(dimension) - this.getMinimum(dimension);
 	}
 	
 	/**
 	 * adds a {@link Position} to extend the {@link Envelope}
-	 * 
-	 * @since 0.1
-	 * 
+	 *
 	 * @param position the {@link Position} to add
 	 * @return whether the {@link Envelope} was extended or not
+	 *
+	 * @since 0.1.0
 	 */
-	public boolean addPosition(Position position)
-	{
+	public boolean addPosition(Position position) {
 		boolean result = false;
 		
 		DirectPosition posSrc = position.getDirectPosition();
 		DirectPosition posDst;
-		try
-		{
+		try {
 			posDst = GeoUtils.transform(posSrc, this.getCoordinateReferenceSystem());
-		}
-		catch (TransformException e)
-		{
+		} catch (TransformException e) {
 			ContainerEnvelope.LOGGER.warn("Use given position without transformation to the envelope CRS.", e);
 			
 			posDst = posSrc;
 		}
 		
 		ContainerEnvelope.LOGGER.debug("Set new dimensions of lower and upper corner to infinity values.");
-		for (int i = this.getDimension(); this.getDimension() < posDst.getDimension(); i++)
-		{
+		for (int i = this.getDimension(); this.getDimension() < posDst.getDimension(); i++) {
 			this.lowerCorner.setOrdinate(i, Double.POSITIVE_INFINITY);
 			this.upperCorner.setOrdinate(i, Double.NEGATIVE_INFINITY);
 		}
 		
 		double[] coordinates = posDst.getCoordinate();
-		for (int i = 0; i < posDst.getDimension(); i++)
-		{
-			if (coordinates[i] < this.lowerCorner.getOrdinate(i))
-			{
+		for (int i = 0; i < posDst.getDimension(); i++) {
+			if (coordinates[i] < this.lowerCorner.getOrdinate(i)) {
 				ContainerEnvelope.LOGGER.debug("Found smaller ordinate on " + i + ". dimension: " + coordinates[i] + " < " + this.lowerCorner.getOrdinate(i));
 				
 				this.lowerCorner.setOrdinate(i, coordinates[i]);
 				result = true;
 			}
-			if (coordinates[i] > this.upperCorner.getOrdinate(i))
-			{
+			if (coordinates[i] > this.upperCorner.getOrdinate(i)) {
 				ContainerEnvelope.LOGGER.debug("Found greater ordinate on " + i + ". dimension: " + coordinates[i] + " < " + this.upperCorner.getOrdinate(i));
 				
 				this.upperCorner.setOrdinate(i, coordinates[i]);
@@ -248,20 +218,17 @@ implements Envelope
 	
 	/**
 	 * adds a {@link List} of {@link Position}s to extend the {@link Envelope}
-	 * 
-	 * @since 0.1
-	 * 
+	 *
 	 * @param positions a {@link List} of {@link Position}s to add
 	 * @return whether the {@link Envelope} was extended or not
+	 *
+	 * @since 0.1.0
 	 */
-	public boolean addPositions(Collection<? extends Position> positions)
-	{
+	public boolean addPositions(Collection<? extends Position> positions) {
 		boolean result = false;
 		
-		for (Position pos : positions)
-		{
-			if (this.addPosition(pos))
-			{
+		for (Position pos : positions) {
+			if (this.addPosition(pos)) {
 				ContainerEnvelope.LOGGER.debug("Position " + pos + " have changed the envelope.");
 				
 				result = true;
@@ -273,14 +240,13 @@ implements Envelope
 	
 	/**
 	 * adds an {@link Envelope} to extend this {@link Envelope}
-	 * 
-	 * @since 0.1
-	 * 
+	 *
 	 * @param envelope the {@link Envelope} to add
 	 * @return whether the {@link Envelope} was extended or not
+	 *
+	 * @since 0.1.0
 	 */
-	public boolean addEnvelope(Envelope envelope)
-	{
+	public boolean addEnvelope(Envelope envelope) {
 		List<Position> list = new ArrayList<>();
 		
 		ContainerEnvelope.LOGGER.debug("Add lower and upper corner of the given envelope to the list of positions to add.");

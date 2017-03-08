@@ -2,17 +2,15 @@ package de.conterra.babelfish.plugin.v10_02.object.domain;
 
 /**
  * defines a Inherited Domain
- * 
- * @version 0.1
- * @author chwe
- * @since 0.1
+ *
+ * @author ChrissW-R1
+ * @version 0.1.0
+ * @since 0.1.0
  */
 public class InheritedDomain
-extends DomainObject
-{
+		extends DomainObject {
 	@Override
-	public String getType()
-	{
+	public String getType() {
 		return "inherited";
 	}
 }

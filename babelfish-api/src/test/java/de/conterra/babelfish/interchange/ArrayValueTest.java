@@ -1,61 +1,56 @@
 package de.conterra.babelfish.interchange;
 
-import java.util.List;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.List;
+
 /**
  * tests the class {@link ArrayValue}
- * 
+ *
+ * @author ChrissW-R1
  * @version 0.3.1
- * @author chwe
  * @since 0.3.1
  */
-public class ArrayValueTest
-{
+public class ArrayValueTest {
 	/**
 	 * the test object
-	 * 
+	 *
 	 * @since 0.3.1
 	 */
-	private ArrayValue	array;
+	private ArrayValue array;
 	/**
 	 * values which are stored in the test object
-	 * 
+	 *
 	 * @since 0.3.1
 	 */
-	private Value[]		values	=
-	{
-			new StringValue("First value"),
-			new BooleanValue(true),
-			new NumberValue(Math.PI)
-	};
+	private Value[] values =
+			{
+					new StringValue("First value"),
+					new BooleanValue(true),
+					new NumberValue(Math.PI)
+			};
 	
 	/**
 	 * initialize the test object
-	 * 
+	 *
 	 * @since 0.3.1
 	 */
 	@Before
-	public void setUp()
-	{
+	public void setUp() {
 		this.array = new ArrayValue();
 		
-		for (Value value : this.values)
-		{
+		for (Value value : this.values) {
 			this.array.addValue(value);
 		}
 	}
 	
 	/**
-	 * Test method for
-	 * {@link de.conterra.babelfish.interchange.ArrayValue#isEmpty()}.
+	 * Test method for {@link de.conterra.babelfish.interchange.ArrayValue#isEmpty()}.
 	 */
 	@Test
-	public void testIsEmpty()
-	{
+	public void testIsEmpty() {
 		Assert.assertFalse(this.array.isEmpty());
 		
 		this.array.clear();
@@ -63,42 +58,33 @@ public class ArrayValueTest
 	}
 	
 	/**
-	 * Test method for
-	 * {@link de.conterra.babelfish.interchange.ArrayValue#getValues()}.
+	 * Test method for {@link de.conterra.babelfish.interchange.ArrayValue#getValues()}.
 	 */
 	@Test
-	public void testGetValues()
-	{
+	public void testGetValues() {
 		List<? extends Value> localValues = this.array.getValues();
 		Assert.assertEquals(this.values.length, localValues.size());
 		
-		for (int i = 0; i < this.values.length; i++)
-		{
+		for (int i = 0; i < this.values.length; i++) {
 			Assert.assertSame(localValues.get(i), this.values[i]);
 		}
 	}
 	
 	/**
-	 * Test method for
-	 * {@link de.conterra.babelfish.interchange.ArrayValue#getValue(int)}.
+	 * Test method for {@link de.conterra.babelfish.interchange.ArrayValue#getValue(int)}.
 	 */
 	@Test
-	public void testGetValue()
-	{
-		for (int i = 0; i < this.values.length; i++)
-		{
+	public void testGetValue() {
+		for (int i = 0; i < this.values.length; i++) {
 			Assert.assertSame(this.values[i], this.array.getValue(i));
 		}
 	}
 	
 	/**
-	 * Test method for
-	 * {@link de.conterra.babelfish.interchange.ArrayValue#addValue(de.conterra.babelfish.interchange.Value)}
-	 * .
+	 * Test method for {@link de.conterra.babelfish.interchange.ArrayValue#addValue(de.conterra.babelfish.interchange.Value)}.
 	 */
 	@Test
-	public void testAddValue()
-	{
+	public void testAddValue() {
 		this.array.clear();
 		
 		Value value = this.values[0];
@@ -111,13 +97,10 @@ public class ArrayValueTest
 	}
 	
 	/**
-	 * Test method for
-	 * {@link de.conterra.babelfish.interchange.ArrayValue#addValueNotNull(de.conterra.babelfish.interchange.Value)}
-	 * .
+	 * Test method for {@link de.conterra.babelfish.interchange.ArrayValue#addValueNotNull(de.conterra.babelfish.interchange.Value)}.
 	 */
 	@Test
-	public void testAddValueNotNull()
-	{
+	public void testAddValueNotNull() {
 		this.array.clear();
 		
 		NullValue nullValue = new NullValue();
@@ -130,13 +113,10 @@ public class ArrayValueTest
 	}
 	
 	/**
-	 * Test method for
-	 * {@link de.conterra.babelfish.interchange.ArrayValue#removeValue(de.conterra.babelfish.interchange.Value)}
-	 * .
+	 * Test method for {@link de.conterra.babelfish.interchange.ArrayValue#removeValue(de.conterra.babelfish.interchange.Value)}.
 	 */
 	@Test
-	public void testRemoveValueValue()
-	{
+	public void testRemoveValueValue() {
 		Assert.assertTrue(this.array.removeValue(this.values[this.values.length - 1]));
 		Assert.assertEquals(this.values.length - 1, this.array.getValues().size());
 		
@@ -144,14 +124,11 @@ public class ArrayValueTest
 	}
 	
 	/**
-	 * Test method for
-	 * {@link de.conterra.babelfish.interchange.ArrayValue#removeValue(int)}.
+	 * Test method for {@link de.conterra.babelfish.interchange.ArrayValue#removeValue(int)}.
 	 */
 	@Test
-	public void testRemoveValueInt()
-	{
-		for (int i = this.values.length - 1; i >= 0; i--)
-		{
+	public void testRemoveValueInt() {
+		for (int i = this.values.length - 1; i >= 0; i--) {
 			Assert.assertSame(this.values[i], this.array.removeValue(i));
 		}
 	}

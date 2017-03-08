@@ -2,18 +2,17 @@ package de.conterra.babelfish.plugin.v10_02.object.symbol.style;
 
 /**
  * defines a style of Simple Fill Symbols
- * 
- * @version 0.1
- * @author chwe
- * @since 0.1
+ *
+ * @author ChrissW-R1
+ * @version 0.1.0
+ * @since 0.1.0
  */
 public enum SFSStyle
-implements SymbolStyle
-{
+		implements SymbolStyle {
 	/**
 	 * non-visible symbol
-	 * 
-	 * @since 0.1
+	 *
+	 * @since 0.1.0
 	 */
 	Null,
 	BackwardDiagonal,
@@ -25,8 +24,7 @@ implements SymbolStyle
 	Solid;
 	
 	@Override
-	public String toString()
-	{
+	public String toString() {
 		return "esriSFS" + this.name();
 	}
 }

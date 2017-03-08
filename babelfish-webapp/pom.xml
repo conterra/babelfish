@@ -19,6 +19,7 @@
 		<servlet.version>3.1.0</servlet.version>
 		<jdom.version>2.0.6</jdom.version>
 		<image4j.version>0.7</image4j.version>
+		<plugin.jaxb.version>0.13.2</plugin.jaxb.version>
 	</properties>
 	
 	<dependencies>
@@ -71,7 +72,35 @@
 						</links>
 					</configuration>
 				</plugin>
+				<plugin>
+					<groupId>org.jvnet.jaxb2.maven2</groupId>
+					<artifactId>maven-jaxb2-plugin</artifactId>
+					<version>${plugin.jaxb.version}</version>
+					<executions>
+						<execution>
+							<id>generate-xsd</id>
+							<goals>
+								<goal>generate</goal>
+							</goals>
+							<configuration>
+								<schemas>
+									<schema>
+										<fileset>
+											<directory>${project.basedir}/src/main/xsd</directory>
+										</fileset>
+									</schema>
+								</schemas>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
 			</plugins>
 		</pluginManagement>
+		<plugins>
+			<plugin>
+				<groupId>org.jvnet.jaxb2.maven2</groupId>
+				<artifactId>maven-jaxb2-plugin</artifactId>
+			</plugin>
+		</plugins>
 	</build>
 </project>

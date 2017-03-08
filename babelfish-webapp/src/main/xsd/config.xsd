@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:jaxb="http://java.sun.com/xml/ns/jaxb" targetNamespace="http://developernetwork.conterra.de/babelfish/configuration" elementFormDefault="qualified" xmlns="http://developernetwork.conterra.de/babelfish/configuration" jaxb:version="2.0">
+	<xsd:annotation>
+		<xsd:appinfo>
+			<jaxb:schemaBindings>
+				<jaxb:package name="de.conterra.babelfish.config" />
+			</jaxb:schemaBindings>
+		</xsd:appinfo>
+	</xsd:annotation>
+	<xsd:simpleType name="semVer">
+		<xsd:restriction base="xsd:normalizedString">
+			<xsd:pattern value="(((((0?)\.([1-9][\d]*))|(([1-9]\d*)\.([1-9]\d*|\d)))(\.([1-9]\d*|\d))?)(-(([0-9A-Za-z-]+)(\.([0-9A-Za-z-]+))*))?((\+|_)(([0-9A-Za-z-]+)(\.([0-9A-Za-z-]+))*))?)" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="positiveDouble">
+		<xsd:restriction base="xsd:double">
+			<xsd:minInclusive value="0" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:complexType name="config">
+		<xsd:all>
+			<xsd:element name="schemaVersion" type="semVer" minOccurs="0" maxOccurs="1" default="0.4.0" />
+			<xsd:element name="shutdownDelay" type="xsd:long" minOccurs="0" maxOccurs="1" default="5000" />
+			<xsd:element name="managerEnabled" type="xsd:boolean" minOccurs="0" maxOccurs="1" default="false" />
+		</xsd:all>
+	</xsd:complexType>
+	<xsd:element name="config" type="config" />
+</xsd:schema>

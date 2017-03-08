@@ -4,20 +4,19 @@ import de.conterra.babelfish.plugin.v10_02.feature.Feature;
 
 /**
  * defines a field of {@link Feature}s
- * 
- * @version 0.2
- * @author chwe
- * @since 0.2
+ *
+ * @author ChrissW-R1
+ * @version 0.2.0
+ * @since 0.2.0
  */
 public interface Field
-extends de.conterra.babelfish.plugin.v10_02.feature.Field
-{
+		extends de.conterra.babelfish.plugin.v10_02.feature.Field {
 	/**
-	 * If <code>null</code> values ​​are allowed?
-	 * 
-	 * @since 0.2
-	 * 
-	 * @return <code>true</code>, if <code>null</code> values are ​​allowed
+	 * If {@code null} values ​​are allowed?
+	 *
+	 * @return {@code true}, if {@code null} values are allowed
+	 *
+	 * @since 0.2.0
 	 */
 	public boolean isNullable();
 }

@@ -2,70 +2,62 @@ package de.conterra.babelfish.interchange;
 
 /**
  * defines a {@link Value}, which contains a {@link String}
- * 
- * @version 0.1
- * @author chwe
- * @since 0.1
+ *
+ * @author ChrissW-R1
+ * @version 0.1.0
+ * @since 0.1.0
  */
 public class StringValue
-extends Value
-{
+		extends Value {
 	/**
 	 * the value to store
-	 * 
-	 * @since 0.1
+	 *
+	 * @since 0.1.0
 	 */
 	private String value;
 	
 	/**
 	 * constructor, with given value
-	 * 
-	 * @since 0.1
-	 * 
+	 *
 	 * @param value the value to store
+	 * @since 0.1.0
 	 */
-	public StringValue(String value)
-	{
+	public StringValue(String value) {
 		this.value = value;
 	}
 	
 	/**
 	 * standard constructor
-	 * 
-	 * @since 0.1
+	 *
+	 * @since 0.1.0
 	 */
-	public StringValue()
-	{
+	public StringValue() {
 		this("");
 	}
 	
 	/**
 	 * gives the value
-	 * 
-	 * @since 0.1
-	 * 
+	 *
 	 * @return the value
+	 *
+	 * @since 0.1.0
 	 */
-	public String getValue()
-	{
+	public String getValue() {
 		return this.value;
 	}
 	
 	/**
 	 * sets the value
-	 * 
-	 * @since 0.1
-	 * 
+	 *
 	 * @param value the value to set
+	 * @since 0.1.0
 	 */
-	public void setValue(String value)
-	{
+	public void setValue(String value) {
 		this.value = value;
 	}
 	
 	@Override
-	public boolean isEmpty()
-	{
+	public boolean isEmpty() {
 		return this.value == null || this.value.isEmpty();
 	}
 }

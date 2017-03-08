@@ -6,38 +6,34 @@ import org.junit.Test;
 
 /**
  * tests the class {@link NullValue}
- * 
+ *
+ * @author ChrissW-R1
  * @version 0.3.1
- * @author chwe
  * @since 0.3.1
  */
-public class NullValueTest
-{
+public class NullValueTest {
 	/**
 	 * the test object
-	 * 
+	 *
 	 * @since 0.3.1
 	 */
 	private NullValue value;
 	
 	/**
 	 * initialize the test object
-	 * 
+	 *
 	 * @since 0.3.1
 	 */
 	@Before
-	public void setUp()
-	{
+	public void setUp() {
 		this.value = new NullValue();
 	}
 	
 	/**
-	 * Test method for
-	 * {@link de.conterra.babelfish.interchange.NullValue#isEmpty()}.
+	 * Test method for {@link de.conterra.babelfish.interchange.NullValue#isEmpty()}.
 	 */
 	@Test
-	public void testIsEmpty()
-	{
+	public void testIsEmpty() {
 		Assert.assertTrue(this.value.isEmpty());
 	}
 }

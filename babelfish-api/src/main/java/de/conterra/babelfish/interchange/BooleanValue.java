@@ -1,61 +1,54 @@
 package de.conterra.babelfish.interchange;
 
 /**
- * defines a {@link Value}, which stores a <code>boolean</code>
- * 
- * @version 0.1
- * @author chwe
- * @since 0.1
+ * defines a {@link Value}, which stores a {@code boolean}
+ *
+ * @author ChrissW-R1
+ * @version 0.1.0
+ * @since 0.1.0
  */
 public class BooleanValue
-extends Value
-{
+		extends Value {
 	/**
-	 * the stored <code>boolean</code>
-	 * 
-	 * @since 0.1
+	 * the stored {@code boolean}
+	 *
+	 * @since 0.1.0
 	 */
 	private boolean value;
 	
 	/**
 	 * constructor, with given value
-	 * 
-	 * @since 0.1
-	 * 
+	 *
 	 * @param value the value to store
+	 * @since 0.1.0
 	 */
-	public BooleanValue(boolean value)
-	{
+	public BooleanValue(boolean value) {
 		this.value = value;
 	}
 	
 	/**
 	 * gives the stored value
-	 * 
-	 * @since 0.1
-	 * 
+	 *
 	 * @return the stored value
+	 *
+	 * @since 0.1.0
 	 */
-	public boolean getValue()
-	{
+	public boolean getValue() {
 		return this.value;
 	}
 	
 	/**
 	 * sets the value
-	 * 
-	 * @since 0.1
-	 * 
+	 *
 	 * @param value the value to set
+	 * @since 0.1.0
 	 */
-	public void setValue(boolean value)
-	{
+	public void setValue(boolean value) {
 		this.value = value;
 	}
 	
 	@Override
-	public boolean isEmpty()
-	{
+	public boolean isEmpty() {
 		return false;
 	}
 }

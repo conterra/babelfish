@@ -11,38 +11,33 @@ import de.conterra.babelfish.util.MimeUtils;
 
 /**
  * defines a builder, which creates an overview of all {@link Attachment}s
- * 
- * @version 0.1
- * @author chwe
- * @since 0.1
+ *
+ * @author ChrissW-R1
+ * @version 0.1.0
+ * @since 0.1.0
  */
-public class AttachmentBuilder
-{
+public class AttachmentBuilder {
 	/**
 	 * private standard constructor, to prevent initialization
-	 * 
-	 * @since 0.1
+	 *
+	 * @since 0.1.0
 	 */
-	private AttachmentBuilder()
-	{
+	private AttachmentBuilder() {
 	}
 	
 	/**
-	 * creates an {@link ObjectValue} with the overview over all
-	 * {@link Attachment}s of a {@link Feature}
-	 * 
-	 * @since 0.1
-	 * 
+	 * creates an {@link ObjectValue} with the overview over all {@link Attachment}s of a {@link Feature}
+	 *
 	 * @param feature the {@link Feature} to get the {@link Attachment}s of
 	 * @return the created {@link ObjectValue}
+	 *
+	 * @since 0.1.0
 	 */
-	public static ObjectValue build(Feature<? extends FeatureObject> feature)
-	{
+	public static ObjectValue build(Feature<? extends FeatureObject> feature) {
 		ObjectValue result = new ObjectValue();
 		
 		ArrayValue attas = new ArrayValue();
-		for (Attachment atta : feature.getAttachments())
-		{
+		for (Attachment atta : feature.getAttachments()) {
 			ObjectValue attaValue = new ObjectValue();
 			byte[] data = atta.getData();
 			

@@ -1,12 +1,5 @@
 package de.conterra.babelfish.util;
 
-import java.io.Serializable;
-import java.util.Set;
-import java.util.concurrent.ExecutionException;
-
-import org.junit.Assert;
-import org.junit.Test;
-
 import de.conterra.babelfish.plugin.ServiceNotAvailableException;
 import de.conterra.babelfish.plugin.WrongRequestException;
 import de.conterra.babelfish.plugin.v10_02.feature.Feature;
@@ -15,24 +8,26 @@ import de.conterra.babelfish.plugin.v10_11.feature.Relationship;
 import de.conterra.babelfish.plugin.v10_11.feature.Table;
 import de.conterra.babelfish.plugin.v10_21.RestService;
 import de.conterra.babelfish.plugin.v10_21.feature.FeatureService;
+import org.junit.Assert;
+import org.junit.Test;
+
+import java.io.Serializable;
+import java.util.Set;
+import java.util.concurrent.ExecutionException;
 
 /**
  * tests the class {@link ClassUtils}
- * 
+ *
+ * @author ChrissW-R1
  * @version 0.3.1
- * @author chwe
  * @since 0.3.1
  */
-public class ClassUtilsTest
-{
+public class ClassUtilsTest {
 	/**
-	 * Test method for
-	 * {@link de.conterra.babelfish.util.ClassUtils#getSuperTypes(java.lang.Class)}
-	 * .
+	 * Test method for {@link de.conterra.babelfish.util.ClassUtils#getSuperTypes(java.lang.Class)}.
 	 */
 	@Test
-	public void testGetSuperTypes()
-	{
+	public void testGetSuperTypes() {
 		Set<? extends Class<?>> superTypes = ClassUtils.getSuperTypes(ServiceNotAvailableException.class);
 		
 		Assert.assertTrue(superTypes.contains(ExecutionException.class));
@@ -47,13 +42,10 @@ public class ClassUtilsTest
 	}
 	
 	/**
-	 * Test method for
-	 * {@link de.conterra.babelfish.util.ClassUtils#getSuperclasses(java.lang.Class)}
-	 * .
+	 * Test method for {@link de.conterra.babelfish.util.ClassUtils#getSuperclasses(java.lang.Class)}.
 	 */
 	@Test
-	public void testGetSuperclasses()
-	{
+	public void testGetSuperclasses() {
 		Set<? extends Class<?>> superClasses = ClassUtils.getSuperclasses(ServiceNotAvailableException.class);
 		
 		Assert.assertTrue(superClasses.contains(ExecutionException.class));
@@ -66,13 +58,10 @@ public class ClassUtilsTest
 	}
 	
 	/**
-	 * Test method for
-	 * {@link de.conterra.babelfish.util.ClassUtils#getRecursivlyInterfaces(java.lang.Class)}
-	 * .
+	 * Test method for {@link de.conterra.babelfish.util.ClassUtils#getRecursivlyInterfaces(java.lang.Class)}.
 	 */
 	@Test
-	public void testGetRecursivlyInterfaces()
-	{
+	public void testGetRecursivlyInterfaces() {
 		Set<? extends Class<?>> interfaces = ClassUtils.getRecursivlyInterfaces(FeatureService.class);
 		
 		Assert.assertTrue(interfaces.contains(de.conterra.babelfish.plugin.v10_11.feature.FeatureService.class));

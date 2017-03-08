@@ -1,49 +1,46 @@
 package de.conterra.babelfish.plugin.v10_02.object.symbol;
 
-import java.awt.Color;
-
 import de.conterra.babelfish.plugin.v10_02.object.symbol.style.SLSStyle;
+
+import java.awt.*;
 
 /**
  * defines a Simple Line Symbol
- * 
- * @version 0.1
- * @author chwe
- * @since 0.1
+ *
+ * @author ChrissW-R1
+ * @version 0.1.0
+ * @since 0.1.0
  */
 public class SimpleLineSymbol
-extends SimpleSymbol
-{
+		extends SimpleSymbol {
 	/**
 	 * the style
-	 * 
-	 * @since 0.1
+	 *
+	 * @since 0.1.0
 	 */
 	private final SLSStyle style;
 	/**
 	 * the color
-	 * 
-	 * @since 0.1
+	 *
+	 * @since 0.1.0
 	 */
 	private ColorSymbol color;
 	/**
 	 * the width
-	 * 
-	 * @since 0.1
+	 *
+	 * @since 0.1.0
 	 */
 	private int width;
 	
 	/**
 	 * constructor, with given {@link ColorSymbol}
-	 * 
-	 * @since 0.1
-	 * 
+	 *
 	 * @param style the style
 	 * @param color the {@link ColorSymbol}
 	 * @param width the width
+	 * @since 0.1.0
 	 */
-	public SimpleLineSymbol(SLSStyle style, ColorSymbol color, int width)
-	{
+	public SimpleLineSymbol(SLSStyle style, ColorSymbol color, int width) {
 		this.style = style;
 		this.color = color;
 		this.width = width;
@@ -51,84 +48,74 @@ extends SimpleSymbol
 	
 	/**
 	 * constructor, width given {@link Color}
-	 * 
-	 * @since 0.1
-	 * 
+	 *
 	 * @param style the style
 	 * @param color the color
 	 * @param width the width
+	 * @since 0.1.0
 	 */
-	public SimpleLineSymbol(SLSStyle style, Color color, int width)
-	{
+	public SimpleLineSymbol(SLSStyle style, Color color, int width) {
 		this(style, new ColorSymbol(color), width);
 	}
 	
 	@Override
-	public String getType()
-	{
+	public String getType() {
 		return super.getType() + "SLS";
 	}
 	
 	/**
 	 * gives the color
-	 * 
-	 * @since 0.1
-	 * 
+	 *
 	 * @return the color
+	 *
+	 * @since 0.1.0
 	 */
 	@Override
-	public ColorSymbol getColor()
-	{
+	public ColorSymbol getColor() {
 		return this.color;
 	}
 	
 	/**
 	 * sets the color
-	 * 
-	 * @since 0.1
-	 * 
+	 *
 	 * @param color the color to set
+	 * @since 0.1.0
 	 */
 	@Override
-	public void setColor(ColorSymbol color)
-	{
+	public void setColor(ColorSymbol color) {
 		this.color = color;
 	}
 	
 	/**
 	 * gives the width
-	 * 
-	 * @since 0.1
-	 * 
+	 *
 	 * @return the width
+	 *
+	 * @since 0.1.0
 	 */
-	public int getWidth()
-	{
+	public int getWidth() {
 		return this.width;
 	}
 	
 	/**
 	 * sets the width
-	 * 
-	 * @since 0.1
-	 * 
+	 *
 	 * @param width the width to set
+	 * @since 0.1.0
 	 */
-	public void setWidth(int width)
-	{
+	public void setWidth(int width) {
 		this.width = width;
 	}
 	
 	/**
 	 * gives the style
-	 * 
-	 * @since 0.1
-	 * 
+	 *
 	 * @return the style
+	 *
+	 * @since 0.1.0
 	 */
 	@Override
-	public SLSStyle getStyle()
-	{
+	public SLSStyle getStyle() {
 		return this.style;
 	}
 }
