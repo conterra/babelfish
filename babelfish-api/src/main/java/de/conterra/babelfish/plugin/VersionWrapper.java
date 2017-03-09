@@ -1,8 +1,7 @@
 package de.conterra.babelfish.plugin;
 
 import de.conterra.babelfish.util.ClassUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.lang.annotation.Annotation;
 
@@ -10,16 +9,11 @@ import java.lang.annotation.Annotation;
  * defines a class, which searches for {@link ServiceWrapper} by a {@link RestService}
  *
  * @author ChrissW-R1
- * @version 0.1.0
+ * @version 0.4.0
  * @since 0.1.0
  */
+@Slf4j
 public class VersionWrapper {
-	/**
-	 * the {@link Logger} of this class
-	 *
-	 * @since 0.1.0
-	 */
-	public static final Logger LOGGER = LoggerFactory.getLogger(VersionWrapper.class);
 	/**
 	 * official version number of the current REST API version
 	 *
@@ -48,7 +42,7 @@ public class VersionWrapper {
 			throws ServiceNotAvailableException {
 		ServiceWrapper serviceWrapper = null;
 		
-		VersionWrapper.LOGGER.debug("Search for wrapper in every superclass and interface.");
+		log.debug("Search for wrapper in every superclass and interface.");
 		
 		for (Class<?> superType : ClassUtils.getSuperTypes(service.getClass())) {
 			for (Annotation anno : superType.getAnnotations()) {
@@ -60,7 +54,7 @@ public class VersionWrapper {
 								|| newServiceWrapper.getVersion().doubleValue() > serviceWrapper.getVersion().doubleValue())
 							serviceWrapper = newServiceWrapper;
 					} catch (InstantiationException | IllegalAccessException e) {
-						VersionWrapper.LOGGER.error("Find wrapper information, but couldn't instantiate it.", e);
+						log.error("Find wrapper information, but couldn't instantiate it.", e);
 					}
 				}
 			}
@@ -69,7 +63,7 @@ public class VersionWrapper {
 		if (serviceWrapper == null)
 			throw new ServiceNotAvailableException("No valid wrapper found to handle the service: " + service.getClass().getName());
 		
-		VersionWrapper.LOGGER.debug("Found valid wrapper " + serviceWrapper.getClass().getName() + " (API v" + serviceWrapper.getVersion() + ")");
+		log.debug("Found valid wrapper " + serviceWrapper.getClass().getName() + " (API v" + serviceWrapper.getVersion() + ")");
 		
 		return serviceWrapper;
 	}

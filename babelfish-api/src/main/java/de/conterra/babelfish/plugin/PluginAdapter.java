@@ -1,7 +1,6 @@
 package de.conterra.babelfish.plugin;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,17 +20,11 @@ import java.util.jar.JarFile;
  * defines a class of static methods to {@link Plugin}s
  *
  * @author ChrissW-R1
- * @version 0.2.1
+ * @version 0.4.0
  * @since 0.1.0
  */
+@Slf4j
 public class PluginAdapter {
-	/**
-	 * the {@link Logger} of this class
-	 *
-	 * @since 0.1.0
-	 */
-	public static final Logger LOGGER = LoggerFactory.getLogger(PluginAdapter.class);
-	
 	/**
 	 * the path to the folder, in which the {@link Plugin} JARs would be saved
 	 *
@@ -171,11 +164,11 @@ public class PluginAdapter {
 		String path = file.getAbsolutePath();
 		Set<Plugin> result = new LinkedHashSet<>();
 		
-		PluginAdapter.LOGGER.debug("Try loading plugin from " + path + ".");
+		log.debug("Try loading plugin from " + path + ".");
 		
 		if (file.isDirectory()) {
 			String msg = "The plugin file have to be a JAR! But " + path + " is a directory!";
-			PluginAdapter.LOGGER.error(msg);
+			log.error(msg);
 			throw new IOException(msg);
 		}
 		
@@ -209,26 +202,26 @@ public class PluginAdapter {
 						String pluginName = plugin.getName();
 						
 						if (PluginAdapter.getPlugin(pluginName) != null) {
-							PluginAdapter.LOGGER.debug("A plugin with the name " + pluginName + " is already loaded!");
+							log.debug("A plugin with the name " + pluginName + " is already loaded!");
 							continue;
 						}
 						
-						PluginAdapter.LOGGER.debug("Initialize plugin " + pluginName + ".");
+						log.debug("Initialize plugin " + pluginName + ".");
 						if (plugin.init()) {
-							PluginAdapter.LOGGER.debug("Plugin " + pluginName + " successfully initialized.");
+							log.debug("Plugin " + pluginName + " successfully initialized.");
 							
 							PluginAdapter.PLUGINS.put(plugin, new PluginWrapper(plugin, jarFile, cl));
 							result.add(plugin);
 						} else {
-							PluginAdapter.LOGGER.warn("Initialization of plugin " + pluginName + " failed!");
+							log.warn("Initialization of plugin " + pluginName + " failed!");
 						}
 						
-						PluginAdapter.LOGGER.debug("Successfully loaded plugin " + pluginName + ".");
+						log.debug("Successfully loaded plugin " + pluginName + ".");
 					}
 				} catch (ClassNotFoundException | NoClassDefFoundError e) {
-					PluginAdapter.LOGGER.debug("Couldn't load class " + className + " of file " + path + ".", e);
+					log.debug("Couldn't load class " + className + " of file " + path + ".", e);
 				} catch (InstantiationException | IllegalAccessException e) {
-					PluginAdapter.LOGGER.debug("Couldn't instantiate an object of the class " + className + ".", e);
+					log.debug("Couldn't instantiate an object of the class " + className + ".", e);
 				}
 			}
 			
@@ -241,15 +234,15 @@ public class PluginAdapter {
 				throw new IOException("Couldn't found any plugin implementation in file " + path + "!");
 		} catch (MalformedURLException e) {
 			String msg = "An error occurred on create a class loader of file " + path + "!";
-			PluginAdapter.LOGGER.error(msg, e);
+			log.error(msg, e);
 			throw new IOException(msg, e);
 		} catch (SecurityException e) {
 			String msg = "Have no access rights of the file " + path + "!";
-			PluginAdapter.LOGGER.error(msg, e);
+			log.error(msg, e);
 			throw new IOException(msg, e);
 		} catch (IOException e) {
 			String msg = "Couldn't load file " + path + " as a valid JAR!";
-			PluginAdapter.LOGGER.error(msg, e);
+			log.error(msg, e);
 			throw new IOException(msg, e);
 		}
 		
@@ -265,7 +258,7 @@ public class PluginAdapter {
 	 * @since 0.1.0
 	 */
 	public static boolean unloadPlugin(Plugin plugin) {
-		PluginAdapter.LOGGER.debug("Try unloading the plugin " + plugin.getName() + ".");
+		log.debug("Try unloading the plugin " + plugin.getName() + ".");
 		
 		return PluginAdapter.getPluginWrapper(plugin).shutdown()
 				&& (PluginAdapter.PLUGINS.remove(plugin) != null);

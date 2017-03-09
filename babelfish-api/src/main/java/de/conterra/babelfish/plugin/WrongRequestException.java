@@ -6,7 +6,7 @@ import java.util.concurrent.ExecutionException;
  * This {@link ExecutionException} would be thrown, if a {@link ServiceBuilder} couldn't interpret a request
  *
  * @author ChrissW-R1
- * @version 0.1.0
+ * @version 0.4.0
  * @since 0.1.0
  */
 public class WrongRequestException
@@ -16,7 +16,7 @@ public class WrongRequestException
 	 *
 	 * @since 0.1.0
 	 */
-	private static final long serialVersionUID = -8135379608394945744L;
+	private static final long serialVersionUID = 2L;
 	
 	/**
 	 * standard constructor

@@ -10,25 +10,18 @@ import de.conterra.babelfish.plugin.v10_11.feature.FeatureLayer;
 import de.conterra.babelfish.plugin.v10_11.feature.FeatureService;
 import de.conterra.babelfish.plugin.v10_11.feature.Layer;
 import de.conterra.babelfish.plugin.v10_11.feature.Relationship;
+import lombok.extern.slf4j.Slf4j;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * a class to build the overview page of a {@link Layer}
  *
  * @author ChrissW-R1
- * @version 0.1.0
+ * @version 0.4.0
  * @since 0.1.0
  */
+@Slf4j
 public class LayerBuilder {
-	/**
-	 * the {@link Logger} of this class
-	 *
-	 * @since 0.1.0
-	 */
-	public static final Logger LOGGER = LoggerFactory.getLogger(LayerBuilder.class);
-	
 	/**
 	 * private standard constructor, to prevent initialization
 	 *
@@ -74,7 +67,7 @@ public class LayerBuilder {
 				
 				for (Relationship<? extends FeatureObject, ? extends FeatureObject> rel : service.getRelationships()) {
 					if (rel.getId() == relId) {
-						LayerBuilder.LOGGER.debug("Extends relation " + rel.getOriginLayer().getName() + " --> " + rel.getDestinationLayer().getName() + ".");
+						log.debug("Extends relation " + rel.getOriginLayer().getName() + " --> " + rel.getDestinationLayer().getName() + ".");
 						
 						if (rel.getCardinality() != null)
 							relObject.addContent("cardinality", new StringValue(rel.getCardinality().toString()));
@@ -103,7 +96,7 @@ public class LayerBuilder {
 		result.addContent("supportsAdvancedQueries", new BooleanValue(layer.supportsAdvancedQueries()), "relationships", true);
 		
 		if (layer instanceof FeatureLayer<?, ?>) {
-			LayerBuilder.LOGGER.debug("Layer " + layer.getName() + " is a feature layer.");
+			log.debug("Layer " + layer.getName() + " is a feature layer.");
 			
 			FeatureLayer<? extends GeometryObject, ? extends GeometryFeatureObject<? extends GeometryObject>> featureLayer = (FeatureLayer<?, ?>) layer;
 			

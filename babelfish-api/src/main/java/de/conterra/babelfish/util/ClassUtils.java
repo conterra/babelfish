@@ -1,7 +1,6 @@
 package de.conterra.babelfish.util;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -10,17 +9,11 @@ import java.util.Set;
  * utility class of some function on {@link Class} objects
  *
  * @author ChrissW-R1
- * @version 0.1.0
+ * @version 0.4.0
  * @since 0.1.0
  */
+@Slf4j
 public class ClassUtils {
-	/**
-	 * the {@link Logger} of this class
-	 *
-	 * @since 0.1.0
-	 */
-	public static final Logger LOGGER = LoggerFactory.getLogger(ClassUtils.class);
-	
 	/**
 	 * private standard constructor, to prevent initialization
 	 *
@@ -43,14 +36,14 @@ public class ClassUtils {
 		if (child != null) {
 			String className = child.getName();
 			
-			ClassUtils.LOGGER.debug("Adds all superclasses of the given class " + className + " to the result set.");
+			log.debug("Adds all superclasses of the given class " + className + " to the result set.");
 			Set<? extends Class<?>> superClasses = ClassUtils.getSuperclasses(child);
 			result.addAll(ClassUtils.getSuperclasses(child));
 			
-			ClassUtils.LOGGER.debug("Adds all interfaces (recursively) of the given class " + className + " to the result list.");
+			log.debug("Adds all interfaces (recursively) of the given class " + className + " to the result list.");
 			result.addAll(ClassUtils.getRecursivlyInterfaces(child));
 			
-			ClassUtils.LOGGER.debug("Adds all interfaces of all super classes to the result list.");
+			log.debug("Adds all interfaces of all super classes to the result list.");
 			for (Class<?> clazz : superClasses) {
 				result.addAll(ClassUtils.getRecursivlyInterfaces(clazz));
 			}
@@ -75,9 +68,9 @@ public class ClassUtils {
 			if (superclass != null) {
 				String superclassName = superclass.getName();
 				
-				ClassUtils.LOGGER.debug("Adds superclass " + superclassName + " of the given class " + child.getName() + " to the result set.");
+				log.debug("Adds superclass " + superclassName + " of the given class " + child.getName() + " to the result set.");
 				result.add(superclass);
-				ClassUtils.LOGGER.debug("Adds all superclasses (recursively) of the superclass " + superclassName + " to the result set.");
+				log.debug("Adds all superclasses (recursively) of the superclass " + superclassName + " to the result set.");
 				result.addAll(ClassUtils.getSuperclasses(superclass));
 			}
 		}
@@ -100,9 +93,9 @@ public class ClassUtils {
 			for (Class<?> in : child.getInterfaces()) {
 				String interfaceName = in.getName();
 				
-				ClassUtils.LOGGER.debug("Adds the interface " + interfaceName + " to the result set.");
+				log.debug("Adds the interface " + interfaceName + " to the result set.");
 				result.add(in);
-				ClassUtils.LOGGER.debug("Adds all interfaces of the interface " + interfaceName + " to the result set.");
+				log.debug("Adds all interfaces of the interface " + interfaceName + " to the result set.");
 				result.addAll(ClassUtils.getRecursivlyInterfaces(in));
 			}
 		}

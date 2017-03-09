@@ -14,7 +14,7 @@ import java.io.PrintWriter;
  * A {@link BaseServlet}, which provides an about site
  *
  * @author ChrissW-R1
- * @version 0.2.3
+ * @version 0.4.0
  * @since 0.1.0
  */
 @WebServlet(description = "A Servlet, which provides an about site", urlPatterns =
@@ -29,7 +29,7 @@ public class AboutServlet
 	 *
 	 * @since 0.1.0
 	 */
-	private static final long serialVersionUID = -9045519926848091839L;
+	private static final long serialVersionUID = 3L;
 	
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)

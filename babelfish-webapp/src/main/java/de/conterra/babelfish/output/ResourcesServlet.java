@@ -2,8 +2,7 @@ package de.conterra.babelfish.output;
 
 import de.conterra.babelfish.interchange.DataValue;
 import de.conterra.babelfish.util.DataUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.imageio.ImageIO;
 import javax.servlet.Servlet;
@@ -18,9 +17,10 @@ import java.io.IOException;
  * {@link Servlet} to provide an image of the conterra logo
  *
  * @author ChrissW-R1
- * @version 0.2.3
+ * @version 0.4.0
  * @since 0.2.3
  */
+@Slf4j
 @WebServlet(
 		description = "Servlet to provide an image of the conterra logo",
 		urlPatterns =
@@ -35,13 +35,7 @@ public class ResourcesServlet
 	 *
 	 * @since 0.2.3
 	 */
-	private static final long serialVersionUID = -1990019407862901346L;
-	/**
-	 * the {@link Logger} of this class
-	 *
-	 * @since 0.2.3
-	 */
-	public static final Logger LOGGER = LoggerFactory.getLogger(ResourcesServlet.class);
+	private static final long serialVersionUID = 3L;
 	
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -73,15 +67,15 @@ public class ResourcesServlet
 		String path = null;
 		String filename = null;
 		
-		ResourcesServlet.LOGGER.debug("Target resource is " + pathInfo + ".");
+		log.debug("Target resource is " + pathInfo + ".");
 		
 		if (target[0].equalsIgnoreCase("conterraLogo")) {
-			ResourcesServlet.LOGGER.debug("The conterra logo is requested.");
+			log.debug("The conterra logo is requested.");
 			
 			path = "conterra_Logo_RGB.PNG";
 			filename = "conterraLogo.png";
 		} else if (target[0].equalsIgnoreCase("logoLettering")) {
-			ResourcesServlet.LOGGER.debug("The Babelfish logo with lettering is requested.");
+			log.debug("The Babelfish logo with lettering is requested.");
 			
 			path = "logo_lettering.png";
 			filename = "logoLettering.png";

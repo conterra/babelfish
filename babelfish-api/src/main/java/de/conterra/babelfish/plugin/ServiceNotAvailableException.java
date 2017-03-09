@@ -7,7 +7,7 @@ import java.util.concurrent.ExecutionException;
  * For example it runs in an {@link Exception} on working the request, too.
  *
  * @author ChrissW-R1
- * @version 0.1.0
+ * @version 0.4.0
  * @since 0.1.0
  */
 public class ServiceNotAvailableException
@@ -17,7 +17,7 @@ public class ServiceNotAvailableException
 	 *
 	 * @since 0.1.0
 	 */
-	private static final long serialVersionUID = -9176728755591268754L;
+	private static final long serialVersionUID = 2L;
 	
 	/**
 	 * standard constructor

@@ -1,5 +1,6 @@
 package de.conterra.babelfish.util;
 
+import lombok.extern.slf4j.Slf4j;
 import org.geotools.geometry.GeneralDirectPosition;
 import org.geotools.geometry.iso.coordinate.PointArrayImpl;
 import org.opengis.geometry.DirectPosition;
@@ -7,8 +8,6 @@ import org.opengis.geometry.Envelope;
 import org.opengis.geometry.coordinate.Position;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.operation.TransformException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -19,18 +18,12 @@ import java.util.List;
  * defines an {@link Envelope}, which contains a {@link List} of {@link DirectPosition}s
  *
  * @author ChrissW-R1
- * @version 0.1.0
+ * @version 0.4.0
  * @since 0.1.0
  */
+@Slf4j
 public class ContainerEnvelope
 		implements Envelope {
-	/**
-	 * the {@link Logger} of this class
-	 *
-	 * @since 0.1.0
-	 */
-	public static final Logger LOGGER = LoggerFactory.getLogger(ContainerEnvelope.class);
-	
 	/**
 	 * the lower corner of the {@link Envelope}
 	 *
@@ -55,15 +48,15 @@ public class ContainerEnvelope
 			throws IllegalArgumentException {
 		if (crs == null) {
 			String msg = "The coordinate reference system have to be set!";
-			ContainerEnvelope.LOGGER.debug(msg);
+			log.debug(msg);
 			throw new IllegalArgumentException(msg);
 		}
 		
-		ContainerEnvelope.LOGGER.debug("Create new lower and upper corner.");
+		log.debug("Create new lower and upper corner.");
 		this.lowerCorner = new GeneralDirectPosition(crs);
 		this.upperCorner = new GeneralDirectPosition(crs);
 		
-		ContainerEnvelope.LOGGER.debug("Fill every existing ordinate with infinity values.");
+		log.debug("Fill every existing ordinate with infinity values.");
 		for (int i = 0; i < this.getDimension(); i++) {
 			this.lowerCorner.setOrdinate(i, Double.POSITIVE_INFINITY);
 			this.upperCorner.setOrdinate(i, Double.NEGATIVE_INFINITY);
@@ -81,7 +74,7 @@ public class ContainerEnvelope
 			throws IllegalArgumentException {
 		this((new PointArrayImpl(new LinkedList<>(positions))).getCoordinateReferenceSystem());
 		
-		ContainerEnvelope.LOGGER.debug("Set the extrem ordinates of all given positions.");
+		log.debug("Set the extrem ordinates of all given positions.");
 		this.addPositions(positions);
 	}
 	
@@ -97,7 +90,7 @@ public class ContainerEnvelope
 			throws IllegalArgumentException {
 		this(crs);
 		
-		ContainerEnvelope.LOGGER.debug("Set the extreme ordinates of all given envelopes.");
+		log.debug("Set the extreme ordinates of all given envelopes.");
 		for (Envelope env : envelopes)
 			this.addEnvelope(env);
 	}
@@ -113,7 +106,7 @@ public class ContainerEnvelope
 	private static DirectPosition cleanPosition(DirectPosition pos) {
 		GeneralDirectPosition result = new GeneralDirectPosition(pos);
 		
-		ContainerEnvelope.LOGGER.debug("Set the infinity values to 0.");
+		log.debug("Set the infinity values to 0.");
 		for (int i = 0; i < result.getDimension(); i++) {
 			double ordinate = result.getOrdinate(i);
 			
@@ -136,13 +129,13 @@ public class ContainerEnvelope
 	
 	@Override
 	public DirectPosition getLowerCorner() {
-		ContainerEnvelope.LOGGER.debug("Return cleaned position (no infinity values).");
+		log.debug("Return cleaned position (no infinity values).");
 		return ContainerEnvelope.cleanPosition(this.lowerCorner);
 	}
 	
 	@Override
 	public DirectPosition getUpperCorner() {
-		ContainerEnvelope.LOGGER.debug("Return cleaned position (no infinity values).");
+		log.debug("Return cleaned position (no infinity values).");
 		return ContainerEnvelope.cleanPosition(this.upperCorner);
 	}
 	
@@ -186,12 +179,12 @@ public class ContainerEnvelope
 		try {
 			posDst = GeoUtils.transform(posSrc, this.getCoordinateReferenceSystem());
 		} catch (TransformException e) {
-			ContainerEnvelope.LOGGER.warn("Use given position without transformation to the envelope CRS.", e);
+			log.warn("Use given position without transformation to the envelope CRS.", e);
 			
 			posDst = posSrc;
 		}
 		
-		ContainerEnvelope.LOGGER.debug("Set new dimensions of lower and upper corner to infinity values.");
+		log.debug("Set new dimensions of lower and upper corner to infinity values.");
 		for (int i = this.getDimension(); this.getDimension() < posDst.getDimension(); i++) {
 			this.lowerCorner.setOrdinate(i, Double.POSITIVE_INFINITY);
 			this.upperCorner.setOrdinate(i, Double.NEGATIVE_INFINITY);
@@ -200,13 +193,13 @@ public class ContainerEnvelope
 		double[] coordinates = posDst.getCoordinate();
 		for (int i = 0; i < posDst.getDimension(); i++) {
 			if (coordinates[i] < this.lowerCorner.getOrdinate(i)) {
-				ContainerEnvelope.LOGGER.debug("Found smaller ordinate on " + i + ". dimension: " + coordinates[i] + " < " + this.lowerCorner.getOrdinate(i));
+				log.debug("Found smaller ordinate on " + i + ". dimension: " + coordinates[i] + " < " + this.lowerCorner.getOrdinate(i));
 				
 				this.lowerCorner.setOrdinate(i, coordinates[i]);
 				result = true;
 			}
 			if (coordinates[i] > this.upperCorner.getOrdinate(i)) {
-				ContainerEnvelope.LOGGER.debug("Found greater ordinate on " + i + ". dimension: " + coordinates[i] + " < " + this.upperCorner.getOrdinate(i));
+				log.debug("Found greater ordinate on " + i + ". dimension: " + coordinates[i] + " < " + this.upperCorner.getOrdinate(i));
 				
 				this.upperCorner.setOrdinate(i, coordinates[i]);
 				result = true;
@@ -229,7 +222,7 @@ public class ContainerEnvelope
 		
 		for (Position pos : positions) {
 			if (this.addPosition(pos)) {
-				ContainerEnvelope.LOGGER.debug("Position " + pos + " have changed the envelope.");
+				log.debug("Position " + pos + " have changed the envelope.");
 				
 				result = true;
 			}
@@ -249,7 +242,7 @@ public class ContainerEnvelope
 	public boolean addEnvelope(Envelope envelope) {
 		List<Position> list = new ArrayList<>();
 		
-		ContainerEnvelope.LOGGER.debug("Add lower and upper corner of the given envelope to the list of positions to add.");
+		log.debug("Add lower and upper corner of the given envelope to the list of positions to add.");
 		list.add(envelope.getLowerCorner());
 		list.add(envelope.getUpperCorner());
 		

@@ -4,8 +4,7 @@ import de.conterra.babelfish.interchange.ArrayValue;
 import de.conterra.babelfish.interchange.NumberValue;
 import de.conterra.babelfish.interchange.ObjectValue;
 import de.conterra.babelfish.interchange.StringValue;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -14,17 +13,11 @@ import java.util.Set;
  * defines a class to build the overview list over all registered {@link RestService}s
  *
  * @author ChrissW-R1
- * @version 0.1.0
+ * @version 0.4.0
  * @since 0.1.0
  */
+@Slf4j
 public class ServiceListBuilder {
-	/**
-	 * the {@link Logger} of this class
-	 *
-	 * @since 0.1.0
-	 */
-	public static final Logger LOGGER = LoggerFactory.getLogger(ServiceListBuilder.class);
-	
 	/**
 	 * private standard constructor, to prevent initialization
 	 *
@@ -71,7 +64,7 @@ public class ServiceListBuilder {
 						services.addValue(serviceValue);
 					}
 				} catch (ServiceNotAvailableException e) {
-					ServiceListBuilder.LOGGER.error("Couldn't add service " + serviceId + " to the list, because no valid wrapper found!", e);
+					log.error("Couldn't add service " + serviceId + " to the list, because no valid wrapper found!", e);
 				}
 			}
 		}

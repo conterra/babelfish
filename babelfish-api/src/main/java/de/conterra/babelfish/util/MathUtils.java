@@ -1,23 +1,16 @@
 package de.conterra.babelfish.util;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * defines a class with enhanced {@link Math} functions
  *
  * @author ChrissW-R1
- * @version 0.1.0
+ * @version 0.4.0
  * @since 0.1.0
  */
+@Slf4j
 public class MathUtils {
-	/**
-	 * the {@link Logger} of this class
-	 *
-	 * @since 0.1.0
-	 */
-	public static final Logger LOGGER = LoggerFactory.getLogger(MathUtils.class);
-	
 	/**
 	 * private standard constructor, to prevent intialization
 	 *
@@ -39,22 +32,22 @@ public class MathUtils {
 			throws IllegalArgumentException {
 		if (numbers.length < 1) {
 			String msg = "At least one number was needed!";
-			MathUtils.LOGGER.error(msg);
+			log.error(msg);
 			throw new IllegalArgumentException(msg);
 		}
 		
 		Number result = Double.POSITIVE_INFINITY;
 		
-		MathUtils.LOGGER.debug("Start iterating over all given numbers.");
+		log.debug("Start iterating over all given numbers.");
 		for (Number number : numbers) {
 			if (number.doubleValue() < result.doubleValue()) {
-				MathUtils.LOGGER.debug("Found a smaller number: " + number + " < " + result);
+				log.debug("Found a smaller number: " + number + " < " + result);
 				
 				result = number;
 			}
 		}
 		
-		MathUtils.LOGGER.debug("Smallest number is " + result);
+		log.debug("Smallest number is " + result);
 		return result;
 	}
 	
@@ -71,7 +64,7 @@ public class MathUtils {
 			throws IllegalArgumentException {
 		if (numbers.length < 1) {
 			String msg = "At least one number was needed!";
-			MathUtils.LOGGER.error(msg);
+			log.error(msg);
 			throw new IllegalArgumentException(msg);
 		}
 		
@@ -79,13 +72,13 @@ public class MathUtils {
 		
 		for (Number number : numbers) {
 			if (number.doubleValue() > result.doubleValue()) {
-				MathUtils.LOGGER.debug("Found a greater number: " + number + " > " + result);
+				log.debug("Found a greater number: " + number + " > " + result);
 				
 				result = number;
 			}
 		}
 		
-		MathUtils.LOGGER.debug("Greatest number is " + result);
+		log.debug("Greatest number is " + result);
 		return result;
 	}
 }

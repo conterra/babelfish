@@ -2,8 +2,7 @@ package de.conterra.babelfish.output;
 
 import de.conterra.babelfish.Initializer;
 import de.conterra.babelfish.util.ServletUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.Servlet;
 import javax.servlet.ServletException;
@@ -20,9 +19,10 @@ import java.util.regex.Pattern;
  * defines a {@link Servlet}, which redirects to the right root path
  *
  * @author ChrissW-R1
- * @version 0.3.0
+ * @version 0.4.0
  * @since 0.1.0
  */
+@Slf4j
 @WebServlet(description = "redirects requests with wrong home path", urlPatterns =
 		{
 				"/*"
@@ -34,13 +34,7 @@ public class WrongHomeServlet
 	 *
 	 * @since 0.1.0
 	 */
-	private static final long serialVersionUID = -601368017332082983L;
-	/**
-	 * the {@link Logger} of this class
-	 *
-	 * @since 0.1.0
-	 */
-	public static final Logger LOGGER = LoggerFactory.getLogger(WrongHomeServlet.class);
+	private static final long serialVersionUID = 4L;
 	
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -68,7 +62,7 @@ public class WrongHomeServlet
 			throws IOException {
 		if (!(Initializer.init(this, false))) {
 			String msg = "Initialization failed!";
-			MainServlet.LOGGER.error(msg);
+			log.error(msg);
 			response.sendError(500, msg);
 			return;
 		}
@@ -78,12 +72,12 @@ public class WrongHomeServlet
 		String path = request.getPathInfo();
 		String faviconPath = FaviconServlet.class.getAnnotation(WebServlet.class).urlPatterns()[0];
 		if (path.equalsIgnoreCase(faviconPath)) {
-			WrongHomeServlet.LOGGER.debug("Redirect user to right favicon URL.");
+			log.debug("Redirect user to right favicon URL.");
 			response.sendRedirect(ServletUtils.getPathWithParameters(faviconPath, parameterMap));
 			return;
 		}
 		
-		WrongHomeServlet.LOGGER.debug("Get redirect address from main servlet.");
+		log.debug("Get redirect address from main servlet.");
 		String root = MainServlet.class.getAnnotation(WebServlet.class).urlPatterns()[0];
 		root = root.substring(1, root.length() - 1) + "services/";
 		String dest = root;
@@ -98,10 +92,10 @@ public class WrongHomeServlet
 		if (!(root.toLowerCase(Locale.ROOT).contains(subPath.toLowerCase(Locale.ROOT)))) {
 			dest += subPath;
 			
-			WrongHomeServlet.LOGGER.debug("Find user fault, by part of right root address. (auto-complete)");
+			log.debug("Find user fault, by part of right root address. (auto-complete)");
 		}
 		
-		WrongHomeServlet.LOGGER.debug("Redirect user to right root address.");
+		log.debug("Redirect user to right root address.");
 		
 		response.sendRedirect(ServletUtils.getPathWithParameters(dest, parameterMap));
 	}

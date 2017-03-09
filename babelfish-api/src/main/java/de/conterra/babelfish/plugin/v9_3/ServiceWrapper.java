@@ -4,8 +4,7 @@ import de.conterra.babelfish.plugin.RestService;
 import de.conterra.babelfish.plugin.ServiceBuilder;
 import de.conterra.babelfish.plugin.ServiceNotAvailableException;
 import de.conterra.babelfish.plugin.v9_3.map.MapService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 
@@ -13,18 +12,12 @@ import java.util.ArrayList;
  * defines the {@link de.conterra.babelfish.plugin.ServiceWrapper} of REST API version 9.3
  *
  * @author ChrissW-R1
- * @version 0.3.1
+ * @version 0.4.0
  * @since 0.3.1
  */
+@Slf4j
 public class ServiceWrapper
 		implements de.conterra.babelfish.plugin.ServiceWrapper {
-	/**
-	 * the {@link Logger} of this class
-	 *
-	 * @since 0.3.1
-	 */
-	public static final Logger LOGGER = LoggerFactory.getLogger(ServiceWrapper.class);
-	
 	/**
 	 * standard constructor<br>
 	 * <b>Attention</b>: Has to be exist for {@link de.conterra.babelfish.plugin.ServiceWrapper} instances
@@ -55,7 +48,7 @@ public class ServiceWrapper
 			throws ServiceNotAvailableException {
 		switch (restName) {
 			case MapService.REST_NAME:
-				ServiceWrapper.LOGGER.error(MapService.REST_NAME + " currently not implemented.");
+				log.error(MapService.REST_NAME + " currently not implemented.");
 			default:
 				throw new ServiceNotAvailableException("Unkown service type! No registered handler!");
 		}

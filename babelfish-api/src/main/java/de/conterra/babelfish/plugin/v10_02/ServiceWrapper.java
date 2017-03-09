@@ -6,8 +6,7 @@ import de.conterra.babelfish.plugin.ServiceNotAvailableException;
 import de.conterra.babelfish.plugin.v10_02.feature.FeatureService;
 import de.conterra.babelfish.plugin.v10_02.feature.builder.MasterBuilder;
 import de.conterra.babelfish.plugin.v10_02.map.MapService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 
@@ -15,18 +14,12 @@ import java.util.ArrayList;
  * defines the {@link de.conterra.babelfish.plugin.ServiceWrapper} of REST API version 10 SP2
  *
  * @author ChrissW-R1
- * @version 0.1.0
+ * @version 0.4.0
  * @since 0.1.0
  */
+@Slf4j
 public class ServiceWrapper
 		implements de.conterra.babelfish.plugin.ServiceWrapper {
-	/**
-	 * the {@link Logger} of this class
-	 *
-	 * @since 0.1.0
-	 */
-	public static final Logger LOGGER = LoggerFactory.getLogger(ServiceWrapper.class);
-	
 	/**
 	 * standard constructor<br>
 	 * <b>Attention</b>: Has to be exist for {@link de.conterra.babelfish.plugin.ServiceWrapper} instances
@@ -60,10 +53,10 @@ public class ServiceWrapper
 			throws ServiceNotAvailableException {
 		switch (restName) {
 			case FeatureService.REST_NAME:
-				ServiceWrapper.LOGGER.debug("Used builder " + MasterBuilder.class.getName() + " for " + FeatureService.REST_NAME + ".");
+				log.debug("Used builder " + MasterBuilder.class.getName() + " for " + FeatureService.REST_NAME + ".");
 				return new MasterBuilder();
 			case MapService.REST_NAME:
-				ServiceWrapper.LOGGER.error(MapService.REST_NAME + " currently not implemented.");
+				log.error(MapService.REST_NAME + " currently not implemented.");
 			default:
 				throw new ServiceNotAvailableException("Unkown service type! No registered handler!");
 		}

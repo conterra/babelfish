@@ -1,7 +1,6 @@
 package de.conterra.babelfish.plugin;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.net.URLClassLoader;
@@ -11,18 +10,12 @@ import java.util.jar.JarFile;
  * defines a wrapper class of a {@link Plugin}
  *
  * @author ChrissW-R1
- * @version 0.1.0
+ * @version 0.4.0
  * @since 0.1.0
  */
+@Slf4j
 public class PluginWrapper
 		implements Plugin {
-	/**
-	 * the {@link Logger} of this class
-	 *
-	 * @since 0.1.0
-	 */
-	public static final Logger LOGGER = LoggerFactory.getLogger(PluginWrapper.class);
-	
 	/**
 	 * the {@link Plugin}
 	 *
@@ -77,9 +70,9 @@ public class PluginWrapper
 		boolean result = this.getPlugin().shutdown();
 		
 		if (result)
-			PluginWrapper.LOGGER.debug("Successfully executed build-in shutdown process of the plugin " + name + ".");
+			log.debug("Successfully executed build-in shutdown process of the plugin " + name + ".");
 		else
-			PluginWrapper.LOGGER.error("Couldn't shutdown the plugin " + name + " itself!");
+			log.error("Couldn't shutdown the plugin " + name + " itself!");
 		
 		boolean notUsedByOther = true;
 		for (Plugin plugin : PluginAdapter.getPlugins()) {
@@ -87,7 +80,7 @@ public class PluginWrapper
 				PluginWrapper wrapper = PluginAdapter.getPluginWrapper(plugin);
 				
 				if (wrapper.getClassLoader() == this.getClassLoader() || wrapper.getFile() == this.getFile()) {
-					PluginWrapper.LOGGER.debug("Couldn't unload class loader and file of the plugin " + name + ", because them are although used by the plugin " + plugin.getName() + ".");
+					log.debug("Couldn't unload class loader and file of the plugin " + name + ", because them are although used by the plugin " + plugin.getName() + ".");
 					notUsedByOther = false;
 					break;
 				}
@@ -99,7 +92,7 @@ public class PluginWrapper
 				this.getClassLoader().close();
 				this.getFile().close();
 			} catch (IOException e) {
-				PluginWrapper.LOGGER.error("Couldn't unload plugin " + name + "!", e);
+				log.error("Couldn't unload plugin " + name + "!", e);
 				
 				return false;
 			}

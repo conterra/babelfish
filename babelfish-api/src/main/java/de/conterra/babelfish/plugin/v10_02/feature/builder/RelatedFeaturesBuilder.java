@@ -11,10 +11,9 @@ import de.conterra.babelfish.plugin.v10_02.object.feature.GeometryFeatureObject;
 import de.conterra.babelfish.plugin.v10_02.object.geometry.GeometryBuilder;
 import de.conterra.babelfish.plugin.v10_02.object.geometry.GeometryObject;
 import de.conterra.babelfish.plugin.v10_02.object.geometry.SpatialReference;
+import lombok.extern.slf4j.Slf4j;
 import org.josql.QueryParseException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.LinkedHashSet;
@@ -25,17 +24,11 @@ import java.util.Set;
  * defines a builder of a list of all related {@link Feature}s
  *
  * @author ChrissW-R1
- * @version 0.1.0
+ * @version 0.4.0
  * @since 0.1.0
  */
+@Slf4j
 public class RelatedFeaturesBuilder {
-	/**
-	 * the {@link Logger} of this class
-	 *
-	 * @since 0.1.0
-	 */
-	public static final Logger LOGGER = LoggerFactory.getLogger(RelatedFeaturesBuilder.class);
-	
 	/**
 	 * private standard constructor, to prevent initialization
 	 *
@@ -74,7 +67,7 @@ public class RelatedFeaturesBuilder {
 			features.addAll(originLayer.getFeatures());
 		else {
 			for (int featureId : featureIds) {
-				RelatedFeaturesBuilder.LOGGER.debug("Add feature with id: " + featureId);
+				log.debug("Add feature with id: " + featureId);
 				
 				features.add((new LayerWrapper<O>(originLayer)).getFeature(featureId));
 			}
@@ -91,7 +84,7 @@ public class RelatedFeaturesBuilder {
 					if (query == null)
 						query = new DefaultQuery<>();
 					
-					RelatedFeaturesBuilder.LOGGER.debug("Execute query to get related features.");
+					log.debug("Execute query to get related features.");
 					
 					for (Feature<? extends D> destFeature : query.execute(relationship.getRelatedFeatures(feature), null, whereClause)) {
 						if (usedCrs == null && destFeature instanceof GeometryFeatureObject<?>)
@@ -102,7 +95,7 @@ public class RelatedFeaturesBuilder {
 					
 					relatedFeaturesMap.put(feature, relatedFeatures);
 				} catch (QueryParseException e) {
-					RelatedFeaturesBuilder.LOGGER.warn("The given where clause (" + whereClause + ") wasn't valid!", e);
+					log.warn("The given where clause (" + whereClause + ") wasn't valid!", e);
 				}
 			}
 		}
