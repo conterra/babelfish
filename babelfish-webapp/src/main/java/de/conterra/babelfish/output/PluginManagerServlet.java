@@ -1,7 +1,7 @@
 package de.conterra.babelfish.output;
 
-import de.conterra.babelfish.Config;
 import de.conterra.babelfish.Initializer;
+import de.conterra.babelfish.config.Config;
 import de.conterra.babelfish.plugin.Plugin;
 import de.conterra.babelfish.plugin.PluginAdapter;
 import de.conterra.babelfish.plugin.ServiceContainer;
@@ -173,7 +173,7 @@ public class PluginManagerServlet
 			throws IOException {
 		Initializer.init(this, true);
 		
-		boolean managerEnabled = Config.isManagerEnabled();
+		boolean managerEnabled = Initializer.config.isManagerEnabled();
 		
 		if (!managerEnabled) {
 			String msg = "The plugin manager is disabled!";

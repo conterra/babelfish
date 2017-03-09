@@ -1,5 +1,7 @@
 package de.conterra.babelfish;
 
+import de.conterra.babelfish.config.Config;
+import de.conterra.babelfish.config.ObjectFactory;
 import de.conterra.babelfish.plugin.Plugin;
 import de.conterra.babelfish.plugin.PluginAdapter;
 import de.conterra.babelfish.util.ReschedulableTimer;
@@ -8,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import javax.imageio.ImageIO;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServlet;
+import javax.xml.bind.*;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
@@ -25,6 +28,19 @@ import java.net.URL;
  */
 @Slf4j
 public class Initializer {
+	/**
+	 * singleton {@link ObjectFactory} to create XML objects
+	 *
+	 * @since 0.4.0
+	 */
+	public static final ObjectFactory OBJECT_FACTORY = new ObjectFactory();
+	/**
+	 * {@link Config} object to store all settings
+	 *
+	 * @since 0.4.0
+	 */
+	public static Config config;
+	
 	/**
 	 * the root {@link URL} to the folder to store files (like configurations, plugins, etc.)
 	 *
@@ -111,13 +127,20 @@ public class Initializer {
 			}
 		}
 		
-		if (Config.load())
+		try {
+			Unmarshaller unmarshaller = JAXBContext.newInstance(Config.class).createUnmarshaller();
+			JAXBElement<Config> element = (JAXBElement<Config>) unmarshaller.unmarshal(new File(BASE_URL.toString() + "/config.xml"));
+			config = element.getValue();
+			
 			log.debug("Configuration successfully loaded.");
-		else
-			log.warn("Couldn't load configuration!");
+		} catch (JAXBException e) {
+			log.warn("Couldn't load configuration! Using default settings instead.");
+			
+			config = OBJECT_FACTORY.createConfig();
+		}
 		
 		log.debug("Reschedule the shutdown timer.");
-		Initializer.SHUTDOWN_TIMER.reschedule(Config.getShutdownDelay());
+		Initializer.SHUTDOWN_TIMER.reschedule(config.getShutdownDelay());
 		
 		if (Initializer.getDefaultIcon() == null) {
 			log.debug("Load default Babelfish icon.");
@@ -147,7 +170,7 @@ public class Initializer {
 			}
 			
 			if (loadPlugins) {
-				long abortDelay = Config.getShutdownDelay();
+				long abortDelay = config.getShutdownDelay();
 				if (abortDelay > 60000)
 					abortDelay = 60000;
 				
@@ -223,10 +246,15 @@ public class Initializer {
 		log.debug("Call garbage collector.");
 		System.gc();
 		
-		if (Config.save())
+		try {
+			Marshaller marshaller = JAXBContext.newInstance(Config.class).createMarshaller();
+			marshaller.marshal(config, new File(BASE_URL.toString() + "/config.xml"));
+			
 			log.debug("Configuration successfully saved.");
-		else
+		} catch (JAXBException e) {
+			e.printStackTrace();
 			log.warn("Couldn't save the configuration!");
+		}
 		
 		return result;
 	}
