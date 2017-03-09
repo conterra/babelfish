@@ -1,9 +1,8 @@
 package de.conterra.babelfish.util;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -20,14 +19,8 @@ import java.io.InputStream;
  * @version 0.1.0
  * @since 0.1.0
  */
+@Slf4j
 public class DataUtils {
-	/**
-	 * the {@link Logger} of this class
-	 *
-	 * @since 0.1.0
-	 */
-	public static final Logger LOGGER = LoggerFactory.getLogger(DataUtils.class);
-	
 	/**
 	 * private standard constructor, to prevent initialization
 	 *
@@ -74,7 +67,7 @@ public class DataUtils {
 		try {
 			IOUtils.copy(is, os);
 		} catch (IOException e) {
-			DataUtils.LOGGER.warn("An exception occurred while copy from input to output stream!", e);
+			log.warn("An exception occurred while copy from input to output stream!", e);
 		}
 		
 		return os.toByteArray();
@@ -94,7 +87,7 @@ public class DataUtils {
 		try {
 			ImageIO.write(DataUtils.toBufferedImage(img), "png", os);
 		} catch (IOException e) {
-			DataUtils.LOGGER.warn("An exception occurred while writing the image to the output stream!", e);
+			log.warn("An exception occurred while writing the image to the output stream!", e);
 		}
 		
 		byte[] result = os.toByteArray();
@@ -102,7 +95,7 @@ public class DataUtils {
 		try {
 			os.close();
 		} catch (IOException e) {
-			DataUtils.LOGGER.warn("An exception occurred while close the output stream!", e);
+			log.warn("An exception occurred while close the output stream!", e);
 		}
 		
 		return result;
@@ -123,9 +116,9 @@ public class DataUtils {
 		try {
 			result = ImageIO.read(new ByteArrayInputStream(data));
 			
-			DataUtils.LOGGER.debug("Image successfully created.");
+			log.debug("Image successfully created.");
 		} catch (IllegalArgumentException | IOException e) {
-			DataUtils.LOGGER.warn("Used empty image, because the input is not a valid one!", e);
+			log.warn("Used empty image, because the input is not a valid one!", e);
 			
 			result = new BufferedImage(0, 0, BufferedImage.TYPE_INT_ARGB);
 		}
@@ -143,15 +136,15 @@ public class DataUtils {
 	 */
 	public static BufferedImage toBufferedImage(Image img) {
 		if (img instanceof BufferedImage) {
-			DataUtils.LOGGER.debug("The given image is already a buffered image. Return the input.");
+			log.debug("The given image is already a buffered image. Return the input.");
 			
 			return (BufferedImage) img;
 		}
 		
-		DataUtils.LOGGER.debug("Create a buffered image with transparency.");
+		log.debug("Create a buffered image with transparency.");
 		BufferedImage bimage = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
 		
-		DataUtils.LOGGER.debug("Draw the image on to the buffered image.");
+		log.debug("Draw the image on to the buffered image.");
 		Graphics2D bGr = bimage.createGraphics();
 		bGr.drawImage(img, 0, 0, null);
 		bGr.dispose();

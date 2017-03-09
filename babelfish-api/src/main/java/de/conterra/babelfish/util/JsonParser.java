@@ -1,6 +1,7 @@
 package de.conterra.babelfish.util;
 
 import de.conterra.babelfish.plugin.v10_02.object.geometry.SpatialReference;
+import lombok.extern.slf4j.Slf4j;
 import org.geotools.geometry.DirectPosition2D;
 import org.geotools.geometry.iso.coordinate.EnvelopeImpl;
 import org.geotools.geometry.iso.coordinate.LineStringImpl;
@@ -18,8 +19,6 @@ import org.opengis.geometry.primitive.Point;
 import org.opengis.geometry.primitive.Ring;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
 import java.util.LinkedList;
@@ -32,14 +31,8 @@ import java.util.List;
  * @version 0.1.0
  * @since 0.1.0
  */
+@Slf4j
 public class JsonParser {
-	/**
-	 * the {@link Logger} of this class
-	 *
-	 * @since 0.1.0
-	 */
-	public static final Logger LOGGER = LoggerFactory.getLogger(JsonParser.class);
-	
 	/**
 	 * private standard constructor, to prevent initialization
 	 *
@@ -65,16 +58,16 @@ public class JsonParser {
 		try {
 			parsedCrs = JsonParser.parseCrs(json);
 			
-			JsonParser.LOGGER.debug("Found a CRS in the given JSON object.");
+			log.debug("Found a CRS in the given JSON object.");
 		} catch (JSONException e) {
 			parsedCrs = crs;
 			
-			JsonParser.LOGGER.debug("Use given CRS.");
+			log.debug("Use given CRS.");
 		}
 		
 		if (parsedCrs == null) {
 			String msg = "No valid CRS found or given!";
-			JsonParser.LOGGER.error(msg);
+			log.error(msg);
 			throw new IllegalArgumentException(msg);
 		}
 		
@@ -98,14 +91,14 @@ public class JsonParser {
 			try {
 				decodeString = json.getString("wkt");
 				
-				JsonParser.LOGGER.debug("Found CRS as WKT.");
+				log.debug("Found CRS as WKT.");
 			} catch (JSONException e) {
 				try {
 					decodeString = "" + json.getInt("wkid");
 					
-					JsonParser.LOGGER.debug("Found CRS as WKID.");
+					log.debug("Found CRS as WKID.");
 				} catch (JSONException e2) {
-					JsonParser.LOGGER.debug("Check, if the JSON object is no CRS, but contains some.");
+					log.debug("Check, if the JSON object is no CRS, but contains some.");
 					
 					return JsonParser.parseCrs(json.getJSONObject("spatialReference"));
 				}
@@ -114,7 +107,7 @@ public class JsonParser {
 			return GeoUtils.decodeCrs(decodeString);
 		} catch (JSONException | FactoryException e) {
 			String msg = "No valid CRS found!";
-			JsonParser.LOGGER.error(msg, e);
+			log.error(msg, e);
 			throw new JSONException(msg);
 		}
 	}
@@ -150,26 +143,26 @@ public class JsonParser {
 	 */
 	public static Collection<? extends LineString> parseMultiLine(JSONObject json, CoordinateReferenceSystem crs)
 			throws JSONException, IllegalArgumentException {
-		JsonParser.LOGGER.debug("Extract CRS from JSON object.");
+		log.debug("Extract CRS from JSON object.");
 		CoordinateReferenceSystem parsedCrs = JsonParser.parseCrs(json, crs);
 		List<LineString> result = new LinkedList<>();
 		
-		JsonParser.LOGGER.debug("Get paths from the JSON object.");
+		log.debug("Get paths from the JSON object.");
 		JSONArray paths = json.getJSONArray("paths");
 		for (int i = 0; i < paths.length(); i++) {
 			JSONArray path = paths.getJSONArray(i);
 			List<Position> points = new LinkedList<>();
 			
-			JsonParser.LOGGER.debug("Found " + path.length() + " positions on path with index " + i + ".");
+			log.debug("Found " + path.length() + " positions on path with index " + i + ".");
 			
 			for (int k = 0; k < path.length(); k++) {
 				JSONArray point = path.getJSONArray(k);
 				
-				JsonParser.LOGGER.debug("Create new point from position " + k + ".");
+				log.debug("Create new point from position " + k + ".");
 				points.add(new DirectPosition2D(parsedCrs, point.getDouble(0), point.getDouble(1)));
 			}
 			
-			JsonParser.LOGGER.debug("Create new line.");
+			log.debug("Create new line.");
 			result.add(new LineStringImpl(points));
 		}
 		
@@ -190,22 +183,22 @@ public class JsonParser {
 	 */
 	public static Polygon parsePolygon(JSONObject json, CoordinateReferenceSystem crs)
 			throws JSONException, IllegalArgumentException {
-		JsonParser.LOGGER.debug("Extract CRS from JSON object.");
+		log.debug("Extract CRS from JSON object.");
 		CoordinateReferenceSystem parsedCrs = JsonParser.parseCrs(json, crs);
 		List<Position> points = new LinkedList<>();
 		
-		JsonParser.LOGGER.debug("Get rings from the JSON object.");
+		log.debug("Get rings from the JSON object.");
 		JSONArray rings = json.getJSONArray("rings");
 		JSONArray ring = rings.getJSONArray(0);
-		JsonParser.LOGGER.debug("Found " + ring.length() + " positions of the exterior ring.");
+		log.debug("Found " + ring.length() + " positions of the exterior ring.");
 		for (int i = 0; i < ring.length(); i++) {
 			JSONArray point = ring.getJSONArray(i);
 			
-			JsonParser.LOGGER.debug("Create new point from position " + i + " of the exterior ring.");
+			log.debug("Create new point from position " + i + " of the exterior ring.");
 			points.add(new DirectPosition2D(parsedCrs, point.getDouble(0), point.getDouble(1)));
 		}
 		
-		JsonParser.LOGGER.debug("Create exterior ring.");
+		log.debug("Create exterior ring.");
 		Ring exterior = GeoUtils.createRing(points.toArray(new Position[points.size()]));
 		
 		List<Ring> interior = new LinkedList<>();
@@ -213,20 +206,20 @@ public class JsonParser {
 			ring = rings.getJSONArray(i);
 			points = new LinkedList<>();
 			
-			JsonParser.LOGGER.debug("Found " + ring.length() + " positions on interior ring with index " + i + ".");
+			log.debug("Found " + ring.length() + " positions on interior ring with index " + i + ".");
 			
 			for (int k = 0; k < ring.length(); k++) {
 				JSONArray point = ring.getJSONArray(k);
 				
-				JsonParser.LOGGER.debug("Create new point from position " + k + ".");
+				log.debug("Create new point from position " + k + ".");
 				points.add(new DirectPosition2D(parsedCrs, point.getDouble(0), point.getDouble(1)));
 			}
 			
-			JsonParser.LOGGER.debug("Create new interior ring.");
+			log.debug("Create new interior ring.");
 			interior.add(GeoUtils.createRing(points.toArray(new Position[points.size()])));
 		}
 		
-		JsonParser.LOGGER.debug("Create new polygon.");
+		log.debug("Create new polygon.");
 		return new PolygonImpl(new SurfaceBoundaryImpl(parsedCrs, exterior, interior));
 	}
 	
@@ -244,10 +237,10 @@ public class JsonParser {
 	 */
 	public static Envelope parseEnvelope(JSONObject json, CoordinateReferenceSystem crs)
 			throws JSONException, IllegalArgumentException {
-		JsonParser.LOGGER.debug("Extract CRS from JSON object.");
+		log.debug("Extract CRS from JSON object.");
 		CoordinateReferenceSystem parsedCrs = JsonParser.parseCrs(json, crs);
 		
-		JsonParser.LOGGER.debug("Create new envelope.");
+		log.debug("Create new envelope.");
 		return new EnvelopeImpl(
 				new DirectPosition2D(parsedCrs, json.getDouble("xmin"), json.getDouble("ymin")),
 				new DirectPosition2D(parsedCrs, json.getDouble("xmax"), json.getDouble("ymax")));

@@ -8,11 +8,10 @@ import de.conterra.babelfish.plugin.v10_02.object.geometry.GeometryObject;
 import de.conterra.babelfish.plugin.v10_11.feature.FeatureService;
 import de.conterra.babelfish.plugin.v10_11.feature.Layer;
 import de.conterra.babelfish.util.GeoUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.josql.QueryParseException;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.LinkedHashSet;
 import java.util.Map;
@@ -25,15 +24,9 @@ import java.util.Set;
  * @version 0.2.0
  * @since 0.1.0
  */
+@Slf4j
 public class MasterBuilder
 		implements ServiceBuilder {
-	/**
-	 * the {@link Logger} of this class
-	 *
-	 * @since 0.1.0
-	 */
-	public static final Logger LOGGER = LoggerFactory.getLogger(MasterBuilder.class);
-	
 	@Override
 	public ObjectValue build(RestService service, String[] path, Map<? extends String, ? extends String> parameters)
 			throws ServiceNotAvailableException, WrongRequestException,
@@ -49,12 +42,12 @@ public class MasterBuilder
 			try {
 				crs = GeoUtils.decodeCrs(crsString);
 			} catch (FactoryException e) {
-				MasterBuilder.LOGGER.debug("Couldn't decode CRS from parameter map.", e);
+				log.debug("Couldn't decode CRS from parameter map.", e);
 			}
 		}
 		
 		if (path.length <= 0) {
-			MasterBuilder.LOGGER.debug("Create information site of the service.");
+			log.debug("Create information site of the service.");
 			
 			return ServiceOverviewBuilder.build(featureService);
 		} else {
@@ -111,7 +104,7 @@ public class MasterBuilder
 							return QueryBuilder.build(layer, crs, geometry, whereClause, objectIds, idsOnly, countOnly);
 						} catch (QueryParseException e) {
 							String msg = "The query couldn't be executed!";
-							MasterBuilder.LOGGER.error(msg, e);
+							log.error(msg, e);
 							throw new BuildingException(msg, e);
 						}
 					} else if (path[1].equalsIgnoreCase("queryRelatedRecords")) {
@@ -131,19 +124,19 @@ public class MasterBuilder
 								return RelatedFeaturesBuilder.build(relationship, crs, objectIds, whereClause);
 							else {
 								String msg = "Couldn't found relationship with id: " + relationshipId;
-								MasterBuilder.LOGGER.error(msg);
+								log.error(msg);
 								throw new BuildingException(msg);
 							}
 						} catch (NumberFormatException e) {
 							String msg = "The relationship identifier have to be a valid Number!";
-							MasterBuilder.LOGGER.error(msg, e);
+							log.error(msg, e);
 							throw new BuildingException(msg, e);
 						}
 					}
 				}
 			} catch (NumberFormatException e) {
 				String msg = "The layer id must be a number! Requested id: " + path[0];
-				MasterBuilder.LOGGER.error(msg, e);
+				log.error(msg, e);
 				throw new BuildingException(msg, e);
 			}
 		}

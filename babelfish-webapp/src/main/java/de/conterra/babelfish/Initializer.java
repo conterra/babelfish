@@ -3,8 +3,7 @@ package de.conterra.babelfish;
 import de.conterra.babelfish.plugin.Plugin;
 import de.conterra.babelfish.plugin.PluginAdapter;
 import de.conterra.babelfish.util.ReschedulableTimer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.imageio.ImageIO;
 import javax.servlet.ServletContext;
@@ -24,14 +23,8 @@ import java.net.URL;
  * @version 0.3.0
  * @since 0.1.0
  */
+@Slf4j
 public class Initializer {
-	/**
-	 * the {@link Logger} of this class
-	 *
-	 * @since 0.1.0
-	 */
-	public static final Logger LOGGER = LoggerFactory.getLogger(Initializer.class);
-	
 	/**
 	 * the root {@link URL} to the folder to store files (like configurations, plugins, etc.)
 	 *
@@ -46,7 +39,7 @@ public class Initializer {
 	 */
 	public static final ReschedulableTimer SHUTDOWN_TIMER = new ReschedulableTimer(() -> {
 		if (!Initializer.shutdown())
-			Initializer.LOGGER.warn("Shutdown failed!");
+			log.warn("Shutdown failed!");
 	});
 	
 	/**
@@ -87,13 +80,13 @@ public class Initializer {
 	 * @since 0.1.0
 	 */
 	public static boolean init(HttpServlet servlet, boolean loadPlugins) {
-		Initializer.LOGGER.debug("Start initialization");
+		log.debug("Start initialization");
 		boolean result = true;
 		
 		ServletContext context = servlet.getServletContext();
 		
 		if (Initializer.BASE_URL == null) {
-			Initializer.LOGGER.debug("Define base URL to store files.");
+			log.debug("Define base URL to store files.");
 			
 			try {
 				URL url = new URL(context.getResource("/").toString());
@@ -112,27 +105,27 @@ public class Initializer {
 				} else if (scheme.equalsIgnoreCase("JNDI"))
 					Initializer.BASE_URL = new URL(("file:///" + context.getRealPath("/")).replaceAll(" ", "%20"));
 				
-				Initializer.LOGGER.debug("Set the base URL to: " + Initializer.BASE_URL.toURI().toString());
+				log.debug("Set the base URL to: " + Initializer.BASE_URL.toURI().toString());
 			} catch (NullPointerException | MalformedURLException | URISyntaxException e) {
-				Initializer.LOGGER.error("Couldn't found a valid URL!", e);
+				log.error("Couldn't found a valid URL!", e);
 			}
 		}
 		
 		if (Config.load())
-			Initializer.LOGGER.debug("Configuration successfully loaded.");
+			log.debug("Configuration successfully loaded.");
 		else
-			Initializer.LOGGER.warn("Couldn't load configuration!");
+			log.warn("Couldn't load configuration!");
 		
-		Initializer.LOGGER.debug("Reschedule the shutdown timer.");
+		log.debug("Reschedule the shutdown timer.");
 		Initializer.SHUTDOWN_TIMER.reschedule(Config.getShutdownDelay());
 		
 		if (Initializer.getDefaultIcon() == null) {
-			Initializer.LOGGER.debug("Load default Babelfish icon.");
+			log.debug("Load default Babelfish icon.");
 			
 			try {
 				Initializer.DEFAULT_ICON = ImageIO.read(context.getResource("/WEB-INF/classes/icon.png"));
 			} catch (IOException e) {
-				Initializer.LOGGER.error("Couldn't load the default Babelfish icon!", e);
+				log.error("Couldn't load the default Babelfish icon!", e);
 				
 				result = false;
 			}
@@ -144,9 +137,9 @@ public class Initializer {
 			long start = System.currentTimeMillis();
 			while (PluginAdapter.getPluginsFolder() == null && (System.currentTimeMillis() - start) < 5000) {
 				File file = new File(new File(Initializer.BASE_URL.toURI()), PluginAdapter.PLUGINS_FOLDER_PATH.substring(1));
-				Initializer.LOGGER.debug("Try to create plugins folder. URL: " + file.getName());
+				log.debug("Try to create plugins folder. URL: " + file.getName());
 				if (!(file.exists()) && !(file.mkdirs()))
-					Initializer.LOGGER.warn("Couldn't create plugin folder.");
+					log.warn("Couldn't create plugin folder.");
 				
 				url = file.toURI().toURL();
 				if (url != null)
@@ -164,7 +157,7 @@ public class Initializer {
 				
 				if (!Initializer.loadPluginsFlag) {
 					Initializer.loadPluginsFlag = true;
-					Initializer.LOGGER.debug("Set flag, while plugins were loaded.");
+					log.debug("Set flag, while plugins were loaded.");
 					url = PluginAdapter.getPluginsFolder();
 					
 					if (url != null) {
@@ -173,31 +166,31 @@ public class Initializer {
 						if (folder.isDirectory()) {
 							for (File file : folder.listFiles()) {
 								String fileName = file.getAbsolutePath();
-								Initializer.LOGGER.debug("Found file in plugin folder: " + fileName);
+								log.debug("Found file in plugin folder: " + fileName);
 								
 								if (file.isDirectory()) {
-									Initializer.LOGGER.debug("The file " + fileName + " is a directory.");
+									log.debug("The file " + fileName + " is a directory.");
 									continue;
 								}
 								
 								try {
 									PluginAdapter.loadPlugin(file);
 								} catch (IOException e) {
-									Initializer.LOGGER.debug("The file " + fileName + " is not a valid plugin JAR!", e);
+									log.debug("The file " + fileName + " is not a valid plugin JAR!", e);
 								}
 							}
 						}
 					} else {
-						Initializer.LOGGER.warn("The plugins folder doesn't exists!");
+						log.warn("The plugins folder doesn't exists!");
 						result = false;
 					}
 					
-					Initializer.LOGGER.debug("Release flag of plugin loading.");
+					log.debug("Release flag of plugin loading.");
 					Initializer.loadPluginsFlag = false;
 				}
 			}
 		} catch (URISyntaxException | IOException e) {
-			Initializer.LOGGER.warn("An error occurred while loading plugins!", e);
+			log.warn("An error occurred while loading plugins!", e);
 			
 			return false;
 		}
@@ -219,21 +212,21 @@ public class Initializer {
 			String pluginName = plugin.getName();
 			
 			if (PluginAdapter.unloadPlugin(plugin))
-				Initializer.LOGGER.debug("Plugin " + pluginName + " successfully unloaded.");
+				log.debug("Plugin " + pluginName + " successfully unloaded.");
 			else {
-				Initializer.LOGGER.error("Couldn't unload plugin " + pluginName + ".");
+				log.error("Couldn't unload plugin " + pluginName + ".");
 				
 				result = false;
 			}
 		}
 		
-		Initializer.LOGGER.debug("Call garbage collector.");
+		log.debug("Call garbage collector.");
 		System.gc();
 		
 		if (Config.save())
-			Initializer.LOGGER.debug("Configuration successfully saved.");
+			log.debug("Configuration successfully saved.");
 		else
-			Initializer.LOGGER.warn("Couldn't save the configuration!");
+			log.warn("Couldn't save the configuration!");
 		
 		return result;
 	}

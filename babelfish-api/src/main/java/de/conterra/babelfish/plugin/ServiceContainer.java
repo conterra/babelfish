@@ -1,7 +1,6 @@
 package de.conterra.babelfish.plugin;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -12,16 +11,11 @@ import java.util.concurrent.ConcurrentHashMap;
  * defines container, to register {@link RestService}s
  *
  * @author ChrissW-R1
- * @version 0.1.0
+ * @version 0.4.0
  * @since 0.1.0
  */
+@Slf4j
 public class ServiceContainer {
-	/**
-	 * the {@link Logger} of this class
-	 *
-	 * @since 0.1.0
-	 */
-	private static final Logger LOGGER = LoggerFactory.getLogger(ServiceContainer.class);
 	/**
 	 * a {@link Set} of all registered {@link RestService}s
 	 *
@@ -128,12 +122,12 @@ public class ServiceContainer {
 			throw new IllegalArgumentException("The plugin name couldn't be empty");
 		
 		if (ServiceContainer.getService(pluginName, serviceId) != null) {
-			ServiceContainer.LOGGER.warn("There is already a service with id " + serviceId + " registered for the plugin " + pluginName + "!");
+			log.warn("There is already a service with id " + serviceId + " registered for the plugin " + pluginName + "!");
 			
 			return false;
 		}
 		
-		ServiceContainer.LOGGER.debug("Register a new service on plugin " + ServiceContainer.toUrlSaveString(pluginName) + " with id " + ServiceContainer.toUrlSaveString(serviceId));
+		log.debug("Register a new service on plugin " + ServiceContainer.toUrlSaveString(pluginName) + " with id " + ServiceContainer.toUrlSaveString(serviceId));
 		
 		return ServiceContainer.services.add(service);
 	}

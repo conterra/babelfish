@@ -1,9 +1,8 @@
 package de.conterra.babelfish.plugin.v10_02.object.feature;
 
 import de.conterra.babelfish.plugin.v10_02.feature.Field;
+import lombok.extern.slf4j.Slf4j;
 import org.joda.time.DateTime;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -12,18 +11,12 @@ import java.util.Map;
  * defines a Feature Object
  *
  * @author ChrissW-R1
- * @version 0.3.0
+ * @version 0.4.0
  * @see <a href="http://help.arcgis.com/en/arcgisserver/10.0/apis/rest/feature.html">ArcGIS REST API</a>
  * @since 0.1.0
  */
+@Slf4j
 public class FeatureObject {
-	/**
-	 * the {@link Logger} of this class
-	 *
-	 * @since 0.3.0
-	 */
-	public static final Logger LOGGER = LoggerFactory.getLogger(FeatureObject.class);
-	
 	/**
 	 * the {@link Map} of attributes
 	 *
@@ -106,13 +99,13 @@ public class FeatureObject {
 			String fieldName = field.getName();
 			
 			if (fieldName.equalsIgnoreCase(id)) {
-				FeatureObject.LOGGER.debug("Found " + field.getType() + " field with name " + fieldName);
+				log.debug("Found " + field.getType() + " field with name " + fieldName);
 				
 				return this.getAttribute(field);
 			}
 		}
 		
-		FeatureObject.LOGGER.debug("No field with name " + id + " found!");
+		log.debug("No field with name " + id + " found!");
 		return null;
 	}
 	

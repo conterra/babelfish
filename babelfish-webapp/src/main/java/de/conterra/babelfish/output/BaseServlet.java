@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServlet;
  * defines {@link HttpServlet}, which handles the initialization and shutdown
  *
  * @author ChrissW-R1
- * @version 0.1.1
+ * @version 0.4.0
  * @since 0.1.0
  */
 public abstract class BaseServlet
@@ -19,7 +19,7 @@ public abstract class BaseServlet
 	 *
 	 * @since 0.1.0
 	 */
-	private static final long serialVersionUID = 1387929037760889253L;
+	private static final long serialVersionUID = 3L;
 	
 	@Override
 	public void init()

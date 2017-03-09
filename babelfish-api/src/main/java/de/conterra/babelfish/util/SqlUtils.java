@@ -1,7 +1,6 @@
 package de.conterra.babelfish.util;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
 import java.util.regex.Matcher;
@@ -14,14 +13,8 @@ import java.util.regex.Pattern;
  * @version 0.1.0
  * @since 0.1.0
  */
+@Slf4j
 public class SqlUtils {
-	/**
-	 * the {@link Logger} of this class
-	 *
-	 * @since 0.1.0
-	 */
-	public static final Logger LOGGER = LoggerFactory.getLogger(SqlUtils.class);
-	
 	/**
 	 * all SQL operators, where a column name could stand in front to
 	 *
@@ -112,17 +105,17 @@ public class SqlUtils {
 	 */
 	public static String replaceColumn(String sql, String method) {
 		String result = sql;
-		SqlUtils.LOGGER.debug("Mask all operators of statement: " + sql);
+		log.debug("Mask all operators of statement: " + sql);
 		String[] operators = SqlUtils.getOperators();
 		for (String operator : operators) {
 			result = result.replaceAll(operator, SqlUtils.maskSql(operator));
 		}
 		result = result.replaceAll("#@|@#", "#");
 		result = result.replaceAll("@@", "@");
-		SqlUtils.LOGGER.debug("All operators masked. Masked statement: " + result);
+		log.debug("All operators masked. Masked statement: " + result);
 		
 		for (String operator : operators) {
-			SqlUtils.LOGGER.debug("Execute column id replacement at operator " + operator + ". Current statement: " + result);
+			log.debug("Execute column id replacement at operator " + operator + ". Current statement: " + result);
 			
 			String maskedOperator = SqlUtils.maskSql(operator);
 			String newSql = "";
@@ -141,21 +134,21 @@ public class SqlUtils {
 					spaceIndex = matcher.end();
 				}
 				
-				SqlUtils.LOGGER.debug("Found cloumn id at " + spaceIndex + " in " + cleanPart);
+				log.debug("Found cloumn id at " + spaceIndex + " in " + cleanPart);
 				
 				newSql += cleanPart.substring(0, spaceIndex) + method + "('" + cleanPart.substring(spaceIndex) + "') " + maskedOperator + " ";
 			}
 			
 			result = newSql + parts[parts.length - 1];
 			
-			SqlUtils.LOGGER.debug("All column ids of operator " + operator + " replaced. New statement: " + result);
+			log.debug("All column ids of operator " + operator + " replaced. New statement: " + result);
 		}
 		
-		SqlUtils.LOGGER.debug("Unmask all operators of statement: " + result);
+		log.debug("Unmask all operators of statement: " + result);
 		for (String operator : operators) {
 			result = result.replaceAll(SqlUtils.maskSql(operator), operator);
 		}
-		SqlUtils.LOGGER.debug("All operators unmasked. Result statement: " + result);
+		log.debug("All operators unmasked. Result statement: " + result);
 		
 		return result;
 	}

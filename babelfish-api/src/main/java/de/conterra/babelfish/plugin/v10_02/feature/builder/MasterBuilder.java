@@ -12,13 +12,12 @@ import de.conterra.babelfish.plugin.v10_02.object.geometry.GeometryObject;
 import de.conterra.babelfish.util.DataUtils;
 import de.conterra.babelfish.util.GeoUtils;
 import de.conterra.babelfish.util.JsonParser;
+import lombok.extern.slf4j.Slf4j;
 import org.josql.QueryParseException;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.LinkedHashSet;
 import java.util.Map;
@@ -28,18 +27,12 @@ import java.util.Set;
  * the {@link ServiceBuilder} to handle any request on a {@link FeatureService}
  *
  * @author ChrissW-R1
- * @version 0.1.1
+ * @version 0.4.0
  * @since 0.1.0
  */
+@Slf4j
 public class MasterBuilder
 		implements ServiceBuilder {
-	/**
-	 * the {@link Logger} of this class
-	 *
-	 * @since 0.1.0
-	 */
-	public static final Logger LOGGER = LoggerFactory.getLogger(MasterBuilder.class);
-	
 	@Override
 	public ObjectValue build(RestService service, String[] path, Map<? extends String, ? extends String> parameters)
 			throws ServiceNotAvailableException, WrongRequestException,
@@ -64,9 +57,9 @@ public class MasterBuilder
 			}
 		}
 		if (outCrs == null)
-			MasterBuilder.LOGGER.warn("Wasn't able to decode outSR parameter " + parameter + " as a CRS!");
+			log.warn("Wasn't able to decode outSR parameter " + parameter + " as a CRS!");
 		else
-			MasterBuilder.LOGGER.debug("Decoded given outSR parameter " + parameter + " as the following CRS: " + outCrs.toWKT());
+			log.debug("Decoded given outSR parameter " + parameter + " as the following CRS: " + outCrs.toWKT());
 		
 		CoordinateReferenceSystem inCrs;
 		parameter = parameters.get("inSR");
@@ -76,15 +69,15 @@ public class MasterBuilder
 			try {
 				inCrs = JsonParser.parseCrs(new JSONObject(parameter));
 			} catch (JSONException e2) {
-				MasterBuilder.LOGGER.warn("Wasn't able to decode inSR parameter " + parameter + " as a CRS!");
+				log.warn("Wasn't able to decode inSR parameter " + parameter + " as a CRS!");
 				inCrs = null;
 			}
 		} catch (NullPointerException e) {
-			MasterBuilder.LOGGER.debug("Given parameter inSR was empty.");
+			log.debug("Given parameter inSR was empty.");
 			inCrs = null;
 		}
 		if (inCrs != null)
-			MasterBuilder.LOGGER.debug("Decoded given inSR parameter " + parameter + " as the following CRS: " + inCrs.toWKT());
+			log.debug("Decoded given inSR parameter " + parameter + " as the following CRS: " + inCrs.toWKT());
 		
 		parameter = parameters.get("geometry");
 		GeometryObject geometry;
@@ -92,10 +85,10 @@ public class MasterBuilder
 			geometry = GeoUtils.parseGeometry(parameter, inCrs);
 			
 			if (inCrs != null)
-				MasterBuilder.LOGGER.debug("Parse geometry: " + parameter + "\r\nwith CRS: " + inCrs.toWKT());
+				log.debug("Parse geometry: " + parameter + "\r\nwith CRS: " + inCrs.toWKT());
 		} catch (IllegalArgumentException e) {
 			if (inCrs != null)
-				MasterBuilder.LOGGER.warn("Wasn't able to parse geometry: " + parameter + "\r\nwith CRS: " + inCrs.toWKT(), e);
+				log.warn("Wasn't able to parse geometry: " + parameter + "\r\nwith CRS: " + inCrs.toWKT(), e);
 			
 			geometry = null;
 		}
@@ -110,7 +103,7 @@ public class MasterBuilder
 		}
 		
 		if (path.length <= 0) {
-			MasterBuilder.LOGGER.debug("Create information site of the service.");
+			log.debug("Create information site of the service.");
 			
 			return ServiceOverviewBuilder.build(featureService);
 		} else {
@@ -127,7 +120,7 @@ public class MasterBuilder
 				
 				if (layer != null) {
 					if (path.length == 1) {
-						MasterBuilder.LOGGER.debug("Create layer overview.");
+						log.debug("Create layer overview.");
 						
 						return LayerBuilder.build(layer, featureService, outCrs);
 					} else {
@@ -143,9 +136,9 @@ public class MasterBuilder
 								
 								return new DataValue(data);
 							} else if (path.length == 2)
-								MasterBuilder.LOGGER.warn("There is no overview of images specified in the REST API!");
+								log.warn("There is no overview of images specified in the REST API!");
 							else
-								MasterBuilder.LOGGER.warn("The image path couldn't have a sub path!");
+								log.warn("The image path couldn't have a sub path!");
 							
 							return null;
 						} else if (path[1].equalsIgnoreCase("query")) {
@@ -162,7 +155,7 @@ public class MasterBuilder
 								return QueryBuilder.build(layer, outCrs, geometry, whereClause, objectIds, idsOnly, countOnly);
 							} catch (QueryParseException e) {
 								String msg = "The query couldn't be executed!";
-								MasterBuilder.LOGGER.error(msg, e);
+								log.error(msg, e);
 								throw new BuildingException(msg, e);
 							}
 						} else if (path[1].equalsIgnoreCase("queryRelatedRecords")) {
@@ -182,12 +175,12 @@ public class MasterBuilder
 									return RelatedFeaturesBuilder.build(relationship, outCrs, objectIds, whereClause);
 								else {
 									String msg = "Couldn't found relationship with id: " + relationshipId;
-									MasterBuilder.LOGGER.error(msg);
+									log.error(msg);
 									throw new BuildingException(msg);
 								}
 							} catch (NumberFormatException e) {
 								String msg = "The relationship identifier have to be a valid Number!";
-								MasterBuilder.LOGGER.error(msg, e);
+								log.error(msg, e);
 								throw new BuildingException(msg, e);
 							}
 						} else {
@@ -204,7 +197,7 @@ public class MasterBuilder
 										FeatureWrapper<? extends FeatureObject> featureWrapper = new FeatureWrapper<>(feature);
 										
 										if (path.length == 2) {
-											MasterBuilder.LOGGER.debug("Create feature result.");
+											log.debug("Create feature result.");
 											
 											ObjectValue result = new ObjectValue();
 											Field objectIdField = layer.getObjectIdField();
@@ -220,14 +213,14 @@ public class MasterBuilder
 														
 														if (attachment == null) {
 															String msg = "Attachment " + path[3] + " not found!";
-															MasterBuilder.LOGGER.error(msg);
+															log.error(msg);
 															throw new BuildingException(msg);
 														}
 														
 														return new DataValue(attachment.getData());
 													} catch (NumberFormatException e) {
 														String msg = "The attachment id have to be a Number! Requested attachment: " + path[3];
-														MasterBuilder.LOGGER.error(msg, e);
+														log.error(msg, e);
 														throw new BuildingException(msg, e);
 													}
 												} else
@@ -239,17 +232,17 @@ public class MasterBuilder
 										}
 									} else {
 										String msg = "The requested feature " + path[1] + " is not available!";
-										MasterBuilder.LOGGER.error(msg);
+										log.error(msg);
 										throw new BuildingException(msg);
 									}
 								} else {
 									String msg = "Layer " + layer.getName() + " is not a Feature Layer!";
-									MasterBuilder.LOGGER.warn(msg);
+									log.warn(msg);
 									throw new BuildingException(msg);
 								}
 							} catch (NumberFormatException e) {
 								String msg = "The feature id have to be a Number! Requested feature: " + path[1];
-								MasterBuilder.LOGGER.error(msg, e);
+								log.error(msg, e);
 								throw new BuildingException(msg, e);
 							}
 						}
@@ -257,7 +250,7 @@ public class MasterBuilder
 				}
 			} catch (NumberFormatException e) {
 				String msg = "The layer id have to be a Number! Requested layer: " + path[0];
-				MasterBuilder.LOGGER.error(msg, e);
+				log.error(msg, e);
 				throw new BuildingException(msg, e);
 			}
 		}

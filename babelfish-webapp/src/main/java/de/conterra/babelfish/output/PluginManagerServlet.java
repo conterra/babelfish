@@ -6,10 +6,9 @@ import de.conterra.babelfish.plugin.Plugin;
 import de.conterra.babelfish.plugin.PluginAdapter;
 import de.conterra.babelfish.plugin.ServiceContainer;
 import de.conterra.babelfish.util.ServletUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -29,9 +28,10 @@ import java.util.Set;
  * A {@link HttpServlet} to upload and delete {@link Plugin}s
  *
  * @author ChrissW-R1
- * @version 0.3.1
+ * @version 0.4.0
  * @since 0.1.0
  */
+@Slf4j
 @WebServlet(description = "A GUI to upload and delete plugins", urlPatterns =
 		{
 				"/plugins",
@@ -45,13 +45,7 @@ public class PluginManagerServlet
 	 *
 	 * @since 0.1.0
 	 */
-	private static final long serialVersionUID = 6622147933488958289L;
-	/**
-	 * the {@link Logger} of this class
-	 *
-	 * @since 0.1.0
-	 */
-	public static final Logger LOGGER = LoggerFactory.getLogger(PluginManagerServlet.class);
+	private static final long serialVersionUID = 4L;
 	
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -82,7 +76,7 @@ public class PluginManagerServlet
 		
 		String type = request.getParameter("type");
 		
-		PluginManagerServlet.LOGGER.debug("Request type: " + type);
+		log.debug("Request type: " + type);
 		
 		if (type != null) {
 			if (type.equalsIgnoreCase("upload")) {
@@ -101,62 +95,62 @@ public class PluginManagerServlet
 						is.close();
 						os.close();
 						
-						PluginManagerServlet.LOGGER.debug("A file with name " + name + " was uploaded.");
+						log.debug("A file with name " + name + " was uploaded.");
 						
 						try {
 							PluginAdapter.loadPlugin(outFile);
 							
-							PluginManagerServlet.LOGGER.debug("The file " + name + " is a valid plugin file.");
+							log.debug("The file " + name + " is a valid plugin file.");
 						} catch (IOException e) {
-							PluginManagerServlet.LOGGER.warn("A non valid plugin file " + name + " was uploaded!", e);
+							log.warn("A non valid plugin file " + name + " was uploaded!", e);
 							
 							try {
 								Files.delete(outFile.toPath());
-								PluginManagerServlet.LOGGER.debug("Successfully removed file: " + name);
+								log.debug("Successfully removed file: " + name);
 							} catch (IOException e2) {
-								PluginManagerServlet.LOGGER.error("An error occurred on deleting file: " + name, e2);
+								log.error("An error occurred on deleting file: " + name, e2);
 							}
 						}
 					} else {
-						PluginManagerServlet.LOGGER.debug("Empty file upload.");
+						log.debug("Empty file upload.");
 					}
 					
 					this.reload(response);
 					return;
 				} catch (IllegalArgumentException | MalformedURLException | URISyntaxException e) {
-					PluginManagerServlet.LOGGER.error("File couldn't uploaded!", e);
+					log.error("File couldn't uploaded!", e);
 				}
 			} else if (type.equalsIgnoreCase("remove")) {
 				Plugin plugin = PluginAdapter.getPlugin(request.getParameter("plugin"));
 				String pluginName = plugin.getName();
 				
-				PluginManagerServlet.LOGGER.debug("Try to remove plugin " + pluginName + ".");
+				log.debug("Try to remove plugin " + pluginName + ".");
 				
 				String path = PluginAdapter.getPluginWrapper(plugin).getFile().getName();
 				
 				if (PluginAdapter.unloadPlugin(plugin)) {
-					PluginManagerServlet.LOGGER.debug("Plugin " + pluginName + " successfully unloaded.");
+					log.debug("Plugin " + pluginName + " successfully unloaded.");
 					
 					try {
 						Files.delete((new File(path)).toPath());
 						
-						PluginManagerServlet.LOGGER.debug("Successfully removed file " + path + " of plugin " + pluginName);
+						log.debug("Successfully removed file " + path + " of plugin " + pluginName);
 						
 						try {
 							FileUtils.deleteDirectory(new File(PluginAdapter.getPluginFolder(plugin).toURI()));
 							
-							PluginManagerServlet.LOGGER.debug("Successfully removed plugin folder of plugin " + pluginName + ".");
+							log.debug("Successfully removed plugin folder of plugin " + pluginName + ".");
 						} catch (NullPointerException | URISyntaxException e) {
-							PluginManagerServlet.LOGGER.error("An error occurred on deleting plugin folder of plugin " + pluginName + "!", e);
+							log.error("An error occurred on deleting plugin folder of plugin " + pluginName + "!", e);
 						}
 						
 						this.reload(response);
 						return;
 					} catch (IOException e) {
-						PluginManagerServlet.LOGGER.error("An error occurred on deleting file " + path + " of plugin " + pluginName + "!", e);
+						log.error("An error occurred on deleting file " + path + " of plugin " + pluginName + "!", e);
 					}
 				} else {
-					PluginManagerServlet.LOGGER.debug("Plugin " + pluginName + " couldn't unloaded!");
+					log.debug("Plugin " + pluginName + " couldn't unloaded!");
 				}
 			}
 		}
@@ -184,7 +178,7 @@ public class PluginManagerServlet
 		if (!managerEnabled) {
 			String msg = "The plugin manager is disabled!";
 			response.sendError(403, msg);
-			PluginManagerServlet.LOGGER.debug(msg);
+			log.debug(msg);
 		}
 		
 		return managerEnabled;
@@ -282,7 +276,7 @@ public class PluginManagerServlet
 		if (part != null) {
 			for (String cd : part.getHeader("content-disposition").split(";")) {
 				if (cd.trim().startsWith("filename")) {
-					PluginManagerServlet.LOGGER.debug("Found element with filename.");
+					log.debug("Found element with filename.");
 					
 					String filename = cd.substring(cd.indexOf('=') + 1).trim().replace("\"", "");
 					return filename.substring(filename.lastIndexOf('/') + 1).substring(filename.lastIndexOf('\\') + 1);
@@ -305,7 +299,7 @@ public class PluginManagerServlet
 	 */
 	private void reload(HttpServletResponse response)
 			throws IOException {
-		PluginManagerServlet.LOGGER.debug("Reload the site.");
+		log.debug("Reload the site.");
 		
 		response.sendRedirect(PluginManagerServlet.class.getAnnotation(WebServlet.class).urlPatterns()[0].substring(1));
 	}

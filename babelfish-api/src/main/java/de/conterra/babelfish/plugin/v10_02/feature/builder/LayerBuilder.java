@@ -10,12 +10,11 @@ import de.conterra.babelfish.plugin.v10_02.object.geometry.GeometryBuilder;
 import de.conterra.babelfish.plugin.v10_02.object.geometry.GeometryObject;
 import de.conterra.babelfish.plugin.v10_02.object.labeling.LabelBuilder;
 import de.conterra.babelfish.plugin.v10_02.object.renderer.RendererBuilder;
+import lombok.extern.slf4j.Slf4j;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.opengis.geometry.Envelope;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.LinkedHashSet;
 import java.util.Map;
@@ -25,17 +24,11 @@ import java.util.Set;
  * a class to build the overview page of a {@link Layer}
  *
  * @author ChrissW-R1
- * @version 0.1.0
+ * @version 0.4.0
  * @since 0.1.0
  */
+@Slf4j
 public class LayerBuilder {
-	/**
-	 * the {@link Logger} of this class
-	 *
-	 * @since 0.1.0
-	 */
-	public static final Logger LOGGER = LoggerFactory.getLogger(LayerBuilder.class);
-	
 	/**
 	 * private standard constructor, to prevent initialization
 	 *
@@ -90,7 +83,7 @@ public class LayerBuilder {
 				destination = true;
 			
 			if (origin != destination) {
-				LayerBuilder.LOGGER.debug("Found relationship " + originLayer.getName() + " --> " + destLayer.getName() + ".");
+				log.debug("Found relationship " + originLayer.getName() + " --> " + destLayer.getName() + ".");
 				
 				ObjectValue relValue = new ObjectValue();
 				
@@ -110,7 +103,7 @@ public class LayerBuilder {
 		result.addContentNotEmpty("relationships", rels);
 		
 		if (layer instanceof FeatureLayer<?, ?>) {
-			LayerBuilder.LOGGER.debug("Layer " + name + " is a feature layer.");
+			log.debug("Layer " + name + " is a feature layer.");
 			
 			FeatureLayer<? extends GeometryObject, ? extends GeometryFeatureObject<? extends GeometryObject>> featureLayer = (FeatureLayer<?, ?>) layer;
 			
@@ -132,7 +125,7 @@ public class LayerBuilder {
 		}
 		
 		if (layer instanceof TimeLayer<?>) {
-			LayerBuilder.LOGGER.debug("Layer " + name + " have time versioned data.");
+			log.debug("Layer " + name + " have time versioned data.");
 			
 			TimeLayer<T> timeLayer = (TimeLayer<T>) layer;
 			

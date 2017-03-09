@@ -6,7 +6,7 @@ import java.util.concurrent.ExecutionException;
  * This {@link ExecutionException} would be thrown, if a {@link ServiceBuilder} run into an {@link Exception} even though the request was valid
  *
  * @author ChrissW-R1
- * @version 0.1.0
+ * @version 0.4.0
  * @since 0.1.0
  */
 public class BuildingException
@@ -16,7 +16,7 @@ public class BuildingException
 	 *
 	 * @since 0.1.0
 	 */
-	private static final long serialVersionUID = 6153281879488344633L;
+	private static final long serialVersionUID = 2L;
 	
 	/**
 	 * standard constructor

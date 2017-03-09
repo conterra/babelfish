@@ -6,8 +6,7 @@ import de.conterra.babelfish.plugin.v10_02.feature.Relationship;
 import de.conterra.babelfish.plugin.v10_02.object.feature.FeatureObject;
 import de.conterra.babelfish.plugin.v10_02.object.feature.GeometryFeatureObject;
 import de.conterra.babelfish.plugin.v10_02.object.geometry.Polygon;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -19,15 +18,9 @@ import java.util.Set;
  * @version 0.1.1
  * @since 0.1.0
  */
+@Slf4j
 public class SimpleRelationship
 		implements Relationship<GeometryFeatureObject<Polygon>, FeatureObject> {
-	/**
-	 * the {@link Logger} of this class
-	 *
-	 * @since 0.1.1
-	 */
-	public static final Logger LOGGER = LoggerFactory.getLogger(SimpleRelationship.class);
-	
 	/**
 	 * the unique identifier
 	 *
@@ -94,16 +87,16 @@ public class SimpleRelationship
 		Set<Feature<FeatureObject>> result = new LinkedHashSet<>();
 		
 		if (originFeature == SimplePolygonLayer.DEILMANN_PARK) {
-			SimpleRelationship.LOGGER.debug("Requested related features of the Deilmann Park.");
+			log.debug("Requested related features of the Deilmann Park.");
 			
 			result.add(SimpleTable.CON_TERRA);
 			result.add(SimpleTable.ESRI);
 		} else if (originFeature == SimplePolygonLayer.AGENTUR_FUER_ARBEIT) {
-			SimpleRelationship.LOGGER.debug("Requested related features of the Agentur f\u00FCr Arbeit.");
+			log.debug("Requested related features of the Agentur f\u00FCr Arbeit.");
 			
 			result.add(SimpleTable.AGENTUR_FUER_ARBEIT);
 		} else
-			SimpleRelationship.LOGGER.debug("No linked feature was requested: " + originFeature.getFeature().getAttribute("name"));
+			log.debug("No linked feature was requested: " + originFeature.getFeature().getAttribute("name"));
 		
 		return result;
 	}

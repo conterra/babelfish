@@ -7,10 +7,9 @@ import de.conterra.babelfish.interchange.ObjectValue;
 import de.conterra.babelfish.plugin.*;
 import de.conterra.babelfish.util.DataUtils;
 import de.conterra.babelfish.util.ServletUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.servlet.Servlet;
 import javax.servlet.ServletException;
@@ -26,13 +25,13 @@ import java.util.Locale;
 import java.util.Map;
 
 /**
- * {@link Servlet}, which handles all {@link HttpServletRequest}s on the right
- * root path
+ * {@link Servlet}, which handles all {@link HttpServletRequest}s on the right root path
  *
  * @author ChrissW-R1
- * @version 0.3.0
+ * @version 0.4.0
  * @since 0.1.0
  */
+@Slf4j
 @WebServlet(description = "handles the HTTP request", urlPatterns =
 		{
 				"/ArcGIS/rest/*",
@@ -46,13 +45,7 @@ public class MainServlet
 	 *
 	 * @since 0.1.0
 	 */
-	private static final long serialVersionUID = -8124809514577262326L;
-	/**
-	 * the {@link Logger} of this class
-	 *
-	 * @since 0.1.0
-	 */
-	public static final Logger LOGGER = LoggerFactory.getLogger(MainServlet.class);
+	private static final long serialVersionUID = 4L;
 	
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -78,12 +71,12 @@ public class MainServlet
 			throws IOException {
 		if (!Initializer.init(this, true)) {
 			String msg = "Initialization failed";
-			MainServlet.LOGGER.error(msg);
+			log.error(msg);
 			response.sendError(500, msg);
 			return;
 		}
 		
-		MainServlet.LOGGER.debug("Prepare input parameters.");
+		log.debug("Prepare input parameters.");
 		Map<? extends String, ? extends String[]> parameterMap = request.getParameterMap();
 		HashMap<String, String> parameters = new HashMap<>();
 		for (String key : parameterMap.keySet()) {
@@ -99,22 +92,22 @@ public class MainServlet
 				if (remoteData.length <= 0)
 					throw new IOException("No external file found!");
 				
-				MainServlet.LOGGER.debug("Found external JSON file for parameter " + key + " at " + url);
+				log.debug("Found external JSON file for parameter " + key + " at " + url);
 				
 				JSONObject remoteJson = new JSONObject(new String(remoteData));
 				for (String remoteKey : JSONObject.getNames(remoteJson))
 					json.append(remoteKey, remoteJson.get(remoteKey));
 				
-				MainServlet.LOGGER.debug("All values of the remote JSON file added to the parameter value.");
+				log.debug("All values of the remote JSON file added to the parameter value.");
 				
 				parameterValue = json.toString();
 			} catch (JSONException | IOException e) {
-				MainServlet.LOGGER.debug("No valid remote JSON file found for parameter " + key, e);
+				log.debug("No valid remote JSON file found for parameter " + key, e);
 				
 				parameterValue = parameter;
 			}
 			
-			MainServlet.LOGGER.debug("Add prepared parameter " + key + " to the parameter map.");
+			log.debug("Add prepared parameter " + key + " to the parameter map.");
 			
 			parameters.put(key, parameterValue);
 		}
@@ -124,7 +117,7 @@ public class MainServlet
 		
 		if (formatParameter != null) {
 			if (formatParameter.equalsIgnoreCase("help")) {
-				MainServlet.LOGGER.info("Redirect to the API help page of ESRI");
+				log.info("Redirect to the API help page of ESRI");
 				response.sendRedirect(Initializer.HELP_URL);
 				return;
 			} else if (formatParameter.equalsIgnoreCase("pJSON"))
@@ -133,7 +126,7 @@ public class MainServlet
 				try {
 					format = Format.valueOf(formatParameter.toUpperCase(Locale.ROOT));
 				} catch (IllegalArgumentException e) {
-					MainServlet.LOGGER.warn("Requested format " + formatParameter + " wasn't found.", e);
+					log.warn("Requested format " + formatParameter + " wasn't found.", e);
 				}
 			}
 		}
@@ -141,7 +134,7 @@ public class MainServlet
 		if (format == null)
 			format = Format.JSON;
 		
-		MainServlet.LOGGER.debug("Used output format is " + format);
+		log.debug("Used output format is " + format);
 		
 		String target = request.getPathInfo();
 		
@@ -154,7 +147,7 @@ public class MainServlet
 		String[] targetParts = target.split("/");
 		
 		if (targetParts[0].isEmpty()) {
-			MainServlet.LOGGER.debug("Redirect to root URL (with WrongHomeServlet).");
+			log.debug("Redirect to root URL (with WrongHomeServlet).");
 			response.sendRedirect(ServletUtils.getPathWithParameters("/", parameterMap));
 			return;
 		}
@@ -165,18 +158,18 @@ public class MainServlet
 					String plugin;
 					
 					try {
-						MainServlet.LOGGER.debug("Request service list.");
+						log.debug("Request service list.");
 						
 						if (ServiceContainer.getServices(targetParts[1]).isEmpty()) {
 							String msg = "No registered plugin: " + targetParts[1];
-							MainServlet.LOGGER.error(msg);
+							log.error(msg);
 							response.sendError(404, msg);
 							return;
 						}
 						
 						plugin = targetParts[1];
 					} catch (IndexOutOfBoundsException e) {
-						MainServlet.LOGGER.debug("Request plugin list.");
+						log.debug("Request plugin list.");
 						
 						plugin = null;
 					}
@@ -187,14 +180,14 @@ public class MainServlet
 					
 					if (service == null) {
 						String msg = "No registered service: " + targetParts[2];
-						MainServlet.LOGGER.error(msg);
+						log.error(msg);
 						response.sendError(404, msg);
 						return;
 					}
 					
 					if (targetParts.length < 4) {
 						String msg = "Missing service type in request!";
-						MainServlet.LOGGER.error(msg);
+						log.error(msg);
 						response.sendError(404, msg);
 						return;
 					}
@@ -211,7 +204,7 @@ public class MainServlet
 					} else {
 						String[] servicePath = Arrays.copyOfRange(targetParts, 4, targetParts.length);
 						
-						MainServlet.LOGGER.debug("Search for valid wrapper for requested service.");
+						log.debug("Search for valid wrapper for requested service.");
 						ServiceWrapper serviceWrapper = VersionWrapper.getServiceWrapper(service);
 						rootObject = serviceWrapper.getBuilder(targetParts[3]).build(service, servicePath, parameters);
 						if (rootObject != null && rootObject.getValue("currentVersion") == null)
@@ -219,12 +212,12 @@ public class MainServlet
 					}
 				}
 			} catch (ServiceNotAvailableException | BuildingException e) {
-				MainServlet.LOGGER.error(e.getMessage(), e);
+				log.error(e.getMessage(), e);
 				response.sendError(500, e.getMessage());
 				
 				return;
 			} catch (WrongRequestException e) {
-				MainServlet.LOGGER.error(e.getMessage(), e);
+				log.error(e.getMessage(), e);
 				response.sendError(400, e.getMessage());
 				return;
 			}
@@ -239,11 +232,11 @@ public class MainServlet
 		
 		if (rootObject != null) {
 			if (rootObject instanceof DataValue) {
-				MainServlet.LOGGER.debug("Send output as data stream");
+				log.debug("Send output as data stream");
 				
 				ByteOutput.output((DataValue) rootObject, response, targetParts[targetParts.length - 1]);
 			} else {
-				MainServlet.LOGGER.debug("Print output.");
+				log.debug("Print output.");
 				
 				response.setContentType(format.formatter.getContentType());
 				response.setCharacterEncoding(format.formatter.getCharacterEncoding());
@@ -254,7 +247,7 @@ public class MainServlet
 		}
 		
 		String msg = "Don't know any response-action for the given request! Request: " + request.getPathInfo();
-		MainServlet.LOGGER.error(msg);
+		log.error(msg);
 		response.sendError(400, msg);
 	}
 }

@@ -2,9 +2,8 @@ package de.conterra.babelfish.output;
 
 import de.conterra.babelfish.Initializer;
 import de.conterra.babelfish.util.DataUtils;
+import lombok.extern.slf4j.Slf4j;
 import net.sf.image4j.codec.ico.ICOEncoder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.servlet.Servlet;
 import javax.servlet.ServletException;
@@ -20,9 +19,10 @@ import java.io.OutputStream;
  * {@link Servlet}, which provides a Favicon
  *
  * @author ChrissW-R1
- * @version 0.1.1
+ * @version 0.4.0
  * @since 0.1.0
  */
+@Slf4j
 @WebServlet(description = "Servlet, which provides a Favicon", urlPatterns =
 		{
 				"/favicon.ico"
@@ -34,13 +34,7 @@ public class FaviconServlet
 	 *
 	 * @since 0.1.0
 	 */
-	private static final long serialVersionUID = 4212107595327196900L;
-	/**
-	 * the {@link Logger} of this class
-	 *
-	 * @since 0.1.0
-	 */
-	public static final Logger LOGGER = LoggerFactory.getLogger(FaviconServlet.class);
+	private static final long serialVersionUID = 3L;
 	
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -71,17 +65,17 @@ public class FaviconServlet
 		int picSize = 32;
 		
 		ByteArrayOutputStream outByte = new ByteArrayOutputStream();
-		FaviconServlet.LOGGER.debug("Transform the icon into a byte array of ICO format.");
+		log.debug("Transform the icon into a byte array of ICO format.");
 		ICOEncoder.write(DataUtils.toBufferedImage(Initializer.getDefaultIcon().getScaledInstance(picSize, picSize, Image.SCALE_SMOOTH)), outByte);
 		byte[] data = outByte.toByteArray();
 		outByte.close();
 		
-		FaviconServlet.LOGGER.debug("Set header information.");
+		log.debug("Set header information.");
 		response.setContentType("image/vnd.microsoft.icon");
 		response.setContentLength(data.length);
 		
 		OutputStream outStream = response.getOutputStream();
-		FaviconServlet.LOGGER.debug("Write image byte data to output stream.");
+		log.debug("Write image byte data to output stream.");
 		outStream.write(data);
 		outStream.close();
 	}

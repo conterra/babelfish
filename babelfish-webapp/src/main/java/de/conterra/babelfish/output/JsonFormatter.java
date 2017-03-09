@@ -1,11 +1,10 @@
 package de.conterra.babelfish.output;
 
 import de.conterra.babelfish.interchange.*;
+import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.Writer;
@@ -18,15 +17,9 @@ import java.util.Map;
  * @version 0.1.0
  * @since 0.1.0
  */
+@Slf4j
 public class JsonFormatter
 		implements OutlineFormatter {
-	/**
-	 * the {@link Logger} of this class
-	 *
-	 * @since 0.1.0
-	 */
-	public static final Logger LOGGER = LoggerFactory.getLogger(JsonFormatter.class);
-	
 	@Override
 	public String getContentType() {
 		return "application/json";
@@ -55,19 +48,19 @@ public class JsonFormatter
 			}
 		}
 		
-		JsonFormatter.LOGGER.debug("Request pretty format: " + pretty);
+		log.debug("Request pretty format: " + pretty);
 		
 		String callback = "";
 		if (parameters.containsKey("callback"))
 			callback = parameters.get("callback")[0];
 		
 		if (!(callback.isEmpty())) {
-			JsonFormatter.LOGGER.debug("Write callback information from request.");
+			log.debug("Write callback information from request.");
 			
 			try {
 				writer.write(callback + "(");
 			} catch (IOException e) {
-				JsonFormatter.LOGGER.error("Error on write callback information!", e);
+				log.error("Error on write callback information!", e);
 			}
 		}
 		
@@ -79,14 +72,14 @@ public class JsonFormatter
 			else
 				jsonObject.write(writer);
 		} catch (JSONException | IOException e) {
-			JsonFormatter.LOGGER.error("Error on write JSON content!", e);
+			log.error("Error on write JSON content!", e);
 		}
 		
 		if (!(callback.isEmpty())) {
 			try {
 				writer.write(");");
 			} catch (IOException e) {
-				JsonFormatter.LOGGER.error("Error on write callback close pattern!", e);
+				log.error("Error on write callback close pattern!", e);
 			}
 		}
 	}

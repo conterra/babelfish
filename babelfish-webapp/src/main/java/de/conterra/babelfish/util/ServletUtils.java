@@ -1,7 +1,6 @@
 package de.conterra.babelfish.util;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.Servlet;
 import javax.servlet.http.HttpServlet;
@@ -16,14 +15,8 @@ import java.util.Map;
  * @version 0.1.1
  * @since 0.1.0
  */
+@Slf4j
 public class ServletUtils {
-	/**
-	 * the {@link Logger} of this class
-	 *
-	 * @since 0.1.0
-	 */
-	public static final Logger LOGGER = LoggerFactory.getLogger(ServletUtils.class);
-	
 	/**
 	 * private standard constructor, to prevent initialization
 	 *
@@ -45,12 +38,12 @@ public class ServletUtils {
 		String result = path;
 		
 		for (String key : parameters.keySet()) {
-			ServletUtils.LOGGER.debug("Add parameter " + key + " to the URL.");
+			log.debug("Add parameter " + key + " to the URL.");
 			for (String value : (String[]) (parameters.get(key)))
 				result += "&" + key + "=" + value;
 		}
 		
-		ServletUtils.LOGGER.debug("Replace first '&' in URL to '?'.");
+		log.debug("Replace first '&' in URL to '?'.");
 		result = result.replaceFirst("&", "?");
 		
 		return result;

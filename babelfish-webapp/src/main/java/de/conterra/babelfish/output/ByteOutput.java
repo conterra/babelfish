@@ -1,12 +1,11 @@
 package de.conterra.babelfish.output;
 
 import de.conterra.babelfish.interchange.DataValue;
+import lombok.extern.slf4j.Slf4j;
 import net.sf.jmimemagic.Magic;
 import net.sf.jmimemagic.MagicException;
 import net.sf.jmimemagic.MagicMatchNotFoundException;
 import net.sf.jmimemagic.MagicParseException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
@@ -20,14 +19,8 @@ import java.io.IOException;
  * @version 0.2.3
  * @since 0.2.3
  */
+@Slf4j
 public class ByteOutput {
-	/**
-	 * the {@link Logger} of this class
-	 *
-	 * @since 0.2.3
-	 */
-	public static final Logger LOGGER = LoggerFactory.getLogger(ByteOutput.class);
-	
 	/**
 	 * private standard constructor, to prevent initialization
 	 *
@@ -49,7 +42,7 @@ public class ByteOutput {
 			throws IOException {
 		if (dataValue.isEmpty()) {
 			String msg = "The requested ressource is an empty data set!";
-			ByteOutput.LOGGER.warn(msg);
+			log.warn(msg);
 			response.sendError(204, msg);
 			return;
 		}
@@ -61,12 +54,12 @@ public class ByteOutput {
 		try {
 			mimeType = Magic.getMagicMatch(data).getMimeType();
 		} catch (MagicParseException | MagicMatchNotFoundException | MagicException e) {
-			ByteOutput.LOGGER.warn("Couldn't found MIME type for output data!", e);
+			log.warn("Couldn't found MIME type for output data!", e);
 			
 			mimeType = "application/octet-stream";
 		}
 		
-		ByteOutput.LOGGER.debug("Send data ouput with MIME type " + mimeType + ".");
+		log.debug("Send data ouput with MIME type " + mimeType + ".");
 		
 		response.setContentType(mimeType);
 		response.setContentLength(data.length);
