@@ -38,7 +38,7 @@ public class FeatureObject {
 	 * @param attributes the meta-attributes
 	 * @since 0.1.0
 	 */
-	public FeatureObject(Map<? extends Field, ? extends Object> attributes) {
+	public FeatureObject(Map<? extends Field, ?> attributes) {
 		this.attributes.putAll(attributes);
 	}
 	
@@ -68,7 +68,7 @@ public class FeatureObject {
 	 *
 	 * @since 0.1.0
 	 */
-	public Map<? extends Field, ? extends Object> getAttributes() {
+	public Map<? extends Field, ?> getAttributes() {
 		return new LinkedHashMap<>(this.attributes);
 	}
 	
@@ -142,8 +142,9 @@ public class FeatureObject {
 	 */
 	public String get(String id) {
 		for (Field field : this.getAttributes().keySet()) {
-			if (field.getName().equalsIgnoreCase(id))
+			if (field.getName().equalsIgnoreCase(id)) {
 				return this.getAttribute(field).toString();
+			}
 		}
 		
 		return "";
@@ -163,12 +164,14 @@ public class FeatureObject {
 	 * @since 0.1.0
 	 */
 	public Object addAttribute(Field id, Object attribute)
-			throws IllegalArgumentException {
-		if (attribute == null)
+	throws IllegalArgumentException {
+		if (attribute == null) {
 			return null;
+		}
 		
-		if (FeatureObject.isValidType(attribute))
+		if (FeatureObject.isValidType(attribute)) {
 			return this.attributes.put(id, attribute);
+		}
 		
 		throw new IllegalArgumentException("Only attributes of types Number, String or Boolean are supported! Type " + attribute.getClass().getCanonicalName() + " was tried!");
 	}

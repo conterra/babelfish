@@ -39,7 +39,7 @@ public class GeometryFeatureObject<T extends GeometryObject>
 	 * @param attributes the meta-attributes
 	 * @since 0.1.0
 	 */
-	public GeometryFeatureObject(T geometry, Map<? extends Field, ? extends Object> attributes) {
+	public GeometryFeatureObject(T geometry, Map<? extends Field, ?> attributes) {
 		super(attributes);
 		
 		this.geometry = geometry;

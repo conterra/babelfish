@@ -71,7 +71,7 @@ public class CodedValueDomain
 	 *
 	 * @since 0.1.0
 	 */
-	public Map<? extends String, ? extends Object> getCodedValues() {
+	public Map<? extends String, ?> getCodedValues() {
 		return new LinkedHashMap<>(this.values);
 	}
 	
@@ -100,10 +100,11 @@ public class CodedValueDomain
 	 * @since 0.1.0
 	 */
 	public Object addCodedValue(String name, Object code)
-			throws IllegalArgumentException {
+	throws IllegalArgumentException {
 		if (!(code instanceof String)
-				&& !(code instanceof Number))
+		    && !(code instanceof Number)) {
 			throw new IllegalArgumentException("Only String or Number codes are supported!");
+		}
 		
 		return this.values.put(name, code);
 	}
