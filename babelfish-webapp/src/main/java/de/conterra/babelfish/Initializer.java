@@ -10,7 +10,10 @@ import lombok.extern.slf4j.Slf4j;
 import javax.imageio.ImageIO;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServlet;
-import javax.xml.bind.*;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
@@ -18,6 +21,7 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.Properties;
 
 /**
  * this class initialize all necessary subsystems
@@ -39,7 +43,13 @@ public class Initializer {
 	 *
 	 * @since 0.4.0
 	 */
-	public static Config config;
+	public static Config CONFIG;
+	/**
+	 * project {@link Properties} set on build
+	 *
+	 * @since 0.4.0
+	 */
+	public static Properties PROPERTIES = null;
 	
 	/**
 	 * the root {@link URL} to the folder to store files (like configurations, plugins, etc.)
@@ -47,6 +57,12 @@ public class Initializer {
 	 * @since 0.2.1
 	 */
 	public static URL BASE_URL = null;
+	/**
+	 * the directory of the webapp, used to get the subdirectories and files from.
+	 *
+	 * @since 0.4.0
+	 */
+	public static File BASE_DIR;
 	
 	/**
 	 * the {@link ReschedulableTimer}, which calls the {@link Initializer#shutdown()}, if no requests are registered for a while
@@ -54,8 +70,9 @@ public class Initializer {
 	 * @since 0.1.0
 	 */
 	public static final ReschedulableTimer SHUTDOWN_TIMER = new ReschedulableTimer(() -> {
-		if (!Initializer.shutdown())
+		if (!Initializer.shutdown()) {
 			log.warn("Shutdown failed!");
+		}
 	});
 	
 	/**
@@ -64,13 +81,13 @@ public class Initializer {
 	 * @see <a href="http://resources.arcgis.com/en/help/rest/apiref/">ArcGIS REST API</a>
 	 * @since 0.1.0
 	 */
-	public static final String HELP_URL = "http://resources.arcgis.com/en/help/rest/apiref/";
+	public static final     String  HELP_URL        = "http://resources.arcgis.com/en/help/rest/apiref/";
 	/**
 	 * the default Babelfish icon / logo
 	 *
 	 * @since 0.1.0
 	 */
-	private static Image DEFAULT_ICON = null;
+	private static          Image   DEFAULT_ICON    = null;
 	/**
 	 * flag, which will be set, while plugins were be loaded
 	 *
@@ -109,38 +126,54 @@ public class Initializer {
 				URI uri = url.toURI();
 				
 				String scheme = uri.getScheme();
-				if (scheme.equalsIgnoreCase("File"))
+				if (scheme.equalsIgnoreCase("File")) {
 					Initializer.BASE_URL = url;
-				else if (scheme.equalsIgnoreCase("JAR")) {
+				} else if (scheme.equalsIgnoreCase("JAR")) {
 					String path = uri.toString();
 					path = path.substring(0, path.indexOf("!/"));
 					path = path.substring(0, path.lastIndexOf("."));
 					path = path.substring(path.indexOf(":") + 1);
 					
 					Initializer.BASE_URL = new URL(path);
-				} else if (scheme.equalsIgnoreCase("JNDI"))
+				} else if (scheme.equalsIgnoreCase("JNDI")) {
 					Initializer.BASE_URL = new URL(("file:///" + context.getRealPath("/")).replaceAll(" ", "%20"));
+				}
 				
-				log.debug("Set the base URL to: " + Initializer.BASE_URL.toURI().toString());
+				URI baseUri = Initializer.BASE_URL.toURI();
+				if (Initializer.BASE_URL != null) {
+					Initializer.BASE_DIR = new File(baseUri);
+				}
+				
+				log.debug("Set the base URL to: " + baseUri.toString());
 			} catch (NullPointerException | MalformedURLException | URISyntaxException e) {
 				log.error("Couldn't found a valid URL!", e);
 			}
 		}
 		
+		if (Initializer.PROPERTIES == null) {
+			Initializer.PROPERTIES = new Properties();
+			try {
+				Initializer.PROPERTIES.load(context.getResourceAsStream("/WEB-INF/classes/project.properties"));
+			} catch (IOException e) {
+				log.error("Unable to load project properties!", e);
+				
+				result = false;
+			}
+		}
+		
 		try {
 			Unmarshaller unmarshaller = JAXBContext.newInstance(Config.class).createUnmarshaller();
-			JAXBElement<Config> element = (JAXBElement<Config>) unmarshaller.unmarshal(new File(BASE_URL.toString() + "/config.xml"));
-			config = element.getValue();
+			Initializer.CONFIG = (Config) (unmarshaller.unmarshal(new File(Initializer.BASE_DIR, "config.xml")));
 			
 			log.debug("Configuration successfully loaded.");
 		} catch (JAXBException e) {
 			log.warn("Couldn't load configuration! Using default settings instead.");
 			
-			config = OBJECT_FACTORY.createConfig();
+			Initializer.CONFIG = OBJECT_FACTORY.createConfig();
 		}
 		
 		log.debug("Reschedule the shutdown timer.");
-		Initializer.SHUTDOWN_TIMER.reschedule(config.getShutdownDelay());
+		Initializer.SHUTDOWN_TIMER.reschedule(Initializer.CONFIG.getShutdownDelay());
 		
 		if (Initializer.getDefaultIcon() == null) {
 			log.debug("Load default Babelfish icon.");
@@ -155,28 +188,32 @@ public class Initializer {
 		}
 		
 		try {
-			URL url = null;
+			URL url;
 			
 			long start = System.currentTimeMillis();
 			while (PluginAdapter.getPluginsFolder() == null && (System.currentTimeMillis() - start) < 5000) {
-				File file = new File(new File(Initializer.BASE_URL.toURI()), PluginAdapter.PLUGINS_FOLDER_PATH.substring(1));
+				File file = new File(BASE_DIR, PluginAdapter.PLUGINS_FOLDER_PATH.substring(1));
 				log.debug("Try to create plugins folder. URL: " + file.getName());
-				if (!(file.exists()) && !(file.mkdirs()))
+				if (!(file.exists()) && !(file.mkdirs())) {
 					log.warn("Couldn't create plugin folder.");
+				}
 				
 				url = file.toURI().toURL();
-				if (url != null)
+				if (url != null) {
 					PluginAdapter.setPluginsFolder(url);
+				}
 			}
 			
 			if (loadPlugins) {
-				long abortDelay = config.getShutdownDelay();
-				if (abortDelay > 60000)
+				long abortDelay = Initializer.CONFIG.getShutdownDelay();
+				if (abortDelay > 60000) {
 					abortDelay = 60000;
+				}
 				
 				long abortTime = System.currentTimeMillis() + abortDelay;
-				while (Initializer.loadPluginsFlag && System.currentTimeMillis() < abortTime)
+				while (Initializer.loadPluginsFlag && System.currentTimeMillis() < abortTime) {
 					;
+				}
 				
 				if (!Initializer.loadPluginsFlag) {
 					Initializer.loadPluginsFlag = true;
@@ -234,9 +271,9 @@ public class Initializer {
 		for (Plugin plugin : PluginAdapter.getPlugins()) {
 			String pluginName = plugin.getName();
 			
-			if (PluginAdapter.unloadPlugin(plugin))
+			if (PluginAdapter.unloadPlugin(plugin)) {
 				log.debug("Plugin " + pluginName + " successfully unloaded.");
-			else {
+			} else {
 				log.error("Couldn't unload plugin " + pluginName + ".");
 				
 				result = false;
@@ -248,12 +285,13 @@ public class Initializer {
 		
 		try {
 			Marshaller marshaller = JAXBContext.newInstance(Config.class).createMarshaller();
-			marshaller.marshal(config, new File(BASE_URL.toString() + "/config.xml"));
+			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+			marshaller.marshal(Initializer.CONFIG, new File(Initializer.BASE_DIR, "config.xml"));
 			
 			log.debug("Configuration successfully saved.");
 		} catch (JAXBException e) {
+			log.warn("Couldn't save the configuration!", e);
 			e.printStackTrace();
-			log.warn("Couldn't save the configuration!");
 		}
 		
 		return result;

@@ -49,7 +49,7 @@ public class PluginManagerServlet
 	
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	throws ServletException, IOException {
 		if (!(this.isManagerEnabled(response))) {
 			return;
 		}
@@ -65,7 +65,7 @@ public class PluginManagerServlet
 	
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	throws ServletException, IOException {
 		if (!(this.isManagerEnabled(response))) {
 			return;
 		}
@@ -86,9 +86,9 @@ public class PluginManagerServlet
 					String name = PluginManagerServlet.getFilename(filePart);
 					
 					if (name != null && (!(name.isEmpty()))) {
-						InputStream is = filePart.getInputStream();
-						File outFile = new File((new URL(PluginAdapter.getPluginsFolder().toString() + "/" + name).toURI()));
-						FileOutputStream os = new FileOutputStream(outFile);
+						InputStream      is      = filePart.getInputStream();
+						File             outFile = new File((new URL(PluginAdapter.getPluginsFolder().toString() + "/" + name).toURI()));
+						FileOutputStream os      = new FileOutputStream(outFile);
 						
 						IOUtils.copy(is, os);
 						
@@ -121,7 +121,7 @@ public class PluginManagerServlet
 					log.error("File couldn't uploaded!", e);
 				}
 			} else if (type.equalsIgnoreCase("remove")) {
-				Plugin plugin = PluginAdapter.getPlugin(request.getParameter("plugin"));
+				Plugin plugin     = PluginAdapter.getPlugin(request.getParameter("plugin"));
 				String pluginName = plugin.getName();
 				
 				log.debug("Try to remove plugin " + pluginName + ".");
@@ -170,10 +170,10 @@ public class PluginManagerServlet
 	 * @since 0.1.0
 	 */
 	private boolean isManagerEnabled(HttpServletResponse response)
-			throws IOException {
+	throws IOException {
 		Initializer.init(this, true);
 		
-		boolean managerEnabled = Initializer.config.isManagerEnabled();
+		boolean managerEnabled = Initializer.CONFIG.isManagerEnabled();
 		
 		if (!managerEnabled) {
 			String msg = "The plugin manager is disabled!";
@@ -193,7 +193,7 @@ public class PluginManagerServlet
 	 * @since 0.1.0
 	 */
 	private void writeHeader(PrintWriter writer, String url)
-			throws IOException {
+	throws IOException {
 		String rootPath = ServletUtils.getRootUrl(url, PluginManagerServlet.class.getAnnotation(WebServlet.class).urlPatterns()[0]);
 		
 		writer.println("<!DOCTYPE html>");
@@ -214,7 +214,7 @@ public class PluginManagerServlet
 	 * @since 0.1.0
 	 */
 	private void writeFooter(PrintWriter writer)
-			throws IOException {
+	throws IOException {
 		writer.println("</body></html>");
 	}
 	
@@ -229,10 +229,10 @@ public class PluginManagerServlet
 	 * @since 0.1.0
 	 */
 	private void doRequest(HttpServletRequest request, HttpServletResponse response)
-			throws IOException {
-		PrintWriter writer = response.getWriter();
-		String rootPath = ServletUtils.getRootUrl(ServletUtils.getUrl(request), PluginManagerServlet.class.getAnnotation(WebServlet.class).urlPatterns()[0]);
-		String pluginRootPath = MainServlet.class.getAnnotation(WebServlet.class).urlPatterns()[0];
+	throws IOException {
+		PrintWriter writer         = response.getWriter();
+		String      rootPath       = ServletUtils.getRootUrl(ServletUtils.getUrl(request), PluginManagerServlet.class.getAnnotation(WebServlet.class).urlPatterns()[0]);
+		String      pluginRootPath = MainServlet.class.getAnnotation(WebServlet.class).urlPatterns()[0];
 		pluginRootPath = rootPath + "/" + pluginRootPath.substring(1, pluginRootPath.length() - 1) + "services/";
 		
 		Set<? extends Plugin> plugins = PluginAdapter.getPlugins();
@@ -259,7 +259,7 @@ public class PluginManagerServlet
 		
 		writer.println("<hr />");
 		
-		writer.println("<p align=\"right\"><font size=\"-1\"><a href=\"" + rootPath + "/about\">&copy; 2014 - 2016 by con terra GmbH</a></font></p>");
+		writer.println("<p align=\"right\"><font size=\"-1\"><a href=\"" + rootPath + "/about\">&copy; " + Initializer.PROPERTIES.getProperty("project.inceptionYear") + " - " + Initializer.PROPERTIES.getProperty("project.versionYear") + " by con terra GmbH</a></font></p>");
 	}
 	
 	/**
@@ -272,7 +272,7 @@ public class PluginManagerServlet
 	 * @since 0.1.0
 	 */
 	private static String getFilename(Part part)
-			throws IllegalArgumentException {
+	throws IllegalArgumentException {
 		if (part != null) {
 			for (String cd : part.getHeader("content-disposition").split(";")) {
 				if (cd.trim().startsWith("filename")) {
@@ -298,7 +298,7 @@ public class PluginManagerServlet
 	 * @since 0.1.0
 	 */
 	private void reload(HttpServletResponse response)
-			throws IOException {
+	throws IOException {
 		log.debug("Reload the site.");
 		
 		response.sendRedirect(PluginManagerServlet.class.getAnnotation(WebServlet.class).urlPatterns()[0].substring(1));

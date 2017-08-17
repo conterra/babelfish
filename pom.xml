@@ -9,13 +9,14 @@
 	
 	<name>tRESTle Babelfish main package</name>
 	<url>http://developernetwork.conterra.de</url>
-	<inceptionYear>2016</inceptionYear>
+	<inceptionYear>2014</inceptionYear>
 	<description>The basic package of the tRESTle Babelfish
-
-Includes:
-- the API
-- the web application
-- a very simple sample plugin</description>
+		
+		Includes:
+		- the API
+		- the web application
+		- a very simple sample plugin
+	</description>
 	<organization>
 		<name>con terra - Gesellschaft für Angewandte Informationstechnologie mbH</name>
 		<url>http://www.conterra.de</url>
@@ -32,16 +33,18 @@ Includes:
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>1.8</java.version>
-		<lombok.version>1.16.12</lombok.version>
-		<slf4j.version>1.7.24</slf4j.version>
-		<geotools.version>16.2</geotools.version>
+		
+		<lombok.version>1.16.18</lombok.version>
+		<slf4j.version>1.7.25</slf4j.version>
+		<geotools.version>17.2</geotools.version>
 		<junit.version>4.12</junit.version>
-		<mockito.version>2.7.14</mockito.version>
-		<plugin.mavenproperties.version>1.0-alpha-2</plugin.mavenproperties.version>
-		<plugin.license.version>1.12</plugin.license.version>
+		<mockito.version>2.8.47</mockito.version>
+		
+		<plugin.buildhelper.version>3.0.0</plugin.buildhelper.version>
+		<plugin.license.version>1.13</plugin.license.version>
 		<plugin.findbugs.version>3.0.4</plugin.findbugs.version>
-		<plugin.compiler.version>3.6.1</plugin.compiler.version>
-		<plugin.javadoc.version>2.10.4</plugin.javadoc.version>
+		<plugin.compiler.version>3.6.2</plugin.compiler.version>
+		<plugin.javadoc.version>3.0.0-M1</plugin.javadoc.version>
 		<plugin.source.version>3.0.1</plugin.source.version>
 		<plugin.release.version>2.5.3</plugin.release.version>
 	</properties>
@@ -75,27 +78,22 @@ Includes:
 		<pluginManagement>
 			<plugins>
 				<plugin>
-					<!-- Used to ensure that the usage of the org.codehaus.mojo:jaxb2-maven-plugin is compatible to JDK 8 -->
 					<groupId>org.codehaus.mojo</groupId>
-					<artifactId>properties-maven-plugin</artifactId>
-					<version>${plugin.mavenproperties.version}</version>
+					<artifactId>build-helper-maven-plugin</artifactId>
+					<version>${plugin.buildhelper.version}</version>
 					<executions>
 						<execution>
-							<id>set-additional-system-properties</id>
-							<phase>generate-sources</phase>
+							<id>timestamp-property</id>
 							<goals>
-								<goal>set-system-properties</goal>
+								<goal>timestamp-property</goal>
 							</goals>
+							<phase>validate</phase>
+							<configuration>
+								<name>project.versionYear</name>
+								<pattern>yyyy</pattern>
+							</configuration>
 						</execution>
 					</executions>
-					<configuration>
-						<properties>
-							<property>
-								<name>javax.xml.accessExternalSchema</name>
-								<value>file,http</value>
-							</property>
-						</properties>
-					</configuration>
 				</plugin>
 				<plugin>
 					<groupId>org.codehaus.mojo</groupId>
@@ -161,8 +159,11 @@ Includes:
 					<configuration>
 						<additionalparam>-Xdoclint:none</additionalparam>
 						<links>
-							<link>http://logging.apache.org/log4j/1.2/apidocs</link>
-							<link>http://www.slf4j.org/api</link>
+							<link>https://projectlombok.org/api</link>
+							<link>https://www.slf4j.org/apidocs</link>
+							<link>http://docs.geotools.org/stable/javadocs</link>
+							<link>http://junit.org/junit4/javadoc/latest</link>
+							<link>https://static.javadoc.io/org.mockito/mockito-core/${mockito.version}</link>
 						</links>
 					</configuration>
 				</plugin>
@@ -181,6 +182,10 @@ Includes:
 			</plugins>
 		</pluginManagement>
 		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+			</plugin>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>license-maven-plugin</artifactId>

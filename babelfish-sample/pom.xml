@@ -15,7 +15,7 @@
 	<description>A sample plugin implementation of the tRESTle Babelfish</description>
 	
 	<properties>
-		<plugin.dependency.version>3.0.0</plugin.dependency.version>
+		<plugin.dependency.version>3.0.1</plugin.dependency.version>
 	</properties>
 	
 	<dependencies>
@@ -59,9 +59,6 @@
 					<artifactId>maven-javadoc-plugin</artifactId>
 					<configuration>
 						<show>private</show>
-						<links combine.children="append">
-							<link>http://docs.geotools.org/stable/javadocs</link>
-						</links>
 					</configuration>
 				</plugin>
 			</plugins>

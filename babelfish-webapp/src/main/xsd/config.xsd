@@ -17,12 +17,13 @@
 			<xsd:minInclusive value="0" />
 		</xsd:restriction>
 	</xsd:simpleType>
-	<xsd:complexType name="config">
-		<xsd:all>
-			<xsd:element name="schemaVersion" type="semVer" minOccurs="0" maxOccurs="1" default="0.4.0" />
-			<xsd:element name="shutdownDelay" type="xsd:long" minOccurs="0" maxOccurs="1" default="5000" />
-			<xsd:element name="managerEnabled" type="xsd:boolean" minOccurs="0" maxOccurs="1" default="false" />
-		</xsd:all>
-	</xsd:complexType>
-	<xsd:element name="config" type="config" />
+	<xsd:element name="config">
+		<xsd:complexType>
+			<xsd:all>
+				<xsd:element name="schemaVersion" type="semVer" minOccurs="0" maxOccurs="1" default="0.4.0" />
+				<xsd:element name="shutdownDelay" type="xsd:long" minOccurs="0" maxOccurs="1" default="5000" />
+				<xsd:element name="managerEnabled" type="xsd:boolean" minOccurs="0" maxOccurs="1" default="false" />
+			</xsd:all>
+		</xsd:complexType>
+	</xsd:element>
 </xsd:schema>
