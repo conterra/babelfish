@@ -81,19 +81,6 @@
 		<pluginManagement>
 			<plugins>
 				<plugin>
-					<artifactId>maven-javadoc-plugin</artifactId>
-					<configuration>
-						<links combine.children="append">
-							<link>https://logging.apache.org/log4j/2.x/log4j-api/apidocs</link>
-							<link>https://logging.apache.org/log4j/2.0/log4j-core/apidocs</link>
-							<link>https://logging.apache.org/log4j/2.0/log4j-slf4j-impl/apidocs</link>
-							<link>https://docs.oracle.com/javaee/7/api</link>
-							<link>http://www.jdom.org/docs/apidocs</link>
-							<link>http://image4j.sourceforge.net/javadoc</link>
-						</links>
-					</configuration>
-				</plugin>
-				<plugin>
 					<groupId>org.jvnet.jaxb2.maven2</groupId>
 					<artifactId>maven-jaxb2-plugin</artifactId>
 					<version>${plugin.jaxb.version}</version>
@@ -125,13 +112,22 @@
 						</execution>
 					</executions>
 				</plugin>
+				<plugin>
+					<artifactId>maven-javadoc-plugin</artifactId>
+					<configuration>
+						<links combine.children="append">
+							<link>https://logging.apache.org/log4j/2.x/log4j-api/apidocs</link>
+							<link>https://logging.apache.org/log4j/2.0/log4j-core/apidocs</link>
+							<link>https://logging.apache.org/log4j/2.0/log4j-slf4j-impl/apidocs</link>
+							<link>https://docs.oracle.com/javaee/7/api</link>
+							<link>http://www.jdom.org/docs/apidocs</link>
+							<link>http://image4j.sourceforge.net/javadoc</link>
+						</links>
+					</configuration>
+				</plugin>
 			</plugins>
 		</pluginManagement>
 		<plugins>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>properties-maven-plugin</artifactId>
-			</plugin>
 			<plugin>
 				<groupId>org.jvnet.jaxb2.maven2</groupId>
 				<artifactId>maven-jaxb2-plugin</artifactId>
