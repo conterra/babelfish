@@ -52,18 +52,19 @@ public class LayerBuilder {
 		ObjectValue result = new ObjectValue();
 		
 		Set<Feature<? extends FeatureObject>> allFeatures = new LinkedHashSet<>();
-		LayerWrapper<T> wrapper = new LayerWrapper<>(layer);
-		String name = layer.getName();
+		LayerWrapper<T>                       wrapper     = new LayerWrapper<>(layer);
+		String                                name        = layer.getName();
 		
 		result.addContentNotEmpty("currentVersion", new NumberValue((new ServiceWrapper()).getVersion()));
 		result.addContentNotEmpty("id", new NumberValue(layer.getId()));
 		result.addContentNotEmpty("name", new StringValue(name));
 		
 		String type;
-		if (layer instanceof Table)
+		if (layer instanceof Table) {
 			type = "Table";
-		else
+		} else {
 			type = "Feature Layer";
+		}
 		result.addContentNotEmpty("type", new StringValue(type));
 		
 		result.addContentNotEmpty("description", new StringValue(layer.getDescription()));
@@ -71,16 +72,18 @@ public class LayerBuilder {
 		
 		ArrayValue rels = new ArrayValue();
 		for (Relationship<? extends FeatureObject, ? extends FeatureObject> rel : service.getRelationships()) {
-			boolean origin = false;
+			boolean origin      = false;
 			boolean destination = false;
 			
 			Layer<? extends FeatureObject> originLayer = rel.getOriginLayer();
-			Layer<? extends FeatureObject> destLayer = rel.getDestinationLayer();
+			Layer<? extends FeatureObject> destLayer   = rel.getDestinationLayer();
 			
-			if (originLayer.equals(layer))
+			if (originLayer.equals(layer)) {
 				origin = true;
-			if (destLayer.equals(layer))
+			}
+			if (destLayer.equals(layer)) {
 				destination = true;
+			}
 			
 			if (origin != destination) {
 				log.debug("Found relationship " + originLayer.getName() + " --> " + destLayer.getName() + ".");
@@ -91,10 +94,11 @@ public class LayerBuilder {
 				relValue.addContentNotEmpty("name", new StringValue(rel.getName()));
 				
 				int relatedTableId;
-				if (origin)
+				if (origin) {
 					relatedTableId = destLayer.getId();
-				else
+				} else {
 					relatedTableId = originLayer.getId();
+				}
 				relValue.addContentNotEmpty("relatedTableId", new NumberValue(relatedTableId));
 				
 				rels.addValue(relValue);
@@ -114,8 +118,9 @@ public class LayerBuilder {
 			result.addContentNotEmpty("maxScale", new NumberValue(featureLayer.getMaxScale()));
 			
 			Envelope extent = wrapper.getEnvelope();
-			if (extent != null)
+			if (extent != null) {
 				result.addContentNotEmpty("extent", GeometryBuilder.build(new de.conterra.babelfish.plugin.v10_02.object.geometry.Envelope(extent), crs));
+			}
 			
 			ObjectValue drawingInfo = new ObjectValue();
 			drawingInfo.addContentNotEmpty("renderer", RendererBuilder.build(featureLayer.getRenderer()));
@@ -146,17 +151,18 @@ public class LayerBuilder {
 			timeReference.addContent("respectsDaylightSaving", new BooleanValue(false));
 			timeInfo.addContent("timeReference", timeReference);
 			
-			long interval = Long.MAX_VALUE;
+			long                                                    interval     = Long.MAX_VALUE;
 			Map<? extends Feature<? extends T>, ? extends DateTime> timeFeatures = timeLayer.getTimeFeatures();
 			for (Feature<? extends T> feature : timeFeatures.keySet()) {
 				DateTime time = timeFeatures.get(feature);
 				
 				for (Feature<? extends T> innerFeature : timeFeatures.keySet()) {
-					DateTime innerTime = timeFeatures.get(innerFeature);
-					long innerInterval = Math.abs(time.getMillis() - innerTime.getMillis());
+					DateTime innerTime     = timeFeatures.get(innerFeature);
+					long     innerInterval = Math.abs(time.getMillis() - innerTime.getMillis());
 					
-					if (innerInterval < interval)
+					if (innerInterval < interval) {
 						interval = innerInterval;
+					}
 				}
 			}
 			timeInfo.addContent("timeInterval", new NumberValue(interval));
@@ -176,45 +182,52 @@ public class LayerBuilder {
 		
 		result.addContent("htmlPopupType", new StringValue(layer.getPopupType().toString()));
 		Field objectIdField;
-		if (layer.getObjectIdField() != null)
+		if (layer.getObjectIdField() != null) {
 			objectIdField = layer.getObjectIdField();
-		else
+		} else {
 			objectIdField = LayerWrapper.DEFAULT_OBJECT_ID_FIELD;
+		}
 		result.addContent("objectIdField", new StringValue(objectIdField.getName()));
 		
 		String globalIdFieldName;
-		Field globalIdField = layer.getGlobalIdField();
-		if (globalIdField != null)
+		Field  globalIdField = layer.getGlobalIdField();
+		if (globalIdField != null) {
 			globalIdFieldName = globalIdField.getName();
-		else
+		} else {
 			globalIdFieldName = "";
+		}
 		result.addContent("globalIdField", new StringValue(globalIdFieldName));
 		
 		Field displayField = layer.getDisplayField();
-		if (displayField != null)
+		if (displayField != null) {
 			result.addContent("displayField", new StringValue(displayField.getName()));
-		else
+		} else {
 			result.addContent("displayField", new NullValue());
+		}
 		
-		Field typeIdField = layer.getDisplayField();
-		if (typeIdField != null)
+		Field typeIdField = layer.getTypeIdField();
+		if (typeIdField != null) {
 			result.addContent("typeIdField", new StringValue(typeIdField.getName()));
-		else
+		} else {
 			result.addContent("typeIdField", new NullValue());
+		}
 		
 		ArrayValue fieldsValue = new ArrayValue();
-		for (Field field : wrapper.getFields())
+		for (Field field : wrapper.getFields()) {
 			fieldsValue.addValue(FieldBuilder.build(field));
+		}
 		result.addContent("fields", fieldsValue);
 		
 		ArrayValue types = new ArrayValue();
-		for (Type<? extends T> subType : layer.getSubTypes())
+		for (Type<? extends T> subType : layer.getSubTypes()) {
 			types.addValue(TypeBuilder.build(subType, crs, objectIdField));
+		}
 		result.addContent("types", types);
 		
 		ArrayValue templates = new ArrayValue();
-		for (Template<? extends T> template : layer.getTemplates())
+		for (Template<? extends T> template : layer.getTemplates()) {
 			templates.addValue(TemplateBuilder.build(template, crs, objectIdField));
+		}
 		result.addContent("templates", templates);
 		
 		// ToDo add dynamic capabilities (if the layer provides Editing, etc.)
