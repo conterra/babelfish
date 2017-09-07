@@ -32,17 +32,19 @@ public class FeatureBuilder {
 	 * @since 0.1.1
 	 */
 	private static Value createValueFromField(Object fieldValue) {
-		if (fieldValue == null)
+		if (fieldValue == null) {
 			return null;
+		}
 		
-		if (fieldValue instanceof Number)
+		if (fieldValue instanceof Number) {
 			return new NumberValue((Number) fieldValue);
-		else if (fieldValue instanceof String)
+		} else if (fieldValue instanceof String) {
 			return new StringValue((String) fieldValue);
-		else if (fieldValue instanceof Boolean)
+		} else if (fieldValue instanceof Boolean) {
 			return new BooleanValue((Boolean) fieldValue);
-		else if (fieldValue instanceof DateTime)
+		} else if (fieldValue instanceof DateTime) {
 			return new DateValue((DateTime) fieldValue);
+		}
 		
 		return null;
 	}
@@ -62,8 +64,9 @@ public class FeatureBuilder {
 		if (result == null) {
 			int value = object.hashCode();
 			
-			if (value == Integer.MIN_VALUE)
+			if (value == Integer.MIN_VALUE) {
 				value = 0;
+			}
 			
 			result = new NumberValue(Math.abs(value));
 		}
@@ -84,22 +87,25 @@ public class FeatureBuilder {
 	public static ObjectValue build(FeatureObject object, CoordinateReferenceSystem crs, Field objectIdField) {
 		ObjectValue result = new ObjectValue();
 		
-		if (object instanceof GeometryFeatureObject)
+		if (object instanceof GeometryFeatureObject) {
 			result.addContent("geometry", GeometryBuilder.build(((GeometryFeatureObject<?>) object).getGeometry(), crs));
+		}
 		
-		boolean noId = objectIdField != null;
+		boolean     noId       = objectIdField != null;
 		ObjectValue attrsValue = new ObjectValue();
 		for (Field key : object.getAttributes().keySet()) {
 			Object attr = object.getAttribute(key);
 			
-			if (noId && key.equals(objectIdField))
+			if (noId && key.equals(objectIdField)) {
 				noId = false;
+			}
 			
-			attrsValue.addContentNotEmpty(StringUtils.replaceAllNonAlphaNum(key.getName(), "_"), FeatureBuilder.createValueFromField(attr));
+			attrsValue.addContentNotEmpty(StringUtils.replaceAllNonAlphaNum(key.getName(), StringUtils.NEUTRAL_WORD_DELIMITER), FeatureBuilder.createValueFromField(attr));
 		}
 		
-		if (noId)
-			attrsValue.addContentNotEmpty(StringUtils.replaceAllNonAlphaNum(objectIdField.getName(), "_"), FeatureBuilder.getObjectId(object, objectIdField));
+		if (noId) {
+			attrsValue.addContentNotEmpty(StringUtils.replaceAllNonAlphaNum(objectIdField.getName(), StringUtils.NEUTRAL_WORD_DELIMITER), FeatureBuilder.getObjectId(object, objectIdField));
+		}
 		
 		result.addContent("attributes", attrsValue);
 		

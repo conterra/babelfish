@@ -13,13 +13,19 @@ public class StringUtils {
 	 *
 	 * @since 0.4.0
 	 */
-	public static final String EMPTY               = "";
+	public static final String EMPTY                  = "";
+	/**
+	 * the character, which is in the RegEx group 'word' and could use as delimiter
+	 *
+	 * @since 0.4.0
+	 */
+	public static final String NEUTRAL_WORD_DELIMITER = "_";
 	/**
 	 * RegEx pattern group of all non-alphanumeric characters
 	 *
 	 * @since 0.4.0
 	 */
-	public static final String NON_ALPHA_NUM_REGEX = "[^\\p{L}\\d]";
+	public static final String NON_ALPHA_NUM_REGEX    = "[^\\p{L}\\d]";
 	
 	/**
 	 * private standard constructor, to prevent initialization

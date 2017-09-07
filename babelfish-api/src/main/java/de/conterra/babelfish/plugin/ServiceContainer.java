@@ -76,7 +76,7 @@ public class ServiceContainer {
 			return StringUtils.EMPTY;
 		}
 		
-		return id.replaceAll("[^a-zA-Z0-9_-]", "_");
+		return id.replaceAll("[^\\w-]", StringUtils.NEUTRAL_WORD_DELIMITER);
 	}
 	
 	/**

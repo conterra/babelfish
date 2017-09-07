@@ -35,14 +35,15 @@ public class FieldBuilder {
 	public static ObjectValue build(Field field) {
 		ObjectValue result = new ObjectValue();
 		
-		result.addContent("name", new StringValue(StringUtils.replaceAllNonAlphaNum(field.getName(), "_")));
+		result.addContent("name", new StringValue(StringUtils.replaceAllNonAlphaNum(field.getName(), StringUtils.NEUTRAL_WORD_DELIMITER)));
 		result.addContent("type", new StringValue(field.getType().toString()));
 		result.addContentNotEmpty("length", new NumberValue(field.getLength()));
 		result.addContent("editable", new BooleanValue(field.isEditable()));
 		result.addContent("domain", DomainBuilder.build(field.getDomain()));
 		
-		if (field instanceof de.conterra.babelfish.plugin.v10_11.feature.Field)
+		if (field instanceof de.conterra.babelfish.plugin.v10_11.feature.Field) {
 			result.addContent("nullable", new BooleanValue(((de.conterra.babelfish.plugin.v10_11.feature.Field) field).isNullable()), "domain", false);
+		}
 		
 		return result;
 	}
