@@ -1,6 +1,7 @@
 package de.conterra.babelfish.plugin.v10_02.object.feature;
 
 import de.conterra.babelfish.plugin.v10_02.feature.Field;
+import de.conterra.babelfish.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.joda.time.DateTime;
 
@@ -147,7 +148,7 @@ public class FeatureObject {
 			}
 		}
 		
-		return "";
+		return StringUtils.EMPTY;
 	}
 	
 	/**

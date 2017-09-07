@@ -12,6 +12,7 @@ import de.conterra.babelfish.plugin.v10_02.object.geometry.GeometryObject;
 import de.conterra.babelfish.util.DataUtils;
 import de.conterra.babelfish.util.GeoUtils;
 import de.conterra.babelfish.util.JsonParser;
+import de.conterra.babelfish.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.josql.QueryParseException;
 import org.json.JSONException;
@@ -35,15 +36,16 @@ public class MasterBuilder
 		implements ServiceBuilder {
 	@Override
 	public ObjectValue build(RestService service, String[] path, Map<? extends String, ? extends String> parameters)
-			throws ServiceNotAvailableException, WrongRequestException,
-			BuildingException {
-		if (!(service instanceof FeatureService))
+	throws ServiceNotAvailableException, WrongRequestException,
+	       BuildingException {
+		if (!(service instanceof FeatureService)) {
 			throw new ServiceNotAvailableException("This is not a Feature Service, but it requested as such!");
+		}
 		
 		FeatureService featureService = (FeatureService) service;
 		
 		CoordinateReferenceSystem outCrs;
-		String parameter = parameters.get("outSR");
+		String                    parameter = parameters.get("outSR");
 		if (parameter == null) {
 			parameter = "102100";
 		}
@@ -56,10 +58,11 @@ public class MasterBuilder
 				outCrs = null;
 			}
 		}
-		if (outCrs == null)
+		if (outCrs == null) {
 			log.warn("Wasn't able to decode outSR parameter " + parameter + " as a CRS!");
-		else
+		} else {
 			log.debug("Decoded given outSR parameter " + parameter + " as the following CRS: " + outCrs.toWKT());
+		}
 		
 		CoordinateReferenceSystem inCrs;
 		parameter = parameters.get("inSR");
@@ -76,19 +79,22 @@ public class MasterBuilder
 			log.debug("Given parameter inSR was empty.");
 			inCrs = null;
 		}
-		if (inCrs != null)
+		if (inCrs != null) {
 			log.debug("Decoded given inSR parameter " + parameter + " as the following CRS: " + inCrs.toWKT());
+		}
 		
 		parameter = parameters.get("geometry");
 		GeometryObject geometry;
 		try {
 			geometry = GeoUtils.parseGeometry(parameter, inCrs);
 			
-			if (inCrs != null)
+			if (inCrs != null) {
 				log.debug("Parse geometry: " + parameter + "\r\nwith CRS: " + inCrs.toWKT());
+			}
 		} catch (IllegalArgumentException e) {
-			if (inCrs != null)
+			if (inCrs != null) {
 				log.warn("Wasn't able to parse geometry: " + parameter + "\r\nwith CRS: " + inCrs.toWKT(), e);
+			}
 			
 			geometry = null;
 		}
@@ -98,8 +104,9 @@ public class MasterBuilder
 		Set<Integer> objectIds = new LinkedHashSet<>();
 		parameter = parameters.get("objectIds");
 		if (parameter != null) {
-			for (String objectId : parameters.get("objectIds").replaceAll("[^0-9,]", "").split(","))
+			for (String objectId : parameters.get("objectIds").replaceAll("[^0-9,]", StringUtils.EMPTY).split(",")) {
 				objectIds.add(Integer.parseInt(objectId));
+			}
 		}
 		
 		if (path.length <= 0) {
@@ -135,22 +142,25 @@ public class MasterBuilder
 								}
 								
 								return new DataValue(data);
-							} else if (path.length == 2)
+							} else if (path.length == 2) {
 								log.warn("There is no overview of images specified in the REST API!");
-							else
+							} else {
 								log.warn("The image path couldn't have a sub path!");
+							}
 							
 							return null;
 						} else if (path[1].equalsIgnoreCase("query")) {
 							try {
-								boolean idsOnly = false;
-								String idsOnlyParameter = "returnIdsOnly";
-								if (parameters.containsKey(idsOnlyParameter))
+								boolean idsOnly          = false;
+								String  idsOnlyParameter = "returnIdsOnly";
+								if (parameters.containsKey(idsOnlyParameter)) {
 									idsOnly = Boolean.parseBoolean(parameters.get(idsOnlyParameter));
-								boolean countOnly = false;
-								String countOnlyParameter = "returnCountOnly";
-								if (parameters.containsKey(countOnlyParameter))
+								}
+								boolean countOnly          = false;
+								String  countOnlyParameter = "returnCountOnly";
+								if (parameters.containsKey(countOnlyParameter)) {
 									countOnly = Boolean.parseBoolean(parameters.get(countOnlyParameter));
+								}
 								
 								return QueryBuilder.build(layer, outCrs, geometry, whereClause, objectIds, idsOnly, countOnly);
 							} catch (QueryParseException e) {
@@ -171,9 +181,9 @@ public class MasterBuilder
 									}
 								}
 								
-								if (relationship != null)
+								if (relationship != null) {
 									return RelatedFeaturesBuilder.build(relationship, outCrs, objectIds, whereClause);
-								else {
+								} else {
 									String msg = "Couldn't found relationship with id: " + relationshipId;
 									log.error(msg);
 									throw new BuildingException(msg);
@@ -199,10 +209,11 @@ public class MasterBuilder
 										if (path.length == 2) {
 											log.debug("Create feature result.");
 											
-											ObjectValue result = new ObjectValue();
-											Field objectIdField = layer.getObjectIdField();
-											if (objectIdField == null)
+											ObjectValue result        = new ObjectValue();
+											Field       objectIdField = layer.getObjectIdField();
+											if (objectIdField == null) {
 												objectIdField = LayerWrapper.DEFAULT_OBJECT_ID_FIELD;
+											}
 											result.addContent("feature", FeatureBuilder.build(feature.getFeature(), outCrs, objectIdField));
 											return result;
 										} else {
@@ -223,10 +234,12 @@ public class MasterBuilder
 														log.error(msg, e);
 														throw new BuildingException(msg, e);
 													}
-												} else
+												} else {
 													return AttachmentBuilder.build(feature);
-											} else if (path[2].equalsIgnoreCase("htmlPopUp"))
+												}
+											} else if (path[2].equalsIgnoreCase("htmlPopUp")) {
 												return PopupBuilder.build(feature.getPopup());
+											}
 											
 											return null;
 										}

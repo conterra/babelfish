@@ -10,6 +10,7 @@ import de.conterra.babelfish.plugin.v10_11.feature.FeatureLayer;
 import de.conterra.babelfish.plugin.v10_11.feature.FeatureService;
 import de.conterra.babelfish.plugin.v10_11.feature.Layer;
 import de.conterra.babelfish.plugin.v10_11.feature.Relationship;
+import de.conterra.babelfish.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
@@ -63,20 +64,22 @@ public class LayerBuilder {
 		if (rels != null) {
 			for (Value relValue : rels.getValues()) {
 				ObjectValue relObject = (ObjectValue) relValue;
-				int relId = ((NumberValue) (relObject.getValue(""))).getValue().intValue();
+				int         relId     = ((NumberValue) (relObject.getValue(StringUtils.EMPTY))).getValue().intValue();
 				
 				for (Relationship<? extends FeatureObject, ? extends FeatureObject> rel : service.getRelationships()) {
 					if (rel.getId() == relId) {
 						log.debug("Extends relation " + rel.getOriginLayer().getName() + " --> " + rel.getDestinationLayer().getName() + ".");
 						
-						if (rel.getCardinality() != null)
+						if (rel.getCardinality() != null) {
 							relObject.addContent("cardinality", new StringValue(rel.getCardinality().toString()));
+						}
 						
 						String role = "esriRelRole";
-						if (rel.getOriginLayer().equals(layer))
+						if (rel.getOriginLayer().equals(layer)) {
 							role += "Origin";
-						else
+						} else {
 							role += "Destination";
+						}
 						relObject.addContent("role", new StringValue(role));
 						
 						relObject.addContentNotEmpty("keyField", new StringValue(rel.getKeyField()));
@@ -106,15 +109,17 @@ public class LayerBuilder {
 			result.addContent("hasZ", new BooleanValue((new LayerWrapper<>(featureLayer)).getEnvelope().getDimension() >= 3), "hasAttachments", false);
 			
 			Double defaultZValue = featureLayer.defaultZValue();
-			if (defaultZValue == null)
+			if (defaultZValue == null) {
 				defaultZValue = service.defaultZValue();
+			}
 			result.addContent("enableZDefaults", new BooleanValue(Double.isNaN(defaultZValue)), "hasAttachments", false);
 			result.addContent("zDefault", new NumberValue(defaultZValue), "hasAttachments", true);
 		}
 		
 		int maxRecordCount = layer.getMaxRecordCount();
-		if (maxRecordCount < 0)
+		if (maxRecordCount < 0) {
 			maxRecordCount = service.getMaxRecordCount();
+		}
 		result.addContent("maxRecordCount", new NumberValue(maxRecordCount), "capabilities", true);
 		result.addContent("supportedQueryFormats", new StringValue("JSON"), "capabilities", true);
 		

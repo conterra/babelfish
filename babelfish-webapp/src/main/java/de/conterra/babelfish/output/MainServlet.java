@@ -7,6 +7,7 @@ import de.conterra.babelfish.interchange.ObjectValue;
 import de.conterra.babelfish.plugin.*;
 import de.conterra.babelfish.util.DataUtils;
 import de.conterra.babelfish.util.ServletUtils;
+import de.conterra.babelfish.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -49,13 +50,13 @@ public class MainServlet
 	
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	throws ServletException, IOException {
 		this.doRequest(request, response);
 	}
 	
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	throws ServletException, IOException {
 		this.doRequest(request, response);
 	}
 	
@@ -68,7 +69,7 @@ public class MainServlet
 	 * @since 0.1.0
 	 */
 	private void doRequest(HttpServletRequest request, HttpServletResponse response)
-			throws IOException {
+	throws IOException {
 		if (!Initializer.init(this, true)) {
 			String msg = "Initialization failed";
 			log.error(msg);
@@ -78,7 +79,7 @@ public class MainServlet
 		
 		log.debug("Prepare input parameters.");
 		Map<? extends String, ? extends String[]> parameterMap = request.getParameterMap();
-		HashMap<String, String> parameters = new HashMap<>();
+		HashMap<String, String>                   parameters   = new HashMap<>();
 		for (String key : parameterMap.keySet()) {
 			String parameter = request.getParameter(key);
 			String parameterValue;
@@ -86,17 +87,19 @@ public class MainServlet
 			try {
 				JSONObject json = new JSONObject(parameter);
 				
-				String url = json.getString("url");
+				String url        = json.getString("url");
 				byte[] remoteData = DataUtils.toByteArray((new URL(url)).openStream());
 				
-				if (remoteData.length <= 0)
+				if (remoteData.length <= 0) {
 					throw new IOException("No external file found!");
+				}
 				
 				log.debug("Found external JSON file for parameter " + key + " at " + url);
 				
 				JSONObject remoteJson = new JSONObject(new String(remoteData));
-				for (String remoteKey : JSONObject.getNames(remoteJson))
+				for (String remoteKey : JSONObject.getNames(remoteJson)) {
 					json.append(remoteKey, remoteJson.get(remoteKey));
+				}
 				
 				log.debug("All values of the remote JSON file added to the parameter value.");
 				
@@ -112,7 +115,7 @@ public class MainServlet
 			parameters.put(key, parameterValue);
 		}
 		
-		Format format = null;
+		Format format          = null;
 		String formatParameter = request.getParameter("f");
 		
 		if (formatParameter != null) {
@@ -120,9 +123,9 @@ public class MainServlet
 				log.info("Redirect to the API help page of ESRI");
 				response.sendRedirect(Initializer.HELP_URL);
 				return;
-			} else if (formatParameter.equalsIgnoreCase("pJSON"))
+			} else if (formatParameter.equalsIgnoreCase("pJSON")) {
 				format = Format.JSON;
-			else {
+			} else {
 				try {
 					format = Format.valueOf(formatParameter.toUpperCase(Locale.ROOT));
 				} catch (IllegalArgumentException e) {
@@ -131,20 +134,22 @@ public class MainServlet
 			}
 		}
 		
-		if (format == null)
+		if (format == null) {
 			format = Format.JSON;
+		}
 		
 		log.debug("Used output format is " + format);
 		
 		String target = request.getPathInfo();
 		
-		if (target == null)
-			target = "";
-		else
+		if (target == null) {
+			target = StringUtils.EMPTY;
+		} else {
 			target = target.substring(1);
+		}
 		
-		ObjectValue rootObject = null;
-		String[] targetParts = target.split("/");
+		ObjectValue rootObject  = null;
+		String[]    targetParts = target.split("/");
 		
 		if (targetParts[0].isEmpty()) {
 			log.debug("Redirect to root URL (with WrongHomeServlet).");
@@ -193,12 +198,13 @@ public class MainServlet
 					}
 					
 					if (targetParts.length >= 6
-							&& targetParts[4].equalsIgnoreCase("info")
-							&& targetParts[5].equalsIgnoreCase("thumbnail")) {
+					    && targetParts[4].equalsIgnoreCase("info")
+					    && targetParts[5].equalsIgnoreCase("thumbnail")) {
 						Image icon = service.getIcon();
 						
-						if (icon == null)
+						if (icon == null) {
 							icon = Initializer.getDefaultIcon();
+						}
 						
 						rootObject = new DataValue(DataUtils.toByteArray(icon));
 					} else {
@@ -207,8 +213,9 @@ public class MainServlet
 						log.debug("Search for valid wrapper for requested service.");
 						ServiceWrapper serviceWrapper = VersionWrapper.getServiceWrapper(service);
 						rootObject = serviceWrapper.getBuilder(targetParts[3]).build(service, servicePath, parameters);
-						if (rootObject != null && rootObject.getValue("currentVersion") == null)
+						if (rootObject != null && rootObject.getValue("currentVersion") == null) {
 							rootObject.addContentNotEmpty("currentVersion", new NumberValue(serviceWrapper.getVersion()));
+						}
 					}
 				}
 			} catch (ServiceNotAvailableException | BuildingException e) {
@@ -222,9 +229,9 @@ public class MainServlet
 				return;
 			}
 		} else if (targetParts[0].equalsIgnoreCase("info")) {
-			if (targetParts.length >= 2 && targetParts[1].equalsIgnoreCase("thumbnail"))
+			if (targetParts.length >= 2 && targetParts[1].equalsIgnoreCase("thumbnail")) {
 				rootObject = new DataValue(DataUtils.toByteArray(Initializer.getDefaultIcon()));
-			else {
+			} else {
 				rootObject = new ObjectValue();
 				rootObject.addContent("currentVersion", new NumberValue(VersionWrapper.CURRENT_VERSION));
 			}

@@ -32,7 +32,7 @@ public class SqlUtils {
 					"BETWEEN",
 					"LIKE",
 					"IN",
-			};
+					};
 	
 	/**
 	 * private standard constructor, to prevent initialization
@@ -118,7 +118,7 @@ public class SqlUtils {
 			log.debug("Execute column id replacement at operator " + operator + ". Current statement: " + result);
 			
 			String maskedOperator = SqlUtils.maskSql(operator);
-			String newSql = "";
+			String newSql         = StringUtils.EMPTY;
 			
 			String[] parts = result.split(maskedOperator);
 			for (int i = 0; i < parts.length - 1; i++) {
@@ -128,8 +128,8 @@ public class SqlUtils {
 					cleanPart = cleanPart.substring(0, cleanPart.length() - 1);
 				}
 				
-				int spaceIndex = 0;
-				Matcher matcher = Pattern.compile("[^a-zA-Z0-9_]").matcher(cleanPart);
+				int     spaceIndex = 0;
+				Matcher matcher    = Pattern.compile("[^a-zA-Z0-9_]").matcher(cleanPart);
 				while (matcher.find()) {
 					spaceIndex = matcher.end();
 				}

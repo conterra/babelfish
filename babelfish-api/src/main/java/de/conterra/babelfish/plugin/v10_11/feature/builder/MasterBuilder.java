@@ -8,6 +8,7 @@ import de.conterra.babelfish.plugin.v10_02.object.geometry.GeometryObject;
 import de.conterra.babelfish.plugin.v10_11.feature.FeatureService;
 import de.conterra.babelfish.plugin.v10_11.feature.Layer;
 import de.conterra.babelfish.util.GeoUtils;
+import de.conterra.babelfish.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.josql.QueryParseException;
 import org.opengis.referencing.FactoryException;
@@ -29,15 +30,16 @@ public class MasterBuilder
 		implements ServiceBuilder {
 	@Override
 	public ObjectValue build(RestService service, String[] path, Map<? extends String, ? extends String> parameters)
-			throws ServiceNotAvailableException, WrongRequestException,
-			BuildingException {
-		if (!(service instanceof FeatureService))
+	throws ServiceNotAvailableException, WrongRequestException,
+	       BuildingException {
+		if (!(service instanceof FeatureService)) {
 			throw new ServiceNotAvailableException("This is not a Feature Service, but it requested as such!");
+		}
 		
 		FeatureService featureService = (FeatureService) service;
 		
-		CoordinateReferenceSystem crs = null;
-		String crsString = parameters.get("outSR");
+		CoordinateReferenceSystem crs       = null;
+		String                    crsString = parameters.get("outSR");
 		if (crsString != null) {
 			try {
 				crs = GeoUtils.decodeCrs(crsString);
@@ -64,17 +66,18 @@ public class MasterBuilder
 				
 				if (layer != null) {
 					Set<Integer> objectIds = new LinkedHashSet<>();
-					String parameter = parameters.get("objectIds");
+					String       parameter = parameters.get("objectIds");
 					if (parameter != null) {
-						for (String objectId : parameters.get("objectIds").replaceAll("[^0-9,]", "").split(","))
+						for (String objectId : parameters.get("objectIds").replaceAll("[^0-9,]", StringUtils.EMPTY).split(",")) {
 							objectIds.add(Integer.parseInt(objectId));
+						}
 					}
 					
 					String whereClause = parameters.get("where");
 					
-					if (path.length == 1)
+					if (path.length == 1) {
 						return LayerBuilder.build(layer, featureService, crs);
-					else if (path[1].equalsIgnoreCase("query")) {
+					} else if (path[1].equalsIgnoreCase("query")) {
 						try {
 							CoordinateReferenceSystem inCrs;
 							parameter = parameters.get("inSR");
@@ -92,14 +95,16 @@ public class MasterBuilder
 								geometry = null;
 							}
 							
-							boolean idsOnly = false;
-							String idsOnlyParameter = "returnIdsOnly";
-							if (parameters.containsKey(idsOnlyParameter))
+							boolean idsOnly          = false;
+							String  idsOnlyParameter = "returnIdsOnly";
+							if (parameters.containsKey(idsOnlyParameter)) {
 								idsOnly = Boolean.parseBoolean(parameters.get(idsOnlyParameter));
-							boolean countOnly = false;
-							String countOnlyParameter = "returnCountOnly";
-							if (parameters.containsKey(countOnlyParameter))
+							}
+							boolean countOnly          = false;
+							String  countOnlyParameter = "returnCountOnly";
+							if (parameters.containsKey(countOnlyParameter)) {
 								countOnly = Boolean.parseBoolean(parameters.get(countOnlyParameter));
+							}
 							
 							return QueryBuilder.build(layer, crs, geometry, whereClause, objectIds, idsOnly, countOnly);
 						} catch (QueryParseException e) {
@@ -120,9 +125,9 @@ public class MasterBuilder
 								}
 							}
 							
-							if (relationship != null)
+							if (relationship != null) {
 								return RelatedFeaturesBuilder.build(relationship, crs, objectIds, whereClause);
-							else {
+							} else {
 								String msg = "Couldn't found relationship with id: " + relationshipId;
 								log.error(msg);
 								throw new BuildingException(msg);

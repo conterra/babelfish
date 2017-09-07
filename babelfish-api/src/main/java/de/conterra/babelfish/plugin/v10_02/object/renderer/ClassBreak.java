@@ -1,6 +1,7 @@
 package de.conterra.babelfish.plugin.v10_02.object.renderer;
 
 import de.conterra.babelfish.plugin.v10_02.object.symbol.SymbolObject;
+import de.conterra.babelfish.util.StringUtils;
 
 /**
  * defines a Class Break
@@ -22,13 +23,13 @@ public class ClassBreak {
 	 *
 	 * @since 0.1.0
 	 */
-	private String description = "";
+	private String description = StringUtils.EMPTY;
 	/**
 	 * the maximum value
 	 *
 	 * @since 0.1.0
 	 */
-	private double maxValue;
+	private double       maxValue;
 	/**
 	 * the {@link SymbolObject}
 	 *

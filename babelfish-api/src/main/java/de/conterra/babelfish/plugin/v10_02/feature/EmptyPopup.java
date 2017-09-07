@@ -1,5 +1,7 @@
 package de.conterra.babelfish.plugin.v10_02.feature;
 
+import de.conterra.babelfish.util.StringUtils;
+
 /**
  * defines an empty {@link Popup}, which implements the type {@link PopupType#None}
  *
@@ -16,6 +18,6 @@ public class EmptyPopup
 	
 	@Override
 	public String getContent() {
-		return "";
+		return StringUtils.EMPTY;
 	}
 }

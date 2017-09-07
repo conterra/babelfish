@@ -7,6 +7,7 @@ import de.conterra.babelfish.plugin.v10_02.object.feature.GeometryFeatureObject;
 import de.conterra.babelfish.plugin.v10_02.object.geometry.Point;
 import de.conterra.babelfish.plugin.v10_02.object.labeling.LabelingInfo;
 import de.conterra.babelfish.plugin.v10_02.object.renderer.RendererObject;
+import de.conterra.babelfish.util.StringUtils;
 
 import java.awt.*;
 import java.util.Map;
@@ -46,7 +47,7 @@ public class HelloWorldLayer
 	
 	@Override
 	public String getCopyrightText() {
-		return "";
+		return StringUtils.EMPTY;
 	}
 	
 	@Override

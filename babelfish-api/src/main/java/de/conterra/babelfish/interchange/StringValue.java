@@ -1,5 +1,7 @@
 package de.conterra.babelfish.interchange;
 
+import de.conterra.babelfish.util.StringUtils;
+
 /**
  * defines a {@link Value}, which contains a {@link String}
  *
@@ -32,7 +34,7 @@ public class StringValue
 	 * @since 0.1.0
 	 */
 	public StringValue() {
-		this("");
+		this(StringUtils.EMPTY);
 	}
 	
 	/**

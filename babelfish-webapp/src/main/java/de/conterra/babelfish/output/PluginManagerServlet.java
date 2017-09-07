@@ -6,6 +6,7 @@ import de.conterra.babelfish.plugin.Plugin;
 import de.conterra.babelfish.plugin.PluginAdapter;
 import de.conterra.babelfish.plugin.ServiceContainer;
 import de.conterra.babelfish.util.ServletUtils;
+import de.conterra.babelfish.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
@@ -278,7 +279,7 @@ public class PluginManagerServlet
 				if (cd.trim().startsWith("filename")) {
 					log.debug("Found element with filename.");
 					
-					String filename = cd.substring(cd.indexOf('=') + 1).trim().replace("\"", "");
+					String filename = cd.substring(cd.indexOf('=') + 1).trim().replace("\"", StringUtils.EMPTY);
 					return filename.substring(filename.lastIndexOf('/') + 1).substring(filename.lastIndexOf('\\') + 1);
 				}
 			}

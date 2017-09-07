@@ -1,6 +1,7 @@
 package de.conterra.babelfish.output;
 
 import de.conterra.babelfish.interchange.*;
+import de.conterra.babelfish.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,24 +36,27 @@ public class JsonFormatter
 		boolean pretty = false;
 		
 		try {
-			if (parameters.get("f")[0].equalsIgnoreCase("pJSON"))
+			if (parameters.get("f")[0].equalsIgnoreCase("pJSON")) {
 				pretty = true;
+			}
 		} catch (NullPointerException | ArrayIndexOutOfBoundsException e) {
 		}
 		
 		if (!pretty) {
 			try {
-				if (parameters.get("pretty")[0].equalsIgnoreCase("true"))
+				if (parameters.get("pretty")[0].equalsIgnoreCase("true")) {
 					pretty = true;
+				}
 			} catch (NullPointerException | ArrayIndexOutOfBoundsException e) {
 			}
 		}
 		
 		log.debug("Request pretty format: " + pretty);
 		
-		String callback = "";
-		if (parameters.containsKey("callback"))
+		String callback = StringUtils.EMPTY;
+		if (parameters.containsKey("callback")) {
 			callback = parameters.get("callback")[0];
+		}
 		
 		if (!(callback.isEmpty())) {
 			log.debug("Write callback information from request.");
@@ -67,10 +71,11 @@ public class JsonFormatter
 		try {
 			JSONObject jsonObject = JsonFormatter.convertObject(rootObject);
 			
-			if (pretty)
+			if (pretty) {
 				writer.write(jsonObject.toString(2));
-			else
+			} else {
 				jsonObject.write(writer);
+			}
 		} catch (JSONException | IOException e) {
 			log.error("Error on write JSON content!", e);
 		}
@@ -96,19 +101,20 @@ public class JsonFormatter
 		Object result = JSONObject.NULL;
 		
 		if (value != null) {
-			if (value instanceof NullValue)
+			if (value instanceof NullValue) {
 				result = JSONObject.NULL;
-			else if (value instanceof ObjectValue)
+			} else if (value instanceof ObjectValue) {
 				result = JsonFormatter.convertObject((ObjectValue) value);
-			else if (value instanceof ArrayValue)
+			} else if (value instanceof ArrayValue) {
 				result = JsonFormatter.convertArray((ArrayValue) value);
-			else if (!(value.isEmpty())) {
-				if (value instanceof StringValue)
+			} else if (!(value.isEmpty())) {
+				if (value instanceof StringValue) {
 					result = ((StringValue) value).getValue();
-				else if (value instanceof BooleanValue)
+				} else if (value instanceof BooleanValue) {
 					result = ((BooleanValue) value).getValue();
-				else if (value instanceof NumberValue)
+				} else if (value instanceof NumberValue) {
 					result = ((NumberValue) value).getValue();
+				}
 			}
 		}
 		
@@ -129,8 +135,9 @@ public class JsonFormatter
 		for (String key : object.getBody().keySet()) {
 			Object addValue = JsonFormatter.convertValue(object.getValue(key));
 			
-			if (addValue != null)
+			if (addValue != null) {
 				jsonObject.put(key, addValue);
+			}
 		}
 		
 		return jsonObject;
@@ -150,8 +157,9 @@ public class JsonFormatter
 		for (Value value : array.getValues()) {
 			Object addValue = JsonFormatter.convertValue(value);
 			
-			if (addValue != null)
+			if (addValue != null) {
 				jsonArray.put(addValue);
+			}
 		}
 		
 		return jsonArray;

@@ -1,5 +1,6 @@
 package de.conterra.babelfish.interchange;
 
+import de.conterra.babelfish.util.StringUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -42,7 +43,7 @@ public class StringValueTest {
 	public void testIsEmpty() {
 		Assert.assertFalse(this.value.isEmpty());
 		
-		this.value.setValue("");
+		this.value.setValue(StringUtils.EMPTY);
 		Assert.assertTrue(this.value.isEmpty());
 		
 		this.value.setValue(new String());

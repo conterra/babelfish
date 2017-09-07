@@ -1,5 +1,6 @@
 package de.conterra.babelfish.plugin;
 
+import de.conterra.babelfish.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Collections;
@@ -54,8 +55,9 @@ public class ServiceContainer {
 		Set<RestService> result = new HashSet<>();
 		
 		for (RestService service : ServiceContainer.getServices()) {
-			if (ServiceContainer.toUrlSaveString(service.getPlugin().getName()).equalsIgnoreCase(ServiceContainer.toUrlSaveString(pluginName)))
+			if (ServiceContainer.toUrlSaveString(service.getPlugin().getName()).equalsIgnoreCase(ServiceContainer.toUrlSaveString(pluginName))) {
 				result.add(service);
+			}
 		}
 		
 		return result;
@@ -70,8 +72,9 @@ public class ServiceContainer {
 	 * @since 0.1.0
 	 */
 	public static String toUrlSaveString(String id) {
-		if (id == null)
-			return "";
+		if (id == null) {
+			return StringUtils.EMPTY;
+		}
 		
 		return id.replaceAll("[^a-zA-Z0-9_-]", "_");
 	}
@@ -88,8 +91,9 @@ public class ServiceContainer {
 	 */
 	public static RestService getService(String pluginName, String serviceName) {
 		for (RestService service : ServiceContainer.getServices(pluginName)) {
-			if (ServiceContainer.toUrlSaveString(service.getId()).equalsIgnoreCase(ServiceContainer.toUrlSaveString(serviceName)))
+			if (ServiceContainer.toUrlSaveString(service.getId()).equalsIgnoreCase(ServiceContainer.toUrlSaveString(serviceName))) {
 				return service;
+			}
 		}
 		
 		return null;
@@ -106,20 +110,24 @@ public class ServiceContainer {
 	 * @since 0.1.0
 	 */
 	public static boolean registerService(RestService service)
-			throws NullPointerException, IllegalArgumentException {
-		if (service == null)
+	throws NullPointerException, IllegalArgumentException {
+		if (service == null) {
 			throw new NullPointerException("All parameters are need! No one must be null!");
+		}
 		
 		String serviceId = service.getId();
-		if (serviceId == null || serviceId.isEmpty())
+		if (serviceId == null || serviceId.isEmpty()) {
 			throw new IllegalArgumentException("The service id couldn't be empty!");
+		}
 		
 		Plugin plugin = service.getPlugin();
-		if (plugin == null)
+		if (plugin == null) {
 			throw new IllegalArgumentException("The plugin couldn't be null");
+		}
 		String pluginName = plugin.getName();
-		if (pluginName == null || pluginName.isEmpty())
+		if (pluginName == null || pluginName.isEmpty()) {
 			throw new IllegalArgumentException("The plugin name couldn't be empty");
+		}
 		
 		if (ServiceContainer.getService(pluginName, serviceId) != null) {
 			log.warn("There is already a service with id " + serviceId + " registered for the plugin " + pluginName + "!");

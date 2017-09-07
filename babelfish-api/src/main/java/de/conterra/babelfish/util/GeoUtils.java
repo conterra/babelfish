@@ -69,7 +69,7 @@ public class GeoUtils {
 	 * @since 0.1.0
 	 */
 	public static DirectPosition transform(DirectPosition srcPos, CoordinateReferenceSystem destCrs)
-			throws TransformException {
+	throws TransformException {
 		try {
 			log.debug("Get source CRS.");
 			CoordinateReferenceSystem srcCrs = srcPos.getCoordinateReferenceSystem();
@@ -88,8 +88,9 @@ public class GeoUtils {
 			DirectPosition destPos = trans.transform(pos2D, null);
 			
 			log.debug("Add ordinates of third and higher dimension.");
-			for (int i = 2; i < srcPos.getDimension(); i++)
+			for (int i = 2; i < srcPos.getDimension(); i++) {
 				destPos.setOrdinate(i, srcPos.getOrdinate(i));
+			}
 			
 			return destPos;
 		} catch (NullPointerException | FactoryException e) {
@@ -110,7 +111,7 @@ public class GeoUtils {
 	 * @since 0.1.0
 	 */
 	public static CoordinateReferenceSystem decodeCrs(String crsString)
-			throws FactoryException {
+	throws FactoryException {
 		String resString;
 		
 		try {
@@ -147,8 +148,8 @@ public class GeoUtils {
 	public static int decodeEpsg(String wkt) {
 		String str = wkt.substring(wkt.indexOf("[") + 1, wkt.lastIndexOf("]"));
 		
-		int count = 0;
-		boolean run = true;
+		int     count = 0;
+		boolean run   = true;
 		for (int i = 0; run && i < str.length(); i++) {
 			switch (str.substring(i, i + 1)) {
 				case "[":
@@ -163,7 +164,7 @@ public class GeoUtils {
 						log.debug("Found authority of the root WKT element.");
 						
 						String authStr = checkStr.substring(checkStr.indexOf("[") + 1, checkStr.indexOf("]"));
-						authStr = authStr.replaceAll("[ \"]", "");
+						authStr = authStr.replaceAll("[ \"]", StringUtils.EMPTY);
 						String[] strs = authStr.split(",");
 						
 						if (strs.length >= 2 && strs[0].equalsIgnoreCase("EPSG")) {
@@ -208,7 +209,7 @@ public class GeoUtils {
 	 * @since 0.1.0
 	 */
 	public static GeometryObject parseGeometry(String string, CoordinateReferenceSystem crs)
-			throws IllegalArgumentException {
+	throws IllegalArgumentException {
 		if (string != null && !(string.isEmpty())) {
 			try {
 				JSONObject json = new JSONObject(string);
@@ -255,8 +256,9 @@ public class GeoUtils {
 			String[] coords = string.split(",");
 			
 			try {
-				if (coords.length != 2)
+				if (coords.length != 2) {
 					throw new IndexOutOfBoundsException("The string has not exact two doubles!");
+				}
 				
 				log.debug("Try parsing as raw point (no JSON).");
 				
@@ -265,8 +267,9 @@ public class GeoUtils {
 			}
 			
 			try {
-				if (coords.length != 4)
+				if (coords.length != 4) {
 					throw new IndexOutOfBoundsException("The String has not exact four doubles!");
+				}
 				
 				log.debug("Try parsing as raw envelope (no JSON).");
 				
@@ -317,8 +320,9 @@ public class GeoUtils {
 		List<OrientableCurve> curves = new LinkedList<>();
 		
 		log.debug("Adds lines between all points to the ring.");
-		for (int i = 0; i < positions.length - 1; i++)
+		for (int i = 0; i < positions.length - 1; i++) {
 			curves.add(new CurveImpl(new LineSegmentImpl(positions[i].getDirectPosition(), positions[i + 1].getDirectPosition(), 0)));
+		}
 		if (positions.length >= 2) {
 			log.debug("Adds a line from the last to the first point to the ring.");
 			

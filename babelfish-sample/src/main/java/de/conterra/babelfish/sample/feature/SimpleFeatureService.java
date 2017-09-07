@@ -5,6 +5,7 @@ import de.conterra.babelfish.plugin.v10_02.feature.*;
 import de.conterra.babelfish.plugin.v10_02.object.feature.FeatureObject;
 import de.conterra.babelfish.plugin.v10_02.object.feature.GeometryFeatureObject;
 import de.conterra.babelfish.sample.SimplePlugin;
+import de.conterra.babelfish.util.StringUtils;
 
 import java.awt.*;
 import java.util.*;
@@ -24,34 +25,34 @@ public class SimpleFeatureService
 	 *
 	 * @since 0.1.0
 	 */
-	public static final SimpleFeatureService INSTANCE = new SimpleFeatureService();
+	public static final  SimpleFeatureService                         INSTANCE     = new SimpleFeatureService();
 	/**
 	 * {@link Map} of all {@link Layer}s
 	 *
 	 * @since 0.1.0
 	 */
-	private static final Map<Integer, Layer<? extends FeatureObject>> layers = new LinkedHashMap<>();
+	private static final Map<Integer, Layer<? extends FeatureObject>> layers       = new LinkedHashMap<>();
 	/**
 	 * an instance of {@link SimplePolygonLayer}
 	 *
 	 * @since 0.1.1
 	 */
-	private static final SimplePolygonLayer polygonLayer = new SimplePolygonLayer(2, "Polygons", "");
+	private static final SimplePolygonLayer                           polygonLayer = new SimplePolygonLayer(2, "Polygons", StringUtils.EMPTY);
 	/**
 	 * an instance of {@link SimpleTable}
 	 *
 	 * @since 0.1.1
 	 */
-	private static final SimpleTable table = new SimpleTable(10, "Companies", "");
+	private static final SimpleTable                                  table        = new SimpleTable(10, "Companies", StringUtils.EMPTY);
 	
 	static {
 		Layer<? extends FeatureObject>[] layers = new Layer<?>[]
 				{
-						new SimplePointLayer(0, "Points", ""),
-						new SimpleLineLayer(1, "Lines", ""),
+						new SimplePointLayer(0, "Points", StringUtils.EMPTY),
+						new SimpleLineLayer(1, "Lines", StringUtils.EMPTY),
 						SimpleFeatureService.polygonLayer,
 						SimpleFeatureService.table,
-				};
+						};
 		
 		for (Layer<? extends FeatureObject> layer : layers) {
 			SimpleFeatureService.layers.put(layer.getId(), layer);

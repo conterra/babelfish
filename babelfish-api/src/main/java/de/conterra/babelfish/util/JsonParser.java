@@ -52,7 +52,7 @@ public class JsonParser {
 	 * @since 0.1.0
 	 */
 	private static CoordinateReferenceSystem parseCrs(JSONObject json, CoordinateReferenceSystem crs)
-			throws IllegalArgumentException {
+	throws IllegalArgumentException {
 		CoordinateReferenceSystem parsedCrs;
 		
 		try {
@@ -84,7 +84,7 @@ public class JsonParser {
 	 * @since 0.1.0
 	 */
 	public static CoordinateReferenceSystem parseCrs(JSONObject json)
-			throws JSONException {
+	throws JSONException {
 		String decodeString;
 		
 		try {
@@ -94,7 +94,7 @@ public class JsonParser {
 				log.debug("Found CRS as WKT.");
 			} catch (JSONException e) {
 				try {
-					decodeString = "" + json.getInt("wkid");
+					decodeString = Integer.toString(json.getInt("wkid"));
 					
 					log.debug("Found CRS as WKID.");
 				} catch (JSONException e2) {
@@ -125,7 +125,7 @@ public class JsonParser {
 	 * @since 0.1.0
 	 */
 	public static Point parsePoint(JSONObject json, CoordinateReferenceSystem crs)
-			throws JSONException, IllegalArgumentException {
+	throws JSONException, IllegalArgumentException {
 		return new PointImpl(new DirectPosition2D(JsonParser.parseCrs(json, crs), json.getDouble("x"), json.getDouble("y")));
 	}
 	
@@ -142,15 +142,15 @@ public class JsonParser {
 	 * @since 0.1.0
 	 */
 	public static Collection<? extends LineString> parseMultiLine(JSONObject json, CoordinateReferenceSystem crs)
-			throws JSONException, IllegalArgumentException {
+	throws JSONException, IllegalArgumentException {
 		log.debug("Extract CRS from JSON object.");
 		CoordinateReferenceSystem parsedCrs = JsonParser.parseCrs(json, crs);
-		List<LineString> result = new LinkedList<>();
+		List<LineString>          result    = new LinkedList<>();
 		
 		log.debug("Get paths from the JSON object.");
 		JSONArray paths = json.getJSONArray("paths");
 		for (int i = 0; i < paths.length(); i++) {
-			JSONArray path = paths.getJSONArray(i);
+			JSONArray      path   = paths.getJSONArray(i);
 			List<Position> points = new LinkedList<>();
 			
 			log.debug("Found " + path.length() + " positions on path with index " + i + ".");
@@ -182,14 +182,14 @@ public class JsonParser {
 	 * @since 0.1.0
 	 */
 	public static Polygon parsePolygon(JSONObject json, CoordinateReferenceSystem crs)
-			throws JSONException, IllegalArgumentException {
+	throws JSONException, IllegalArgumentException {
 		log.debug("Extract CRS from JSON object.");
 		CoordinateReferenceSystem parsedCrs = JsonParser.parseCrs(json, crs);
-		List<Position> points = new LinkedList<>();
+		List<Position>            points    = new LinkedList<>();
 		
 		log.debug("Get rings from the JSON object.");
 		JSONArray rings = json.getJSONArray("rings");
-		JSONArray ring = rings.getJSONArray(0);
+		JSONArray ring  = rings.getJSONArray(0);
 		log.debug("Found " + ring.length() + " positions of the exterior ring.");
 		for (int i = 0; i < ring.length(); i++) {
 			JSONArray point = ring.getJSONArray(i);
@@ -236,7 +236,7 @@ public class JsonParser {
 	 * @since 0.1.0
 	 */
 	public static Envelope parseEnvelope(JSONObject json, CoordinateReferenceSystem crs)
-			throws JSONException, IllegalArgumentException {
+	throws JSONException, IllegalArgumentException {
 		log.debug("Extract CRS from JSON object.");
 		CoordinateReferenceSystem parsedCrs = JsonParser.parseCrs(json, crs);
 		

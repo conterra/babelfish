@@ -5,6 +5,7 @@ import de.conterra.babelfish.plugin.v10_02.feature.Field;
 import de.conterra.babelfish.plugin.v10_02.feature.FieldType;
 import de.conterra.babelfish.plugin.v10_02.feature.Table;
 import de.conterra.babelfish.plugin.v10_02.object.feature.FeatureObject;
+import de.conterra.babelfish.util.StringUtils;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -39,7 +40,7 @@ public class SimpleTable
 	public static final Feature<FeatureObject> AGENTUR_FUER_ARBEIT;
 	
 	static {
-		Field address = new SimpleField("address", FieldType.String, "", false, 50, null);
+		Field address = new SimpleField("address", FieldType.String, StringUtils.EMPTY, false, 50, null);
 		
 		FeatureObject feature = new FeatureObject();
 		feature.addAttribute(SimpleField.NAME_FIELD, "con terra - Gesellschaft für Angewandte Informationstechnologie mbH");

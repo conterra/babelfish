@@ -3,6 +3,7 @@ package de.conterra.babelfish.sample.feature;
 import de.conterra.babelfish.plugin.v10_02.feature.Field;
 import de.conterra.babelfish.plugin.v10_02.feature.FieldType;
 import de.conterra.babelfish.plugin.v10_02.object.domain.DomainObject;
+import de.conterra.babelfish.util.StringUtils;
 
 /**
  * defines a very simple {@link Field}
@@ -18,19 +19,19 @@ public class SimpleField
 	 *
 	 * @since 0.1.0
 	 */
-	public static final Field TYPE_FIELD = new SimpleField("type", FieldType.String, "", false, 50, null);
+	public static final Field TYPE_FIELD     = new SimpleField("type", FieldType.String, StringUtils.EMPTY, false, 50, null);
 	/**
 	 * describes the object name
 	 *
 	 * @since 0.1.0
 	 */
-	public static final Field NAME_FIELD = new SimpleField("name", FieldType.String, "", false, 50, null);
+	public static final Field NAME_FIELD     = new SimpleField("name", FieldType.String, StringUtils.EMPTY, false, 50, null);
 	/**
 	 * describes the display field
 	 *
 	 * @since 0.1.0
 	 */
-	public static final Field DISPLAY_FIELD = new SimpleField("req_id", FieldType.String, "Request ID", true, 20, null);
+	public static final Field DISPLAY_FIELD  = new SimpleField("req_id", FieldType.String, "Request ID", true, 20, null);
 	/**
 	 * describes the type field
 	 *
@@ -43,31 +44,31 @@ public class SimpleField
 	 *
 	 * @since 0.1.0
 	 */
-	private final String name;
+	private final String       name;
 	/**
 	 * the {@link FieldType}
 	 *
 	 * @since 0.1.0
 	 */
-	private final FieldType type;
+	private final FieldType    type;
 	/**
 	 * the alias
 	 *
 	 * @since 0.1.0
 	 */
-	private final String alias;
+	private final String       alias;
 	/**
 	 * is it editable?
 	 *
 	 * @since 0.1.0
 	 */
-	private final boolean editable;
+	private final boolean      editable;
 	/**
 	 * the field length
 	 *
 	 * @since 0.1.0
 	 */
-	private final int length;
+	private final int          length;
 	/**
 	 * the {@link DomainObject}
 	 *

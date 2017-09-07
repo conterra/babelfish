@@ -4,10 +4,23 @@ package de.conterra.babelfish.util;
  * defines an utility class with {@link String} functions
  *
  * @author ChrissW-R1
- * @version 0.3.0
+ * @version 0.4.0
  * @since 0.3.0
  */
 public class StringUtils {
+	/**
+	 * complete empty {@link String}
+	 *
+	 * @since 0.4.0
+	 */
+	public static final String EMPTY               = "";
+	/**
+	 * RegEx pattern group of all non-alphanumeric characters
+	 *
+	 * @since 0.4.0
+	 */
+	public static final String NON_ALPHA_NUM_REGEX = "[^\\p{L}\\d]";
+	
 	/**
 	 * private standard constructor, to prevent initialization
 	 *
@@ -27,6 +40,6 @@ public class StringUtils {
 	 * @since 0.3.0
 	 */
 	public static String replaceAllNonAlphaNum(String content, String replacement) {
-		return content.replaceAll("[^\\p{L}0-9]", replacement);
+		return content.replaceAll(StringUtils.NON_ALPHA_NUM_REGEX, replacement);
 	}
 }

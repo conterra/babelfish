@@ -10,6 +10,7 @@ import de.conterra.babelfish.plugin.v10_02.object.geometry.GeometryBuilder;
 import de.conterra.babelfish.plugin.v10_02.object.geometry.GeometryObject;
 import de.conterra.babelfish.plugin.v10_02.object.labeling.LabelBuilder;
 import de.conterra.babelfish.plugin.v10_02.object.renderer.RendererBuilder;
+import de.conterra.babelfish.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
@@ -194,7 +195,7 @@ public class LayerBuilder {
 		if (globalIdField != null) {
 			globalIdFieldName = globalIdField.getName();
 		} else {
-			globalIdFieldName = "";
+			globalIdFieldName = StringUtils.EMPTY;
 		}
 		result.addContent("globalIdField", new StringValue(globalIdFieldName));
 		

@@ -1,6 +1,7 @@
 package de.conterra.babelfish.plugin.v10_02.object.renderer;
 
 import de.conterra.babelfish.plugin.v10_02.object.symbol.SymbolObject;
+import de.conterra.babelfish.util.StringUtils;
 
 /**
  * defines a Unique Value
@@ -28,7 +29,7 @@ public class UniqueValue {
 	 *
 	 * @since 0.1.0
 	 */
-	private String description = "";
+	private String description = StringUtils.EMPTY;
 	/**
 	 * the {@link SymbolObject}
 	 *
