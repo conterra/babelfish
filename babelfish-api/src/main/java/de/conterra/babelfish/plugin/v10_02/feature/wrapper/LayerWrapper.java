@@ -48,7 +48,7 @@ public class LayerWrapper<T extends FeatureObject> {
 		
 		@Override
 		public int getLength() {
-			return (int) Double.NaN;
+			return -1;
 		}
 		
 		@Override
@@ -125,22 +125,26 @@ public class LayerWrapper<T extends FeatureObject> {
 	 */
 	public Feature<T> getFeature(int id) {
 		Field objectIdField = this.layer.getObjectIdField();
-		if (objectIdField == null)
+		if (objectIdField == null) {
 			objectIdField = LayerWrapper.DEFAULT_OBJECT_ID_FIELD;
+		}
 		
 		for (Feature<T> feature : this.layer.getFeatures()) {
 			Object value = feature.getFeature().getAttribute(objectIdField);
-			if (value == null)
+			if (value == null) {
 				value = feature.getFeature().hashCode();
+			}
 			
 			Number number = null;
-			if (value instanceof Number)
+			if (value instanceof Number) {
 				number = (Number) value;
-			else if (value instanceof String)
+			} else if (value instanceof String) {
 				number = Integer.parseInt((String) value);
+			}
 			
-			if (number != null && number.intValue() == id)
+			if (number != null && number.intValue() == id) {
 				return feature;
+			}
 		}
 		
 		return null;
@@ -157,24 +161,29 @@ public class LayerWrapper<T extends FeatureObject> {
 		Set<Field> result = new FieldSet();
 		
 		Field field = this.layer.getObjectIdField();
-		if (field == null)
+		if (field == null) {
 			field = LayerWrapper.DEFAULT_OBJECT_ID_FIELD;
+		}
 		result.add(field);
 		
 		field = this.layer.getGlobalIdField();
-		if (field != null)
+		if (field != null) {
 			result.add(field);
+		}
 		
 		field = this.layer.getDisplayField();
-		if (field != null)
+		if (field != null) {
 			result.add(field);
+		}
 		
 		field = this.layer.getTypeIdField();
-		if (field != null)
+		if (field != null) {
 			result.add(field);
+		}
 		
-		for (Feature<? extends T> feature : this.layer.getFeatures())
+		for (Feature<? extends T> feature : this.layer.getFeatures()) {
 			result.addAll(feature.getFeature().getAttributes().keySet());
+		}
 		
 		return result;
 	}
@@ -187,8 +196,8 @@ public class LayerWrapper<T extends FeatureObject> {
 	 * @since 0.1.0
 	 */
 	public Envelope getEnvelope() {
-		CoordinateReferenceSystem crs = null;
-		List<Envelope> envelopes = new LinkedList<>();
+		CoordinateReferenceSystem crs       = null;
+		List<Envelope>            envelopes = new LinkedList<>();
 		for (Feature<? extends T> f : this.layer.getFeatures()) {
 			FeatureObject fObj = f.getFeature();
 			
@@ -197,12 +206,14 @@ public class LayerWrapper<T extends FeatureObject> {
 				
 				envelopes.add(env);
 				
-				if (crs == null)
+				if (crs == null) {
 					crs = env.getCoordinateReferenceSystem();
+				}
 			}
 		}
-		if (crs != null)
+		if (crs != null) {
 			return new ContainerEnvelope(crs, envelopes);
+		}
 		
 		return null;
 	}

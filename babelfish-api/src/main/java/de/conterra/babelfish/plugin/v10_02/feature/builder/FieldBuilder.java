@@ -37,7 +37,12 @@ public class FieldBuilder {
 		
 		result.addContent("name", new StringValue(StringUtils.replaceAllNonAlphaNum(field.getName(), StringUtils.NEUTRAL_WORD_DELIMITER)));
 		result.addContent("type", new StringValue(field.getType().toString()));
-		result.addContentNotEmpty("length", new NumberValue(field.getLength()));
+		
+		int length = field.getLength();
+		if (length >= 0) {
+			result.addContentNotEmpty("length", new NumberValue(field.getLength()));
+		}
+		
 		result.addContent("editable", new BooleanValue(field.isEditable()));
 		result.addContent("domain", DomainBuilder.build(field.getDomain()));
 		
