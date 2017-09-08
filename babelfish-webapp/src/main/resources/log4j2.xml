@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration xmlns="http://logging.apache.org/log4j/2.0/config">
+	<Appenders>
+		<Console name="CONSOLE" target="SYSTEM_OUT">
+			<ThresholdFilter level="${logging.log4j.appender.console.level}" onMatch="ACCEPT" onMismatch="DENY" />
+			<PatternLayout pattern="[%-5p] %d{ISO8601} [%t] %c - %m%n" />
+		</Console>
+		<RollingFile name="BabelfishFileAppender" fileName="${catalina.base}/logs/babelfish.log" filePattern="${catalina.base}/logs/babelfish-%d{yyyy-MM-dd}.log">
+			<PatternLayout>
+				<pattern>[%-5p] %d{ISO8601} [%t] %c - %m%n</pattern>
+			</PatternLayout>
+			<Policies>
+				<TimeBasedTriggeringPolicy interval="1" modulate="true" />
+			</Policies>
+		</RollingFile>
+	</Appenders>
+	<Loggers>
+		<Root level="${logging.log4j.logger.root.level}">
+			<AppenderRef ref="CONSOLE" />
+			<AppenderRef ref="BabelfishFileAppender" />
+		</Root>
+	</Loggers>
+</Configuration>
