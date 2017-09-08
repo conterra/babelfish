@@ -53,7 +53,7 @@ public class MimeUtils {
 			log.debug("Try find MIME type with Java Mime Magic Library.");
 			result = Magic.getMagicMatch(data).getMimeType();
 			
-			if (result.equalsIgnoreCase("text/plain")) {
+			if ("text/plain".equalsIgnoreCase(result)) {
 				log.debug("MIME type is plain text. Try to classify it more accurately.");
 				
 				try {

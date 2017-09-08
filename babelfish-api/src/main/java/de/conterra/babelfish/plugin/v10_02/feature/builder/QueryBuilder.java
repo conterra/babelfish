@@ -1,5 +1,6 @@
 package de.conterra.babelfish.plugin.v10_02.feature.builder;
 
+import com.google.common.collect.Iterables;
 import de.conterra.babelfish.interchange.*;
 import de.conterra.babelfish.plugin.v10_02.feature.*;
 import de.conterra.babelfish.plugin.v10_02.feature.wrapper.LayerWrapper;
@@ -52,39 +53,38 @@ public class QueryBuilder {
 	 * @since 0.2.0
 	 */
 	public static <T extends FeatureObject> ObjectValue build(Layer<T> layer, CoordinateReferenceSystem crs, GeometryObject geometry, String whereClause, Set<? extends Integer> featureIds, boolean idsOnly, boolean countOnly)
-			throws QueryParseException {
-		ObjectValue result = new ObjectValue();
+	throws QueryParseException {
+		ObjectValue     result       = new ObjectValue();
 		LayerWrapper<T> layerWrapper = new LayerWrapper<>(layer);
 		
 		Query<T> query = layer.getQuery();
-		if (query == null)
+		if (query == null) {
 			query = new DefaultQuery<T>();
+		}
 		
 		Set<Feature<T>> queryFeatures = new LinkedHashSet<>();
-		if (featureIds == null || featureIds.isEmpty())
+		if (featureIds == null || featureIds.isEmpty()) {
 			queryFeatures.addAll(layer.getFeatures());
-		else {
-			for (int featureId : featureIds)
+		} else {
+			for (int featureId : featureIds) {
 				queryFeatures.add(layerWrapper.getFeature(featureId));
+			}
 		}
 		
 		Iterable<? extends Feature<? extends T>> queryResult = query.execute(queryFeatures, geometry, whereClause);
 		
 		if (countOnly) {
-			int count = 0;
-			for (@SuppressWarnings("unused")
-					Feature<? extends T> feature : queryResult)
-				count++;
+			result.addContent("count", new NumberValue(Iterables.size(queryResult)));
 			
-			result.addContent("count", new NumberValue(count));
-			
-			if (!idsOnly)
+			if (!idsOnly) {
 				return result;
+			}
 		}
 		
 		Field objectIdField = layer.getObjectIdField();
-		if (objectIdField == null)
+		if (objectIdField == null) {
 			objectIdField = LayerWrapper.DEFAULT_OBJECT_ID_FIELD;
+		}
 		result.addContent("objectIdFieldName", new StringValue(objectIdField.getName()));
 		
 		ArrayValue features = new ArrayValue();
@@ -96,15 +96,16 @@ public class QueryBuilder {
 			features.addValue(FeatureBuilder.build(object, crs, objectIdField));
 		}
 		
-		if (idsOnly)
+		if (idsOnly) {
 			result.addContent("objectIds", queryIds);
-		else {
+		} else {
 			Field globalIdField = layer.getGlobalIdField();
 			Value globalIdValue;
-			if (globalIdField != null)
+			if (globalIdField != null) {
 				globalIdValue = new StringValue(globalIdField.getName());
-			else
+			} else {
 				globalIdValue = new NullValue();
+			}
 			result.addContent("globalIdFieldName", globalIdValue);
 			
 			if (layer instanceof FeatureLayer<?, ?>) {
@@ -122,8 +123,9 @@ public class QueryBuilder {
 			}
 			
 			ArrayValue fields = new ArrayValue();
-			for (Field field : layerWrapper.getFields())
+			for (Field field : layerWrapper.getFields()) {
 				fields.addValue(FieldBuilder.build(field));
+			}
 			result.addContent("fields", fields);
 			
 			result.addContent("features", features);

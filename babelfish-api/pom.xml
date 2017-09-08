@@ -15,12 +15,13 @@
 	<description>The API to develop plugins of the tRESTle Babelfish</description>
 	
 	<properties>
-		<json.version>20170516</json.version>
 		<jodatime.version>2.9.9</jodatime.version>
+		<guava.version>23.0</guava.version>
 		<commonsio.version>2.5</commonsio.version>
+		<json.version>20170516</json.version>
 		<commonscodec.version>1.10</commonscodec.version>
-		<josql.version>2.2</josql.version>
 		<jmimemagic.version>0.1.2</jmimemagic.version>
+		<josql.version>2.2</josql.version>
 	</properties>
 	
 	<dependencies>
@@ -43,6 +44,11 @@
 			<groupId>joda-time</groupId>
 			<artifactId>joda-time</artifactId>
 			<version>${jodatime.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>${guava.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-io</groupId>

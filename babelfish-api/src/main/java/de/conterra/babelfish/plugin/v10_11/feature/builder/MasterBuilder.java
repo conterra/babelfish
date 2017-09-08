@@ -77,7 +77,7 @@ public class MasterBuilder
 					
 					if (path.length == 1) {
 						return LayerBuilder.build(layer, featureService, crs);
-					} else if (path[1].equalsIgnoreCase("query")) {
+					} else if ("query".equalsIgnoreCase(path[1])) {
 						try {
 							CoordinateReferenceSystem inCrs;
 							parameter = parameters.get("inSR");
@@ -112,7 +112,7 @@ public class MasterBuilder
 							log.error(msg, e);
 							throw new BuildingException(msg, e);
 						}
-					} else if (path[1].equalsIgnoreCase("queryRelatedRecords")) {
+					} else if ("queryRelatedRecords".equalsIgnoreCase(path[1])) {
 						try {
 							int relationshipId = Integer.parseInt(parameters.get("relationshipId"));
 							

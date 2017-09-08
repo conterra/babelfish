@@ -131,7 +131,7 @@ public class MasterBuilder
 						
 						return LayerBuilder.build(layer, featureService, outCrs);
 					} else {
-						if (path[1].equalsIgnoreCase("images")) {
+						if ("images".equalsIgnoreCase(path[1])) {
 							if (path.length == 3) {
 								byte[] data;
 								
@@ -149,7 +149,7 @@ public class MasterBuilder
 							}
 							
 							return null;
-						} else if (path[1].equalsIgnoreCase("query")) {
+						} else if ("query".equalsIgnoreCase(path[1])) {
 							try {
 								boolean idsOnly          = false;
 								String  idsOnlyParameter = "returnIdsOnly";
@@ -168,7 +168,7 @@ public class MasterBuilder
 								log.error(msg, e);
 								throw new BuildingException(msg, e);
 							}
-						} else if (path[1].equalsIgnoreCase("queryRelatedRecords")) {
+						} else if ("queryRelatedRecords".equalsIgnoreCase(path[1])) {
 							try {
 								int relationshipId = Integer.parseInt(parameters.get("relationshipId"));
 								
@@ -217,7 +217,7 @@ public class MasterBuilder
 											result.addContent("feature", FeatureBuilder.build(feature.getFeature(), outCrs, objectIdField));
 											return result;
 										} else {
-											if (path[2].equalsIgnoreCase("attachments")) {
+											if ("attachments".equalsIgnoreCase(path[2])) {
 												if (path.length > 3) {
 													try {
 														Attachment attachment = featureWrapper.getAttachment(Integer.parseInt(path[3]));
@@ -237,7 +237,7 @@ public class MasterBuilder
 												} else {
 													return AttachmentBuilder.build(feature);
 												}
-											} else if (path[2].equalsIgnoreCase("htmlPopUp")) {
+											} else if ("htmlPopUp".equalsIgnoreCase(path[2])) {
 												return PopupBuilder.build(feature.getPopup());
 											}
 											

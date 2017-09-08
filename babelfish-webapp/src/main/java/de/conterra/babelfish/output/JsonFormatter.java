@@ -36,7 +36,7 @@ public class JsonFormatter
 		boolean pretty = false;
 		
 		try {
-			if (parameters.get("f")[0].equalsIgnoreCase("pJSON")) {
+			if ("pJSON".equalsIgnoreCase(parameters.get("f")[0])) {
 				pretty = true;
 			}
 		} catch (NullPointerException | ArrayIndexOutOfBoundsException e) {
@@ -45,7 +45,7 @@ public class JsonFormatter
 		
 		if (!pretty) {
 			try {
-				if (parameters.get("pretty")[0].equalsIgnoreCase("true")) {
+				if ("true".equalsIgnoreCase(parameters.get("pretty")[0])) {
 					pretty = true;
 				}
 			} catch (NullPointerException | ArrayIndexOutOfBoundsException e) {

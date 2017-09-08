@@ -80,7 +80,7 @@ public class PluginManagerServlet
 		log.debug("Request type: " + type);
 		
 		if (type != null) {
-			if (type.equalsIgnoreCase("upload")) {
+			if ("upload".equalsIgnoreCase(type)) {
 				Part filePart = request.getPart("file");
 				
 				try {
@@ -121,7 +121,7 @@ public class PluginManagerServlet
 				} catch (IllegalArgumentException | MalformedURLException | URISyntaxException e) {
 					log.error("File couldn't uploaded!", e);
 				}
-			} else if (type.equalsIgnoreCase("remove")) {
+			} else if ("remove".equalsIgnoreCase(type)) {
 				Plugin plugin     = PluginAdapter.getPlugin(request.getParameter("plugin"));
 				String pluginName = plugin.getName();
 				

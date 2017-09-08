@@ -126,16 +126,16 @@ public class Initializer {
 				URI uri = url.toURI();
 				
 				String scheme = uri.getScheme();
-				if (scheme.equalsIgnoreCase("File")) {
+				if ("File".equalsIgnoreCase(scheme)) {
 					Initializer.BASE_URL = url;
-				} else if (scheme.equalsIgnoreCase("JAR")) {
+				} else if ("JAR".equalsIgnoreCase(scheme)) {
 					String path = uri.toString();
 					path = path.substring(0, path.indexOf("!/"));
 					path = path.substring(0, path.lastIndexOf("."));
 					path = path.substring(path.indexOf(":") + 1);
 					
 					Initializer.BASE_URL = new URL(path);
-				} else if (scheme.equalsIgnoreCase("JNDI")) {
+				} else if ("JNDI".equalsIgnoreCase(scheme)) {
 					Initializer.BASE_URL = new URL(("file:///" + context.getRealPath("/")).replaceAll(" ", "%20"));
 				}
 				

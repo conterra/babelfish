@@ -198,7 +198,7 @@ public class GeoUtils {
 						authStr = authStr.replaceAll("[ \"]", StringUtils.EMPTY);
 						String[] strs = authStr.split(",");
 						
-						if (strs.length >= 2 && strs[0].equalsIgnoreCase("EPSG")) {
+						if (strs.length >= 2 && "EPSG".equalsIgnoreCase(strs[0])) {
 							try {
 								return Integer.parseInt(strs[1]);
 							} catch (NumberFormatException e) {

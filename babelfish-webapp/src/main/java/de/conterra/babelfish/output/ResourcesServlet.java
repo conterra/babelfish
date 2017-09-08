@@ -39,13 +39,13 @@ public class ResourcesServlet
 	
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	throws ServletException, IOException {
 		this.doRequest(request, response);
 	}
 	
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	throws ServletException, IOException {
 		this.doRequest(request, response);
 	}
 	
@@ -60,28 +60,29 @@ public class ResourcesServlet
 	 * @since 0.2.3
 	 */
 	private void doRequest(HttpServletRequest request, HttpServletResponse response)
-			throws IOException {
-		String pathInfo = request.getPathInfo().substring(1);
-		String[] target = pathInfo.split("/");
+	throws IOException {
+		String   pathInfo = request.getPathInfo().substring(1);
+		String[] target   = pathInfo.split("/");
 		
-		String path = null;
+		String path     = null;
 		String filename = null;
 		
 		log.debug("Target resource is " + pathInfo + ".");
 		
-		if (target[0].equalsIgnoreCase("conterraLogo")) {
+		if ("conterraLogo".equalsIgnoreCase(target[0])) {
 			log.debug("The conterra logo is requested.");
 			
 			path = "conterra_Logo_RGB.PNG";
 			filename = "conterraLogo.png";
-		} else if (target[0].equalsIgnoreCase("logoLettering")) {
+		} else if ("logoLettering".equalsIgnoreCase(target[0])) {
 			log.debug("The Babelfish logo with lettering is requested.");
 			
 			path = "logo_lettering.png";
 			filename = "logoLettering.png";
 		}
 		
-		if (path != null || filename != null)
+		if (path != null || filename != null) {
 			ByteOutput.output(new DataValue(DataUtils.toByteArray(ImageIO.read(this.getServletContext().getResource("/WEB-INF/classes/" + path)))), response, filename);
+		}
 	}
 }

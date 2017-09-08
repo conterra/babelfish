@@ -119,11 +119,11 @@ public class MainServlet
 		String formatParameter = request.getParameter("f");
 		
 		if (formatParameter != null) {
-			if (formatParameter.equalsIgnoreCase("help")) {
+			if ("help".equalsIgnoreCase(formatParameter)) {
 				log.info("Redirect to the API help page of ESRI");
 				response.sendRedirect(Initializer.HELP_URL);
 				return;
-			} else if (formatParameter.equalsIgnoreCase("pJSON")) {
+			} else if ("pJSON".equalsIgnoreCase(formatParameter)) {
 				format = Format.JSON;
 			} else {
 				try {
@@ -157,7 +157,7 @@ public class MainServlet
 			return;
 		}
 		
-		if (targetParts[0].equalsIgnoreCase("services")) {
+		if ("services".equalsIgnoreCase(targetParts[0])) {
 			try {
 				if (targetParts.length <= 2) {
 					String plugin;
@@ -198,8 +198,8 @@ public class MainServlet
 					}
 					
 					if (targetParts.length >= 6
-					    && targetParts[4].equalsIgnoreCase("info")
-					    && targetParts[5].equalsIgnoreCase("thumbnail")) {
+					    && "info".equalsIgnoreCase(targetParts[4])
+					    && "thumbnail".equalsIgnoreCase(targetParts[5])) {
 						Image icon = service.getIcon();
 						
 						if (icon == null) {
@@ -228,8 +228,8 @@ public class MainServlet
 				response.sendError(400, e.getMessage());
 				return;
 			}
-		} else if (targetParts[0].equalsIgnoreCase("info")) {
-			if (targetParts.length >= 2 && targetParts[1].equalsIgnoreCase("thumbnail")) {
+		} else if ("info".equalsIgnoreCase(targetParts[0])) {
+			if (targetParts.length >= 2 && "thumbnail".equalsIgnoreCase(targetParts[1])) {
 				rootObject = new DataValue(DataUtils.toByteArray(Initializer.getDefaultIcon()));
 			} else {
 				rootObject = new ObjectValue();
