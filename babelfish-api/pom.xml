@@ -84,12 +84,13 @@
 					<artifactId>maven-javadoc-plugin</artifactId>
 					<configuration>
 						<links combine.children="append">
-							<link>https://stleary.github.io/JSON-java</link>
 							<link>http://www.joda.org/joda-time/apidocs</link>
+							<link>https://google.github.io/guava/releases/${guava.version}/api/docs</link>
 							<link>https://commons.apache.org/proper/commons-io/javadocs/api-${commonsio.version}</link>
+							<link>https://stleary.github.io/JSON-java</link>
 							<link>https://commons.apache.org/proper/commons-codec/archives/${commonscodec.version}/apidocs</link>
-							<link>http://josql.sourceforge.net/manual/javadocs</link>
 							<link>http://jmimemagic.sourceforge.net/apidocs</link>
+							<link>http://josql.sourceforge.net/manual/javadocs</link>
 						</links>
 					</configuration>
 				</plugin>

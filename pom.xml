@@ -179,6 +179,8 @@
 							<link>http://docs.geotools.org/stable/javadocs</link>
 							<link>http://junit.org/junit4/javadoc/latest</link>
 							<link>https://static.javadoc.io/org.mockito/mockito-core/${mockito.version}</link>
+							<link>https://logging.apache.org/log4j/2.0/log4j-core/apidocs</link>
+							<link>https://logging.apache.org/log4j/2.0/log4j-slf4j-impl/apidocs</link>
 						</links>
 					</configuration>
 				</plugin>
