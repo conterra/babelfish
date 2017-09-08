@@ -6,16 +6,19 @@ import de.conterra.babelfish.plugin.v10_02.object.geometry.MultiLine;
 import de.conterra.babelfish.plugin.v10_02.object.geometry.SpatialReference;
 import lombok.extern.slf4j.Slf4j;
 import org.geotools.geometry.DirectPosition2D;
+import org.geotools.geometry.Envelope2D;
 import org.geotools.geometry.iso.coordinate.EnvelopeImpl;
 import org.geotools.geometry.iso.coordinate.LineSegmentImpl;
 import org.geotools.geometry.iso.primitive.CurveImpl;
 import org.geotools.geometry.iso.primitive.PointImpl;
 import org.geotools.geometry.iso.primitive.RingImpl;
 import org.geotools.referencing.CRS;
+import org.geotools.referencing.crs.DefaultGeographicCRS;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.opengis.geometry.DirectPosition;
 import org.opengis.geometry.Envelope;
+import org.opengis.geometry.MismatchedDimensionException;
 import org.opengis.geometry.coordinate.Position;
 import org.opengis.geometry.primitive.OrientableCurve;
 import org.opengis.geometry.primitive.Point;
@@ -44,7 +47,13 @@ public class GeoUtils {
 	 *
 	 * @since 0.1.0
 	 */
-	public static final Map<Integer, Integer> ESRI_IDS = new HashMap<>();
+	public static final Map<Integer, Integer> ESRI_IDS            = new HashMap<>();
+	/**
+	 * an {@link Envelope}, which contains the whole world
+	 *
+	 * @since 0.4.0
+	 */
+	public static final Envelope              FULL_WORLD_ENVELOPE = new Envelope2D(DefaultGeographicCRS.WGS84, -180, -90, 360, 180);
 	
 	static {
 		GeoUtils.ESRI_IDS.put(102100, 3857);
@@ -93,11 +102,33 @@ public class GeoUtils {
 			}
 			
 			return destPos;
-		} catch (NullPointerException | FactoryException e) {
+		} catch (NullPointerException | MismatchedDimensionException | FactoryException e) {
 			String msg = e.getMessage();
 			log.error(msg, e);
 			throw new TransformException(msg, e);
 		}
+	}
+	
+	/**
+	 * transforms multiple {@link DirectPosition}s to another {@link CoordinateReferenceSystem}
+	 *
+	 * @param srcPos  an array of all {@link DirectPosition}s to transform
+	 * @param destCrs the destination {@link CoordinateReferenceSystem} to transform the {@code srcPos} into
+	 * @return a new array with all transformed {@link DirectPosition}s
+	 *
+	 * @throws TransformException if any {@link DirectPosition} in {@code srcPos} couldn't transformed into {@code destCrs}
+	 * @see GeoUtils#transform(DirectPosition, CoordinateReferenceSystem)
+	 * @since 0.4.0
+	 */
+	public static DirectPosition[] transformAll(DirectPosition[] srcPos, CoordinateReferenceSystem destCrs)
+	throws TransformException {
+		DirectPosition[] destPos = new DirectPosition[srcPos.length];
+		
+		for (int i = 0; i < srcPos.length; i++) {
+			destPos[i] = GeoUtils.transform(srcPos[i], destCrs);
+		}
+		
+		return destPos;
 	}
 	
 	/**
@@ -219,6 +250,7 @@ public class GeoUtils {
 					
 					return new de.conterra.babelfish.plugin.v10_02.object.geometry.Polygon(JsonParser.parsePolygon(json, crs));
 				} catch (JSONException e) {
+					log.debug("The JSON object is not a valid polyon.", e);
 				}
 				
 				try {
@@ -226,6 +258,7 @@ public class GeoUtils {
 					
 					return new de.conterra.babelfish.plugin.v10_02.object.geometry.Envelope(JsonParser.parseEnvelope(json, crs));
 				} catch (JSONException e) {
+					log.debug("The JSON object is not a valid envelope.", e);
 				}
 				
 				try {
@@ -233,6 +266,7 @@ public class GeoUtils {
 					
 					return new MultiLine(JsonParser.parseMultiLine(json, crs));
 				} catch (JSONException e) {
+					log.debug("The JSON object is not a valid multi line.", e);
 				}
 				
 				try {
@@ -240,6 +274,7 @@ public class GeoUtils {
 					
 					return new de.conterra.babelfish.plugin.v10_02.object.geometry.Point(JsonParser.parsePoint(json, crs));
 				} catch (JSONException e) {
+					log.debug("The JSON object is not a valid point.", e);
 				}
 				
 				return new SpatialReference(JsonParser.parseCrs(json));
@@ -264,6 +299,7 @@ public class GeoUtils {
 				
 				return new de.conterra.babelfish.plugin.v10_02.object.geometry.Point(new PointImpl(new DirectPosition2D(crs, Double.parseDouble(coords[0]), Double.parseDouble(coords[1]))));
 			} catch (IndexOutOfBoundsException | NumberFormatException e) {
+				log.debug("The content is not a valid raw point.", e);
 			}
 			
 			try {
@@ -278,6 +314,7 @@ public class GeoUtils {
 						new DirectPosition2D(crs, Double.parseDouble(coords[2]), Double.parseDouble(coords[3]))
 				));
 			} catch (IndexOutOfBoundsException | NumberFormatException e) {
+				log.debug("The content is not a valid raw envelope.", e);
 			}
 		}
 		

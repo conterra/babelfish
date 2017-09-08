@@ -1,6 +1,7 @@
 package de.conterra.babelfish.plugin.v10_02.object.geometry;
 
 import de.conterra.babelfish.util.GeoUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.geotools.geometry.jts.JTSFactoryFinder;
 import org.opengis.geometry.*;
 import org.opengis.geometry.Envelope;
@@ -21,9 +22,10 @@ import java.util.Set;
  * defines a {@link Point}
  *
  * @author ChrissW-R1
- * @version 0.3.0
+ * @version 0.4.0
  * @since 0.1.0
  */
+@Slf4j
 public class Point
 		extends GeometryObject
 		implements Cloneable, org.opengis.geometry.primitive.Point {
@@ -56,7 +58,7 @@ public class Point
 	
 	@Override
 	public Geometry clone()
-			throws CloneNotSupportedException {
+	throws CloneNotSupportedException {
 		return this.point.clone();
 	}
 	
@@ -72,12 +74,16 @@ public class Point
 	
 	@Override
 	public com.vividsolutions.jts.geom.Geometry toGeometry(CoordinateReferenceSystem crs) {
+		DirectPosition pos;
+		
 		try {
-			return JTSFactoryFinder.getGeometryFactory().createPoint(GeoUtils.getJtsCoordinate(GeoUtils.transform(this.getDirectPosition(), crs)));
+			pos = GeoUtils.transform(this.getDirectPosition(), crs);
 		} catch (TransformException e) {
+			log.warn("The position couldn't transformed to target CRS! Using untransformed position instead.", e);
+			pos = this.getDirectPosition();
 		}
 		
-		return null;
+		return JTSFactoryFinder.getGeometryFactory().createPoint(GeoUtils.getJtsCoordinate(pos));
 	}
 	
 	@Override
@@ -222,7 +228,7 @@ public class Point
 	
 	@Override
 	public void setDirectPosition(DirectPosition arg0)
-			throws UnmodifiableGeometryException {
+	throws UnmodifiableGeometryException {
 		this.point.setDirectPosition(arg0);
 	}
 	
@@ -238,13 +244,13 @@ public class Point
 	
 	@Override
 	public Geometry transform(CoordinateReferenceSystem arg0, MathTransform arg1)
-			throws TransformException {
+	throws TransformException {
 		return this.point.transform(arg0, arg1);
 	}
 	
 	@Override
 	public Geometry transform(CoordinateReferenceSystem arg0)
-			throws TransformException {
+	throws TransformException {
 		return this.point.transform(arg0);
 	}
 	

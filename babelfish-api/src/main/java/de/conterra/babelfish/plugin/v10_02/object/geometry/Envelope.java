@@ -5,6 +5,7 @@ import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import de.conterra.babelfish.util.GeoUtils;
 import de.conterra.babelfish.util.MathUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.geotools.geometry.jts.JTSFactoryFinder;
 import org.opengis.geometry.DirectPosition;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
@@ -14,9 +15,10 @@ import org.opengis.referencing.operation.TransformException;
  * defines a {@link Envelope}
  *
  * @author ChrissW-R1
- * @version 0.3.0
+ * @version 0.4.0
  * @since 0.1.0
  */
+@Slf4j
 public class Envelope
 		extends GeometryObject
 		implements org.opengis.geometry.Envelope {
@@ -59,26 +61,36 @@ public class Envelope
 	
 	@Override
 	public Geometry toGeometry(CoordinateReferenceSystem crs) {
+		DirectPosition lowerCorner;
+		DirectPosition upperCorner;
+		
 		try {
-			double[] lower = GeoUtils.transform(this.getLowerCorner(), crs).getCoordinate();
-			double[] upper = GeoUtils.transform(this.getUpperCorner(), crs).getCoordinate();
+			DirectPosition lowerCornerTemp = GeoUtils.transform(this.getLowerCorner(), crs);
+			DirectPosition upperCornerTemp = GeoUtils.transform(this.getUpperCorner(), crs);
 			
-			Coordinate[] coords = new Coordinate[]
-					{
-							new Coordinate(lower[0], lower[1]),
-							new Coordinate(lower[0], upper[1]),
-							new Coordinate(upper[0], upper[1]),
-							new Coordinate(upper[0], lower[1]),
-							new Coordinate(lower[0], lower[1]),
-					};
-			
-			GeometryFactory factory = JTSFactoryFinder.getGeometryFactory();
-			
-			return factory.createPolygon(factory.createLinearRing(coords), null);
+			lowerCorner = lowerCornerTemp;
+			upperCorner = upperCornerTemp;
 		} catch (TransformException e) {
+			log.warn("The corners of the envelope couldn't transformed to target CRS! Using untransformed envelope instead.", e);
+			lowerCorner = this.getLowerCorner();
+			upperCorner = this.getUpperCorner();
 		}
 		
-		return null;
+		double[] lower = lowerCorner.getCoordinate();
+		double[] upper = upperCorner.getCoordinate();
+		
+		Coordinate[] coords = new Coordinate[]
+				{
+						new Coordinate(lower[0], lower[1]),
+						new Coordinate(lower[0], upper[1]),
+						new Coordinate(upper[0], upper[1]),
+						new Coordinate(upper[0], lower[1]),
+						new Coordinate(lower[0], lower[1])
+				};
+		
+		GeometryFactory factory = JTSFactoryFinder.getGeometryFactory();
+		
+		return factory.createPolygon(factory.createLinearRing(coords), null);
 	}
 	
 	@Override
@@ -93,25 +105,25 @@ public class Envelope
 	
 	@Override
 	public double getMaximum(int arg0)
-			throws IndexOutOfBoundsException {
+	throws IndexOutOfBoundsException {
 		return this.envelope.getMaximum(arg0);
 	}
 	
 	@Override
 	public double getMedian(int arg0)
-			throws IndexOutOfBoundsException {
+	throws IndexOutOfBoundsException {
 		return this.envelope.getMedian(arg0);
 	}
 	
 	@Override
 	public double getMinimum(int arg0)
-			throws IndexOutOfBoundsException {
+	throws IndexOutOfBoundsException {
 		return this.envelope.getMinimum(arg0);
 	}
 	
 	@Override
 	public double getSpan(int arg0)
-			throws IndexOutOfBoundsException {
+	throws IndexOutOfBoundsException {
 		return this.envelope.getSpan(arg0);
 	}
 	
@@ -139,16 +151,17 @@ public class Envelope
 			double[] u2 = GeoUtils.transform(other.getUpperCorner(), crs).getCoordinate();
 			
 			int dim = MathUtils.min(new Integer[]
-					{
-							l1.length,
-							u1.length,
-							l2.length,
-							u2.length,
-					}).intValue();
+					                        {
+							                        l1.length,
+							                        u1.length,
+							                        l2.length,
+							                        u2.length,
+							                        }).intValue();
 			
 			for (int i = 0; i < dim; i++) {
-				if (l2[i] < l1[i] || u2[i] > u1[i])
+				if (l2[i] < l1[i] || u2[i] > u1[i]) {
 					return false;
+				}
 			}
 		} catch (TransformException e) {
 			return false;
@@ -169,10 +182,11 @@ public class Envelope
 	public boolean isIn(org.opengis.geometry.Envelope other) {
 		Envelope otherEnv;
 		
-		if (other instanceof Envelope)
+		if (other instanceof Envelope) {
 			otherEnv = (Envelope) other;
-		else
+		} else {
 			otherEnv = new Envelope(other);
+		}
 		
 		return otherEnv.contains(this);
 	}

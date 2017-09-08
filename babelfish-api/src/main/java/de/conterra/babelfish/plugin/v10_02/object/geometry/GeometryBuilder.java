@@ -5,12 +5,10 @@ import de.conterra.babelfish.interchange.NumberValue;
 import de.conterra.babelfish.interchange.ObjectValue;
 import de.conterra.babelfish.interchange.StringValue;
 import de.conterra.babelfish.util.GeoUtils;
-import org.geotools.referencing.CRS;
+import lombok.extern.slf4j.Slf4j;
 import org.opengis.geometry.DirectPosition;
-import org.opengis.geometry.MismatchedDimensionException;
 import org.opengis.geometry.coordinate.LineString;
 import org.opengis.geometry.coordinate.Position;
-import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.operation.TransformException;
 
@@ -22,9 +20,10 @@ import java.util.List;
  * defines a class, which creates {@link ObjectValue}s of {@link GeometryObject}s
  *
  * @author ChrissW-R1
- * @version 0.2.0
+ * @version 0.4.0
  * @since 0.1.0
  */
+@Slf4j
 public class GeometryBuilder {
 	/**
 	 * private standard constructor, to prevent initialization
@@ -46,19 +45,21 @@ public class GeometryBuilder {
 	private static ArrayValue buildCoords(Position pos, CoordinateReferenceSystem crs) {
 		ArrayValue result = new ArrayValue();
 		
-		DirectPosition dirPos = pos.getDirectPosition();
+		DirectPosition dirPos  = pos.getDirectPosition();
 		DirectPosition destPos = dirPos;
 		if (crs != null && !(crs.equals(dirPos.getCoordinateReferenceSystem()))) {
 			try {
-				destPos = CRS.findMathTransform(dirPos.getCoordinateReferenceSystem(), crs).transform(dirPos, null);
-			} catch (MismatchedDimensionException | TransformException | FactoryException e) {
+				destPos = GeoUtils.transform(dirPos, crs);
+			} catch (TransformException e) {
+				log.warn("The position couldn't transformed to target CRS! Using untransformed position instead.", e);
 			}
 		}
 		result.addValue(new NumberValue(destPos.getOrdinate(0)));
 		result.addValue(new NumberValue(destPos.getOrdinate(1)));
 		
-		if (destPos.getDimension() >= 3)
+		if (destPos.getDimension() >= 3) {
 			result.addValue(new NumberValue(destPos.getOrdinate(2)));
+		}
 		
 		return result;
 	}
@@ -75,8 +76,9 @@ public class GeometryBuilder {
 	private static ArrayValue buildCoords(Collection<? extends Position> positions, CoordinateReferenceSystem crs) {
 		ArrayValue result = new ArrayValue();
 		
-		for (Position pos : positions)
+		for (Position pos : positions) {
 			result.addValue(GeometryBuilder.buildCoords(pos, crs));
+		}
 		
 		return result;
 	}
@@ -94,18 +96,20 @@ public class GeometryBuilder {
 		ObjectValue result = new ObjectValue();
 		
 		CoordinateReferenceSystem spatial;
-		if (crs == null)
+		if (crs == null) {
 			spatial = geometry.getCoordinateReferenceSystem();
-		else
+		} else {
 			spatial = crs;
+		}
 		
 		if (geometry instanceof SpatialReference) {
 			int epsg = GeoUtils.decodeEpsg(spatial);
 			
-			if (epsg > 0)
+			if (epsg > 0) {
 				result.addContent("wkid", new NumberValue(epsg));
-			else
+			} else {
 				result.addContent("wkt", new StringValue(spatial.toWKT()));
+			}
 		} else {
 			if (geometry instanceof Point) {
 				Point point = (Point) geometry;
@@ -114,24 +118,28 @@ public class GeometryBuilder {
 				try {
 					pos = GeoUtils.transform(pos, spatial);
 				} catch (TransformException e) {
+					log.warn("The position couldn't transformed to target CRS! Using untransformed position instead.", e);
+					spatial = pos.getCoordinateReferenceSystem();
 				}
 				result.addContent("x", new NumberValue(pos.getOrdinate(0)));
 				result.addContent("y", new NumberValue(pos.getOrdinate(1)));
 				
-				if (pos.getDimension() >= 3)
+				if (pos.getDimension() >= 3) {
 					result.addContent("z", new NumberValue(pos.getOrdinate(2)));
+				}
 			} else if (geometry instanceof MultiLine) {
 				MultiLine lines = (MultiLine) geometry;
 				
 				ArrayValue paths = new ArrayValue();
-				for (LineString line : lines.getLines())
+				for (LineString line : lines.getLines()) {
 					paths.addValue(GeometryBuilder.buildCoords(line.getControlPoints(), crs));
+				}
 				result.addContent("paths", paths);
 			} else if (geometry instanceof Polygon) {
 				Polygon polygon = (Polygon) geometry;
 				
-				List<Collection<? extends org.opengis.geometry.primitive.Point>> rings = new LinkedList<>();
-				List<org.opengis.geometry.primitive.Point> exterior = new LinkedList<>(polygon.getExteriorPoints());
+				List<Collection<? extends org.opengis.geometry.primitive.Point>> rings    = new LinkedList<>();
+				List<org.opengis.geometry.primitive.Point>                       exterior = new LinkedList<>(polygon.getExteriorPoints());
 				exterior.add(exterior.iterator().next());
 				rings.add(exterior);
 				for (Collection<? extends org.opengis.geometry.primitive.Point> interPositions : polygon.getInteriorPoints()) {
@@ -141,8 +149,9 @@ public class GeometryBuilder {
 				}
 				
 				ArrayValue ringValue = new ArrayValue();
-				for (Collection<? extends org.opengis.geometry.primitive.Point> ring : rings)
+				for (Collection<? extends org.opengis.geometry.primitive.Point> ring : rings) {
 					ringValue.addValue(GeometryBuilder.buildCoords(ring, crs));
+				}
 				
 				result.addContent("rings", ringValue);
 			} else if (geometry instanceof Multipoint) {
@@ -155,9 +164,14 @@ public class GeometryBuilder {
 				DirectPosition minPos = env.getLowerCorner();
 				DirectPosition maxPos = env.getUpperCorner();
 				try {
-					minPos = GeoUtils.transform(env.getLowerCorner(), spatial);
-					maxPos = GeoUtils.transform(env.getUpperCorner(), spatial);
+					DirectPosition minPosTemp = GeoUtils.transform(env.getLowerCorner(), spatial);
+					DirectPosition maxPosTemp = GeoUtils.transform(env.getUpperCorner(), spatial);
+					
+					minPos = minPosTemp;
+					maxPos = maxPosTemp;
 				} catch (TransformException e) {
+					log.warn("The corners of the envelope couldn't transformed to target CRS! Using untransformed envelope instead.", e);
+					spatial = env.getCoordinateReferenceSystem();
 				}
 				
 				result.addContent("xmin", new NumberValue(minPos.getOrdinate(0)));

@@ -5,6 +5,7 @@ import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.LinearRing;
 import de.conterra.babelfish.util.GeoUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.geotools.geometry.jts.JTSFactoryFinder;
 import org.opengis.geometry.DirectPosition;
 import org.opengis.geometry.Envelope;
@@ -22,9 +23,10 @@ import java.util.List;
  * defines a {@link Polygon}
  *
  * @author ChrissW-R1
- * @version 0.3.0
+ * @version 0.4.0
  * @since 0.1.0
  */
+@Slf4j
 public class Polygon
 		extends GeometryObject
 		implements org.opengis.geometry.coordinate.Polygon {
@@ -67,39 +69,67 @@ public class Polygon
 	
 	@Override
 	public Geometry toGeometry(CoordinateReferenceSystem crs) {
-		GeometryFactory factory = JTSFactoryFinder.getGeometryFactory();
+		List<Coordinate> coordsExterior        = new LinkedList<>();
+		List<Coordinate> untransCoordsExterior = new LinkedList<>();
 		
-		List<Coordinate> coords = new LinkedList<>();
-		
+		boolean trans = true;
 		for (Point point : this.getExteriorPoints()) {
-			try {
-				coords.add(GeoUtils.getJtsCoordinate(GeoUtils.transform(point.getDirectPosition(), crs)));
-			} catch (TransformException e) {
-			}
-		}
-		if (coords.size() > 1)
-			coords.add(coords.get(0));
-		
-		LinearRing exterior = factory.createLinearRing(coords.toArray(new Coordinate[coords.size()]));
-		
-		List<LinearRing> interior = new LinkedList<>();
-		
-		for (Collection<? extends Point> ring : this.getInteriorPoints()) {
-			coords = new LinkedList<>();
+			DirectPosition pos = point.getDirectPosition();
 			
-			for (Point point : ring) {
+			untransCoordsExterior.add(GeoUtils.getJtsCoordinate(pos));
+			
+			if (trans) {
 				try {
-					coords.add(GeoUtils.getJtsCoordinate(GeoUtils.transform(point.getDirectPosition(), crs)));
+					coordsExterior.add(GeoUtils.getJtsCoordinate(GeoUtils.transform(pos, crs)));
 				} catch (TransformException e) {
+					log.warn("A point of the polygons exterior ring couldn't transformed to target CRS! Using untransformed points instead.", e);
 				}
 			}
-			if (coords.size() > 1)
-				coords.add(coords.get(0));
-			
-			interior.add(factory.createLinearRing(coords.toArray(new Coordinate[coords.size()])));
 		}
 		
-		return factory.createPolygon(exterior, interior.toArray(new LinearRing[interior.size()]));
+		List<List<Coordinate>> coordsInterior        = new LinkedList<>();
+		List<List<Coordinate>> untransCoordsInterior = new LinkedList<>();
+		
+		for (Collection<? extends Point> ring : this.getInteriorPoints()) {
+			List<Coordinate> coords        = new LinkedList<>();
+			List<Coordinate> untransCoords = new LinkedList<>();
+			
+			for (Point point : ring) {
+				DirectPosition pos = point.getDirectPosition();
+				untransCoords.add(GeoUtils.getJtsCoordinate(pos));
+				
+				if (trans) {
+					try {
+						coords.add(GeoUtils.getJtsCoordinate(GeoUtils.transform(point.getDirectPosition(), crs)));
+					} catch (TransformException e) {
+						log.warn("A point of a polygons interior ring couldn't transformed to target CRS! Using untransformed points instead.", e);
+					}
+				}
+			}
+			if (coords.size() > 1) {
+				coords.add(coords.get(0));
+			}
+		}
+		
+		if (!trans) {
+			coordsExterior = untransCoordsExterior;
+			coordsInterior = untransCoordsInterior;
+		}
+		
+		GeometryFactory factory = JTSFactoryFinder.getGeometryFactory();
+		
+		if (coordsExterior.size() > 1) {
+			coordsExterior.add(coordsExterior.get(0));
+		}
+		LinearRing exterior = factory.createLinearRing(coordsExterior.toArray(new Coordinate[coordsExterior.size()]));
+		
+		LinearRing[] interior = new LinearRing[coordsInterior.size()];
+		for (int i = 0; i < interior.length; i++) {
+			List<Coordinate> coords = coordsInterior.get(i);
+			interior[i] = factory.createLinearRing(coords.toArray(new Coordinate[coords.size()]));
+		}
+		
+		return factory.createPolygon(exterior, interior);
 	}
 	
 	@Override
@@ -152,8 +182,9 @@ public class Polygon
 	public Collection<? extends Point> getExteriorPoints() {
 		List<Point> result = new LinkedList<>();
 		
-		for (OrientableCurve curve : this.getBoundary().getExterior().getGenerators())
+		for (OrientableCurve curve : this.getBoundary().getExterior().getGenerators()) {
 			result.add(curve.getBoundary().getStartPoint());
+		}
 		
 		return result;
 	}
@@ -171,8 +202,9 @@ public class Polygon
 		for (Ring ring : this.getBoundary().getInteriors()) {
 			List<Point> pts = new LinkedList<>();
 			
-			for (OrientableCurve curve : ring.getGenerators())
+			for (OrientableCurve curve : ring.getGenerators()) {
 				pts.add(curve.getBoundary().getStartPoint());
+			}
 			
 			result.add(pts);
 		}
@@ -199,16 +231,19 @@ public class Polygon
 			for (Point point : ring) {
 				int dim = point.getDirectPosition().getDimension();
 				
-				if (dim < result)
+				if (dim < result) {
 					result = dim;
+				}
 				
-				if (result <= 0)
+				if (result <= 0) {
 					return 0;
+				}
 			}
 		}
 		
-		if (result == Integer.MAX_VALUE)
+		if (result == Integer.MAX_VALUE) {
 			return 0;
+		}
 		
 		return result;
 	}

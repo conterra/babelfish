@@ -2,6 +2,7 @@ package de.conterra.babelfish.plugin.v10_02.object.geometry;
 
 import com.vividsolutions.jts.geom.Coordinate;
 import de.conterra.babelfish.util.GeoUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.geotools.geometry.jts.JTSFactoryFinder;
 import org.opengis.geometry.*;
 import org.opengis.geometry.Envelope;
@@ -20,9 +21,10 @@ import java.util.Set;
  * defines a Multipoint
  *
  * @author ChrissW-R1
- * @version 0.3.0
+ * @version 0.4.0
  * @since 0.1.0
  */
+@Slf4j
 public class Multipoint
 		extends GeometryObject
 		implements Cloneable, MultiPoint {
@@ -55,7 +57,7 @@ public class Multipoint
 	
 	@Override
 	public Geometry clone()
-			throws CloneNotSupportedException {
+	throws CloneNotSupportedException {
 		return this.multiPoint.clone();
 	}
 	
@@ -71,13 +73,26 @@ public class Multipoint
 	
 	@Override
 	public com.vividsolutions.jts.geom.Geometry toGeometry(CoordinateReferenceSystem crs) {
-		List<Coordinate> coords = new LinkedList<>();
+		List<Coordinate> coords        = new LinkedList<>();
+		List<Coordinate> untransCoords = new LinkedList<>();
 		
+		boolean trans = true;
 		for (Point point : this.getElements()) {
-			try {
-				coords.add(GeoUtils.getJtsCoordinate(GeoUtils.transform(point.getDirectPosition(), crs)));
-			} catch (TransformException e) {
+			DirectPosition pos = point.getDirectPosition();
+			
+			untransCoords.add(GeoUtils.getJtsCoordinate(pos));
+			
+			if (trans) {
+				try {
+					coords.add(GeoUtils.getJtsCoordinate(GeoUtils.transform(pos, crs)));
+				} catch (TransformException e) {
+					log.warn("A coordinate of the multi point couldn't transformed to target CRS! Using untransformed coordinates instead.", e);
+					trans = false;
+				}
 			}
+		}
+		if (!trans) {
+			coords = untransCoords;
 		}
 		
 		return JTSFactoryFinder.getGeometryFactory().createMultiPoint(coords.toArray(new Coordinate[coords.size()]));
@@ -205,13 +220,13 @@ public class Multipoint
 	
 	@Override
 	public Geometry transform(CoordinateReferenceSystem arg0, MathTransform arg1)
-			throws TransformException {
+	throws TransformException {
 		return this.multiPoint.transform(arg0, arg1);
 	}
 	
 	@Override
 	public Geometry transform(CoordinateReferenceSystem arg0)
-			throws TransformException {
+	throws TransformException {
 		return this.multiPoint.transform(arg0);
 	}
 	

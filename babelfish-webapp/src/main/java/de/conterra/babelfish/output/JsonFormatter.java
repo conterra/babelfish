@@ -40,6 +40,7 @@ public class JsonFormatter
 				pretty = true;
 			}
 		} catch (NullPointerException | ArrayIndexOutOfBoundsException e) {
+			log.debug("Couldn't get parameter 'f'.", e);
 		}
 		
 		if (!pretty) {
@@ -48,6 +49,7 @@ public class JsonFormatter
 					pretty = true;
 				}
 			} catch (NullPointerException | ArrayIndexOutOfBoundsException e) {
+				log.debug("Couldn't get parameter 'pretty'.", e);
 			}
 		}
 		

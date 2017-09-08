@@ -30,19 +30,19 @@ public class PluginAdapter {
 	 *
 	 * @since 0.1.0
 	 */
-	public static final String PLUGINS_FOLDER_PATH = "/plugins";
+	public static final  String                     PLUGINS_FOLDER_PATH = "/plugins";
 	/**
 	 * the {@link URL} of the {@link Plugin} API base folder
 	 *
 	 * @since 0.1.0
 	 */
-	private static URL PLUGINS_FOLDER = null;
+	private static       URL                        PLUGINS_FOLDER      = null;
 	/**
 	 * {@link Set} of all registered {@link Plugin}s
 	 *
 	 * @since 0.1.0
 	 */
-	private static final Map<Plugin, PluginWrapper> PLUGINS = new ConcurrentHashMap<>();
+	private static final Map<Plugin, PluginWrapper> PLUGINS             = new ConcurrentHashMap<>();
 	
 	/**
 	 * private standard constructor, to prevent initialization
@@ -106,8 +106,9 @@ public class PluginAdapter {
 		String saveName = ServiceContainer.toUrlSaveString(name);
 		
 		for (Plugin plugin : PluginAdapter.getPlugins()) {
-			if (ServiceContainer.toUrlSaveString(plugin.getName()).equalsIgnoreCase(saveName))
+			if (ServiceContainer.toUrlSaveString(plugin.getName()).equalsIgnoreCase(saveName)) {
 				return plugin;
+			}
 		}
 		
 		return null;
@@ -135,15 +136,17 @@ public class PluginAdapter {
 	 * @since 0.1.0
 	 */
 	public static URL getPluginFolder(Plugin plugin)
-			throws NullPointerException {
+	throws NullPointerException {
 		try {
 			File pluginFolder = new File(new File(PluginAdapter.getPluginsFolder().toURI()), ServiceContainer.toUrlSaveString(plugin.getName()));
 			
 			pluginFolder.mkdirs();
 			
-			if (pluginFolder.exists())
+			if (pluginFolder.exists()) {
 				return pluginFolder.toURI().toURL();
+			}
 		} catch (NullPointerException | URISyntaxException | SecurityException | MalformedURLException e) {
+			log.error("An error occured, while initialize the plugin API!", e);
 		}
 		
 		throw new NullPointerException("The plugin API was not correctly initialized!");
@@ -159,9 +162,9 @@ public class PluginAdapter {
 	 * @since 0.1.0
 	 */
 	public static Set<? extends Plugin> loadPlugin(File file)
-			throws IOException {
-		String fileEx = ".class";
-		String path = file.getAbsolutePath();
+	throws IOException {
+		String      fileEx = ".class";
+		String      path   = file.getAbsolutePath();
 		Set<Plugin> result = new LinkedHashSet<>();
 		
 		log.debug("Try loading plugin from " + path + ".");
@@ -176,9 +179,9 @@ public class PluginAdapter {
 			JarFile jarFile = new JarFile(file);
 			
 			URLClassLoader cl = new URLClassLoader(new URL[]
-					{
-							new URL("jar:file:" + path + "!/")
-					}, PluginAdapter.class.getClassLoader());
+					                                       {
+							                                       new URL("jar:file:" + path + "!/")
+					                                       }, PluginAdapter.class.getClassLoader());
 			
 			boolean noPlugin = true;
 			
@@ -186,8 +189,9 @@ public class PluginAdapter {
 			while (enumer.hasMoreElements()) {
 				JarEntry entry = enumer.nextElement();
 				
-				if (entry.isDirectory() || (!(entry.getName().endsWith(fileEx))))
+				if (entry.isDirectory() || (!(entry.getName().endsWith(fileEx)))) {
 					continue;
+				}
 				
 				String className = entry.getName();
 				className = className.substring(0, (className.length()) - (fileEx.length())).replaceAll("/", ".");
@@ -198,7 +202,7 @@ public class PluginAdapter {
 					if (Plugin.class.isAssignableFrom(clazz)) {
 						noPlugin = false;
 						
-						Plugin plugin = (Plugin) (clazz.newInstance());
+						Plugin plugin     = (Plugin) (clazz.newInstance());
 						String pluginName = plugin.getName();
 						
 						if (PluginAdapter.getPlugin(pluginName) != null) {
@@ -230,8 +234,9 @@ public class PluginAdapter {
 				jarFile.close();
 			}
 			
-			if (noPlugin)
+			if (noPlugin) {
 				throw new IOException("Couldn't found any plugin implementation in file " + path + "!");
+			}
 		} catch (MalformedURLException e) {
 			String msg = "An error occurred on create a class loader of file " + path + "!";
 			log.error(msg, e);
@@ -261,6 +266,6 @@ public class PluginAdapter {
 		log.debug("Try unloading the plugin " + plugin.getName() + ".");
 		
 		return PluginAdapter.getPluginWrapper(plugin).shutdown()
-				&& (PluginAdapter.PLUGINS.remove(plugin) != null);
+		       && (PluginAdapter.PLUGINS.remove(plugin) != null);
 	}
 }

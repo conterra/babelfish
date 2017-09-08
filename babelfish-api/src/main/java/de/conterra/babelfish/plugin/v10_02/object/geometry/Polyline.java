@@ -3,6 +3,7 @@ package de.conterra.babelfish.plugin.v10_02.object.geometry;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 import de.conterra.babelfish.util.GeoUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.geotools.geometry.jts.JTSFactoryFinder;
 import org.opengis.geometry.DirectPosition;
 import org.opengis.geometry.coordinate.*;
@@ -21,9 +22,10 @@ import java.util.List;
  * A {@link Polyline} without gaps
  *
  * @author ChrissW-R1
- * @version 0.3.0
+ * @version 0.4.0
  * @since 0.1.0
  */
+@Slf4j
 public class Polyline
 		extends MultiLine
 		implements LineString {
@@ -52,10 +54,16 @@ public class Polyline
 		List<Coordinate> coords = new LinkedList<>();
 		
 		for (Position pos : this.getControlPoints()) {
+			DirectPosition dirPos;
+			
 			try {
-				coords.add(GeoUtils.getJtsCoordinate(GeoUtils.transform(pos.getDirectPosition(), crs)));
+				dirPos = GeoUtils.transform(pos.getDirectPosition(), crs);
 			} catch (TransformException e) {
+				log.warn("The position couldn't transformed to target CRS! Using untransformed position instead.", e);
+				dirPos = pos.getDirectPosition();
 			}
+			
+			coords.add(GeoUtils.getJtsCoordinate(dirPos));
 		}
 		
 		return JTSFactoryFinder.getGeometryFactory().createLineString(coords.toArray(new Coordinate[coords.size()]));

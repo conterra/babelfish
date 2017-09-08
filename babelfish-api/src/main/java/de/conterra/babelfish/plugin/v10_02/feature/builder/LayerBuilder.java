@@ -10,6 +10,7 @@ import de.conterra.babelfish.plugin.v10_02.object.geometry.GeometryBuilder;
 import de.conterra.babelfish.plugin.v10_02.object.geometry.GeometryObject;
 import de.conterra.babelfish.plugin.v10_02.object.labeling.LabelBuilder;
 import de.conterra.babelfish.plugin.v10_02.object.renderer.RendererBuilder;
+import de.conterra.babelfish.util.GeoUtils;
 import de.conterra.babelfish.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.joda.time.DateTime;
@@ -119,9 +120,10 @@ public class LayerBuilder {
 			result.addContentNotEmpty("maxScale", new NumberValue(featureLayer.getMaxScale()));
 			
 			Envelope extent = wrapper.getEnvelope();
-			if (extent != null) {
-				result.addContentNotEmpty("extent", GeometryBuilder.build(new de.conterra.babelfish.plugin.v10_02.object.geometry.Envelope(extent), crs));
+			if (extent == null) {
+				extent = GeoUtils.FULL_WORLD_ENVELOPE;
 			}
+			result.addContentNotEmpty("extent", GeometryBuilder.build(new de.conterra.babelfish.plugin.v10_02.object.geometry.Envelope(extent), crs));
 			
 			ObjectValue drawingInfo = new ObjectValue();
 			drawingInfo.addContentNotEmpty("renderer", RendererBuilder.build(featureLayer.getRenderer()));

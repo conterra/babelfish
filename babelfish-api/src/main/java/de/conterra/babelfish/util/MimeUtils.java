@@ -28,7 +28,7 @@ public class MimeUtils {
 	 *
 	 * @since 0.1.0
 	 */
-	public static final String JSON_TYPE = "application/json";
+	public static final String JSON_TYPE    = "application/json";
 	
 	/**
 	 * private standard constructor, to prevent initialization
@@ -59,10 +59,11 @@ public class MimeUtils {
 				try {
 					new JSONObject(new String(data));
 					
-					log.debug("Found valid JSON document");
+					log.debug("Found valid JSON document.");
 					
 					result = MimeUtils.JSON_TYPE;
 				} catch (JSONException e) {
+					log.debug("No valid JSON document found.", e);
 				}
 			}
 		} catch (MagicParseException | MagicMatchNotFoundException | MagicException e) {
