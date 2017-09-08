@@ -69,16 +69,24 @@
 			<resource>
 				<directory>src/main/resources</directory>
 				<excludes>
-					<exclude>project.properties</exclude>
+					<exclude>**/*.png</exclude>
+					<exclude>**/*.gif</exclude>
+					<exclude>**/*.jpg</exclude>
+					<exclude>**/*.jpeg</exclude>
+					<exclude>**/*.bmp</exclude>
 				</excludes>
-				<filtering>false</filtering>
+				<filtering>true</filtering>
 			</resource>
 			<resource>
 				<directory>src/main/resources</directory>
 				<includes>
-					<include>project.properties</include>
+					<include>**/*.png</include>
+					<include>**/*.gif</include>
+					<include>**/*.jpg</include>
+					<include>**/*.jpeg</include>
+					<include>**/*.bmp</include>
 				</includes>
-				<filtering>true</filtering>
+				<filtering>false</filtering>
 			</resource>
 		</resources>
 		<pluginManagement>
