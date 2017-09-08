@@ -39,6 +39,7 @@
 		<geotools.version>17.2</geotools.version>
 		<junit.version>4.12</junit.version>
 		<mockito.version>2.8.47</mockito.version>
+		<log4j.version>2.8.2</log4j.version>
 		
 		<plugin.buildhelper.version>3.0.0</plugin.buildhelper.version>
 		<plugin.license.version>1.13</plugin.license.version>
@@ -60,6 +61,7 @@
 			<artifactId>slf4j-api</artifactId>
 			<version>${slf4j.version}</version>
 		</dependency>
+		
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
@@ -70,6 +72,18 @@
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-core</artifactId>
 			<version>${mockito.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-core</artifactId>
+			<version>${log4j.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-slf4j-impl</artifactId>
+			<version>${log4j.version}</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
@@ -91,6 +105,7 @@
 							<configuration>
 								<name>project.versionYear</name>
 								<pattern>yyyy</pattern>
+								<locale>en,US</locale>
 							</configuration>
 						</execution>
 					</executions>

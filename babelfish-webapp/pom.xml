@@ -29,11 +29,6 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-api</artifactId>
-			<version>${log4j.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-core</artifactId>
 			<version>${log4j.version}</version>
 		</dependency>
@@ -127,7 +122,6 @@
 					<artifactId>maven-javadoc-plugin</artifactId>
 					<configuration>
 						<links combine.children="append">
-							<link>https://logging.apache.org/log4j/2.x/log4j-api/apidocs</link>
 							<link>https://logging.apache.org/log4j/2.0/log4j-core/apidocs</link>
 							<link>https://logging.apache.org/log4j/2.0/log4j-slf4j-impl/apidocs</link>
 							<link>https://docs.oracle.com/javaee/7/api</link>
