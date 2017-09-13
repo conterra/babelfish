@@ -139,12 +139,11 @@ public class Initializer {
 					Initializer.BASE_URL = new URL(("file:///" + context.getRealPath("/")).replaceAll(" ", "%20"));
 				}
 				
-				URI baseUri = Initializer.BASE_URL.toURI();
 				if (Initializer.BASE_URL != null) {
+					URI baseUri = Initializer.BASE_URL.toURI();
 					Initializer.BASE_DIR = new File(baseUri);
+					log.debug("Set the base URL to: " + baseUri.toString());
 				}
-				
-				log.debug("Set the base URL to: " + baseUri.toString());
 			} catch (NullPointerException | MalformedURLException | URISyntaxException e) {
 				log.error("Couldn't found a valid URL!", e);
 			}
@@ -225,18 +224,20 @@ public class Initializer {
 						
 						if (folder.isDirectory()) {
 							for (File file : folder.listFiles()) {
-								String fileName = file.getAbsolutePath();
-								log.debug("Found file in plugin folder: " + fileName);
-								
-								if (file.isDirectory()) {
-									log.debug("The file " + fileName + " is a directory.");
-									continue;
-								}
-								
-								try {
-									PluginAdapter.loadPlugin(file);
-								} catch (IOException e) {
-									log.debug("The file " + fileName + " is not a valid plugin JAR!", e);
+								if (file.isFile()) {
+									String fileName = file.getAbsolutePath();
+									log.debug("Found file in plugin folder: " + fileName);
+									
+									if (file.isDirectory()) {
+										log.debug("The file " + fileName + " is a directory.");
+										continue;
+									}
+									
+									try {
+										PluginAdapter.loadPlugin(file);
+									} catch (IOException e) {
+										log.debug("The file " + fileName + " is not a valid plugin JAR!", e);
+									}
 								}
 							}
 						}
@@ -244,15 +245,15 @@ public class Initializer {
 						log.warn("The plugins folder doesn't exists!");
 						result = false;
 					}
-					
-					log.debug("Release flag of plugin loading.");
-					Initializer.loadPluginsFlag = false;
 				}
 			}
 		} catch (URISyntaxException | IOException e) {
 			log.warn("An error occurred while loading plugins!", e);
 			
 			return false;
+		} finally {
+			log.debug("Release flag of plugin loading.");
+			Initializer.loadPluginsFlag = false;
 		}
 		
 		return result;

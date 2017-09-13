@@ -41,7 +41,7 @@ public interface Field {
 	/**
 	 * gives the field length
 	 *
-	 * @return the field length
+	 * @return the field length as a positive integer
 	 *
 	 * @since 0.1.0
 	 */

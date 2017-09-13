@@ -92,6 +92,7 @@ public class MasterBuilder
 							try {
 								geometry = GeoUtils.parseGeometry(parameter, inCrs);
 							} catch (IllegalArgumentException e) {
+								log.info("Unable to parse geometry\r\n" + parameter + "\r\nwith CRS: " + inCrs, e);
 								geometry = null;
 							}
 							

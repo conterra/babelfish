@@ -36,10 +36,11 @@ public class SymbolBuilder {
 		ArrayValue result = new ArrayValue();
 		
 		Color color;
-		if (symbol != null)
+		if (symbol != null) {
 			color = symbol.getColor();
-		else
+		} else {
 			color = Color.BLACK;
+		}
 		
 		result.addValue(new NumberValue(color.getRed()));
 		result.addValue(new NumberValue(color.getGreen()));
@@ -112,7 +113,7 @@ public class SymbolBuilder {
 		ObjectValue result = SymbolBuilder.buildMoveable(symbol);
 		
 		byte[] imgData = DataUtils.toByteArray(symbol.getImage());
-		result.addContent("imageData", new StringValue(new String(DataUtils.encodeBase64(imgData))), "color", false);
+		result.addContent("imageData", new StringValue(DataUtils.encodeBase64(imgData)), "color", false);
 		result.addContent("contentType", new StringValue(MimeUtils.getType(imgData)), "color", false);
 		result.addContent("width", new NumberValue(symbol.getWidth()), "angle", true);
 		result.addContent("height", new NumberValue(symbol.getHeight()), "angle", true);
@@ -130,15 +131,17 @@ public class SymbolBuilder {
 	 */
 	public static ObjectValue buildNonColor(BaseSymbol symbol) {
 		ObjectValue result;
-		if (symbol instanceof SimpleSymbol)
+		if (symbol instanceof SimpleSymbol) {
 			result = SymbolBuilder.buildSimple((SimpleSymbol) symbol);
-		else if (symbol instanceof MovableSymbol) {
-			if (symbol instanceof PictureSymbol)
+		} else if (symbol instanceof MovableSymbol) {
+			if (symbol instanceof PictureSymbol) {
 				result = SymbolBuilder.buildPicture((PictureSymbol) symbol);
-			else
+			} else {
 				result = SymbolBuilder.buildMoveable((MovableSymbol) symbol);
-		} else
+			}
+		} else {
 			result = SymbolBuilder.buildBase(symbol);
+		}
 		
 		if (symbol instanceof SimpleMarkerSymbol) {
 			SimpleMarkerSymbol subSymbol = (SimpleMarkerSymbol) symbol;
@@ -173,36 +176,39 @@ public class SymbolBuilder {
 			result.addContent("kerning", new BooleanValue(subSymbol.isKerning()));
 			
 			ObjectValue fontValue = new ObjectValue();
-			Font font = subSymbol.getFont();
+			Font        font      = subSymbol.getFont();
 			fontValue.addContent("family", new StringValue(font.getFamily()));
 			fontValue.addContent("size", new NumberValue(font.getSize()));
 			
 			Map<? extends TextAttribute, ?> attr = font.getAttributes();
 			
 			String style;
-			if (TextAttribute.POSTURE_OBLIQUE.equals(attr.get(TextAttribute.POSTURE)))
+			if (TextAttribute.POSTURE_OBLIQUE.equals(attr.get(TextAttribute.POSTURE))) {
 				style = "oblique";
-			else if (font.isItalic())
+			} else if (font.isItalic()) {
 				style = "italic";
-			else
+			} else {
 				style = "normal";
+			}
 			fontValue.addContent("style", new StringValue(style));
 			
 			// ToDo add support of bolder and lighter fonts (not supported natively by Java)
 			String weight;
-			if (font.isBold())
+			if (font.isBold()) {
 				weight = "bold";
-			else
+			} else {
 				weight = "normal";
+			}
 			fontValue.addContent("weight", new StringValue(weight));
 			
 			String deco;
-			if (TextAttribute.STRIKETHROUGH_ON.equals(attr.get(TextAttribute.STRIKETHROUGH)))
+			if (TextAttribute.STRIKETHROUGH_ON.equals(attr.get(TextAttribute.STRIKETHROUGH))) {
 				deco = "line-through";
-			else if (!((new Integer(-1)).equals(attr.get(TextAttribute.UNDERLINE))))
+			} else if (!((Integer.valueOf(-1)).equals(attr.get(TextAttribute.UNDERLINE)))) {
 				deco = "underline";
-			else
+			} else {
 				deco = "none";
+			}
 			fontValue.addContent("decoration", new StringValue(deco));
 			
 			result.addContent("font", fontValue);
@@ -220,11 +226,12 @@ public class SymbolBuilder {
 	 * @since 0.1.0
 	 */
 	public static Value build(SymbolObject symbol) {
-		if (symbol instanceof BaseSymbol)
+		if (symbol instanceof BaseSymbol) {
 			return SymbolBuilder.buildNonColor((BaseSymbol) symbol);
-		else if (symbol instanceof ColorSymbol)
+		} else if (symbol instanceof ColorSymbol) {
 			return SymbolBuilder.buildColor((ColorSymbol) symbol);
-		else
+		} else {
 			return new ObjectValue();
+		}
 	}
 }

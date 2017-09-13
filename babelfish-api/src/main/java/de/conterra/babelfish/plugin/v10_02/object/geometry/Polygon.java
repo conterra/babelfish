@@ -53,6 +53,11 @@ public class Polygon
 	}
 	
 	@Override
+	public int hashCode() {
+		return this.polygon.hashCode();
+	}
+	
+	@Override
 	public String toString() {
 		return this.polygon.toString();
 	}
@@ -106,9 +111,16 @@ public class Polygon
 					}
 				}
 			}
+			
+			if (untransCoords.size() > 1) {
+				untransCoords.add(untransCoords.get(0));
+			}
 			if (coords.size() > 1) {
 				coords.add(coords.get(0));
 			}
+			
+			coordsInterior.add(coords);
+			untransCoordsInterior.add(untransCoords);
 		}
 		
 		if (!trans) {
