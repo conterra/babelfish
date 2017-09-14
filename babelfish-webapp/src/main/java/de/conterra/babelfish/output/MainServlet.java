@@ -13,7 +13,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import javax.servlet.Servlet;
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -49,26 +48,7 @@ public class MainServlet
 	private static final long serialVersionUID = 4L;
 	
 	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-	throws ServletException, IOException {
-		this.doRequest(request, response);
-	}
-	
-	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-	throws ServletException, IOException {
-		this.doRequest(request, response);
-	}
-	
-	/**
-	 * handles a request. Independent to the method (GET or POST).
-	 *
-	 * @param request  the request from the client
-	 * @param response the response, which should be sent to the client
-	 * @throws IOException if any in- or output {@link Exception} occurred
-	 * @since 0.1.0
-	 */
-	private void doRequest(HttpServletRequest request, HttpServletResponse response)
+	protected void doRequest(HttpServletRequest request, HttpServletResponse response)
 	throws IOException {
 		if (!Initializer.init(this, true)) {
 			String msg = "Initialization failed";

@@ -5,7 +5,6 @@ import de.conterra.babelfish.util.ServletUtils;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.Servlet;
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -36,30 +35,8 @@ public class WrongHomeServlet
 	 */
 	private static final long serialVersionUID = 4L;
 	
-	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		this.doRequest(request, response);
-	}
-	
-	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		this.doRequest(request, response);
-	}
-	
-	/**
-	 * handles the {@link HttpServletRequest}, same on GET and POST
-	 *
-	 * @param request  the {@link HttpServletRequest}
-	 * @param response the {@link HttpServletResponse}
-	 * @throws IOException if an input or output exception occurs
-	 * @see WrongHomeServlet#doGet(HttpServletRequest, HttpServletResponse)
-	 * @see WrongHomeServlet#doPost(HttpServletRequest, HttpServletResponse)
-	 * @since 0.1.0
-	 */
-	private void doRequest(HttpServletRequest request, HttpServletResponse response)
-			throws IOException {
+	protected void doRequest(HttpServletRequest request, HttpServletResponse response)
+	throws IOException {
 		if (!(Initializer.init(this, false))) {
 			String msg = "Initialization failed!";
 			log.error(msg);
@@ -69,7 +46,7 @@ public class WrongHomeServlet
 		
 		Map<? extends String, ? extends String[]> parameterMap = request.getParameterMap();
 		
-		String path = request.getPathInfo();
+		String path        = request.getPathInfo();
 		String faviconPath = FaviconServlet.class.getAnnotation(WebServlet.class).urlPatterns()[0];
 		if (path.equalsIgnoreCase(faviconPath)) {
 			log.debug("Redirect user to right favicon URL.");
@@ -84,8 +61,9 @@ public class WrongHomeServlet
 		
 		Matcher matcher = Pattern.compile("/").matcher(path);
 		matcher.find();
-		while (matcher.find())
+		while (matcher.find()) {
 			dest = "../" + dest;
+		}
 		
 		String subPath = path.substring(1);
 		

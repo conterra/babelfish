@@ -219,18 +219,11 @@ public class PluginManagerServlet
 		writer.println("</body></html>");
 	}
 	
-	/**
-	 * handles the {@link HttpServletRequest}, same on GET and POST
-	 *
-	 * @param request  the {@link HttpServletRequest}
-	 * @param response the {@link HttpServletResponse}
-	 * @throws IOException if an input or output exception occurs
-	 * @see PluginManagerServlet#doGet(HttpServletRequest, HttpServletResponse)
-	 * @see PluginManagerServlet#doPost(HttpServletRequest, HttpServletResponse)
-	 * @since 0.1.0
-	 */
-	private void doRequest(HttpServletRequest request, HttpServletResponse response)
+	@Override
+	protected void doRequest(HttpServletRequest request, HttpServletResponse response)
 	throws IOException {
+		this.setDefaultHeaders(request, response);
+		
 		PrintWriter writer         = response.getWriter();
 		String      rootPath       = ServletUtils.getRootUrl(ServletUtils.getUrl(request), PluginManagerServlet.class.getAnnotation(WebServlet.class).urlPatterns()[0]);
 		String      pluginRootPath = MainServlet.class.getAnnotation(WebServlet.class).urlPatterns()[0];

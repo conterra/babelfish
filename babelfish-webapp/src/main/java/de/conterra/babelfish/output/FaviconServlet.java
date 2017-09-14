@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import net.sf.image4j.codec.ico.ICOEncoder;
 
 import javax.servlet.Servlet;
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -37,29 +36,8 @@ public class FaviconServlet
 	private static final long serialVersionUID = 3L;
 	
 	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		this.doRequest(request, response);
-	}
-	
-	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		this.doRequest(request, response);
-	}
-	
-	/**
-	 * handles the {@link HttpServletRequest}, same on GET and POST
-	 *
-	 * @param request  the {@link HttpServletRequest}
-	 * @param response the {@link HttpServletResponse}
-	 * @throws IOException if any in- or output {@link Exception} occurred
-	 * @see WrongHomeServlet#doGet(HttpServletRequest, HttpServletResponse)
-	 * @see WrongHomeServlet#doPost(HttpServletRequest, HttpServletResponse)
-	 * @since 0.1.0
-	 */
-	private void doRequest(HttpServletRequest request, HttpServletResponse response)
-			throws IOException {
+	protected void doRequest(HttpServletRequest request, HttpServletResponse response)
+	throws IOException {
 		Initializer.init(this, false);
 		
 		int picSize = 32;

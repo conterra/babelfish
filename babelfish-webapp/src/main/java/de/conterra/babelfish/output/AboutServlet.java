@@ -3,7 +3,6 @@ package de.conterra.babelfish.output;
 import de.conterra.babelfish.Initializer;
 import de.conterra.babelfish.util.ServletUtils;
 
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -32,35 +31,14 @@ public class AboutServlet
 	private static final long serialVersionUID = 3L;
 	
 	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		this.doRequest(request, response);
-	}
-	
-	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		this.doRequest(request, response);
-	}
-	
-	/**
-	 * handles the {@link HttpServletRequest}, same on GET and POST
-	 *
-	 * @param request  the {@link HttpServletRequest}
-	 * @param response the {@link HttpServletResponse}
-	 * @throws IOException if an input or output exception occurs
-	 * @see AboutServlet#doGet(HttpServletRequest, HttpServletResponse)
-	 * @see AboutServlet#doPost(HttpServletRequest, HttpServletResponse)
-	 * @since 0.1.0
-	 */
-	private void doRequest(HttpServletRequest request, HttpServletResponse response)
-			throws IOException {
+	protected void doRequest(HttpServletRequest request, HttpServletResponse response)
+	throws IOException {
 		Initializer.init(this, false);
 		
 		PrintWriter writer = response.getWriter();
 		
 		String rootPath = ServletUtils.getRootUrl(ServletUtils.getUrl(request), AboutServlet.class.getAnnotation(WebServlet.class).urlPatterns()[0]);
-		String title = "About the tRESTle&nbsp;Babelfish";
+		String title    = "About the tRESTle&nbsp;Babelfish";
 		
 		writer.println("<!DOCTYPE html>");
 		writer.println("<html><head>");
