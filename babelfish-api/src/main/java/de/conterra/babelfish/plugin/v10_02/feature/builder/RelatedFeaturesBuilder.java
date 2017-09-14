@@ -50,11 +50,11 @@ public class RelatedFeaturesBuilder {
 	 *
 	 * @since 0.1.0
 	 */
-	public static <O extends FeatureObject, D extends FeatureObject> ObjectValue build(Relationship<O, D> relationship, CoordinateReferenceSystem crs, Set<? extends Integer> featureIds, String whereClause) {
+	public static <O extends FeatureObject, D extends FeatureObject> ObjectValue build(Relationship<O, D> relationship, CoordinateReferenceSystem crs, Set<? extends Long> featureIds, String whereClause) {
 		ObjectValue result = new ObjectValue();
 		
-		Layer<O> originLayer = relationship.getOriginLayer();
-		Layer<D> destLayer = relationship.getDestinationLayer();
+		Layer<O>           originLayer  = relationship.getOriginLayer();
+		Layer<D>           destLayer    = relationship.getDestinationLayer();
 		FeatureLayer<?, ?> featureLayer = null;
 		if (destLayer instanceof FeatureLayer<?, ?>) {
 			featureLayer = (FeatureLayer<?, ?>) originLayer;
@@ -63,17 +63,17 @@ public class RelatedFeaturesBuilder {
 		}
 		
 		Set<Feature<O>> features = new LinkedHashSet<>();
-		if (featureIds == null || featureIds.isEmpty())
+		if (featureIds == null || featureIds.isEmpty()) {
 			features.addAll(originLayer.getFeatures());
-		else {
-			for (int featureId : featureIds) {
+		} else {
+			for (long featureId : featureIds) {
 				log.debug("Add feature with id: " + featureId);
 				
 				features.add((new LayerWrapper<O>(originLayer)).getFeature(featureId));
 			}
 		}
 		
-		CoordinateReferenceSystem usedCrs = crs;
+		CoordinateReferenceSystem                  usedCrs            = crs;
 		Map<Feature<O>, Set<Feature<? extends D>>> relatedFeaturesMap = new HashMap<>();
 		for (Feature<O> feature : features) {
 			if (feature != null) {
@@ -81,14 +81,16 @@ public class RelatedFeaturesBuilder {
 					Set<Feature<? extends D>> relatedFeatures = new LinkedHashSet<>();
 					
 					Query<D> query = destLayer.getQuery();
-					if (query == null)
+					if (query == null) {
 						query = new DefaultQuery<>();
+					}
 					
 					log.debug("Execute query to get related features.");
 					
 					for (Feature<? extends D> destFeature : query.execute(relationship.getRelatedFeatures(feature), null, whereClause)) {
-						if (usedCrs == null && destFeature instanceof GeometryFeatureObject<?>)
+						if (usedCrs == null && destFeature instanceof GeometryFeatureObject<?>) {
 							usedCrs = ((GeometryFeatureObject<?>) destFeature).getGeometry().getCoordinateReferenceSystem();
+						}
 						
 						relatedFeatures.add(destFeature);
 					}
@@ -100,21 +102,24 @@ public class RelatedFeaturesBuilder {
 			}
 		}
 		
-		if (usedCrs != null)
+		if (usedCrs != null) {
 			result.addContent("spatialReference", GeometryBuilder.build(new SpatialReference(usedCrs), usedCrs));
+		}
 		
 		ArrayValue relatedRecordGroups = new ArrayValue();
 		for (Feature<O> feature : relatedFeaturesMap.keySet()) {
 			ObjectValue group = new ObjectValue();
 			
 			Field objectIdField = originLayer.getObjectIdField();
-			if (objectIdField == null)
+			if (objectIdField == null) {
 				objectIdField = LayerWrapper.DEFAULT_OBJECT_ID_FIELD;
+			}
 			group.addContent("objectId", FeatureBuilder.getObjectId(feature.getFeature(), objectIdField));
 			
 			ArrayValue relatedRecords = new ArrayValue();
-			for (Feature<? extends D> destFeature : relatedFeaturesMap.get(feature))
+			for (Feature<? extends D> destFeature : relatedFeaturesMap.get(feature)) {
 				relatedRecords.addValue(FeatureBuilder.build(destFeature.getFeature(), usedCrs, destLayer.getObjectIdField()));
+			}
 			group.addContent("relatedRecords", relatedRecords);
 			
 			relatedRecordGroups.addValue(group);

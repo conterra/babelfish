@@ -129,7 +129,7 @@ public class SqlUtils {
 				}
 				
 				int     spaceIndex = 0;
-				Matcher matcher    = Pattern.compile("[^a-zA-Z0-9_]").matcher(cleanPart);
+				Matcher matcher    = Pattern.compile("[^\\w]").matcher(cleanPart);
 				while (matcher.find()) {
 					spaceIndex = matcher.end();
 				}

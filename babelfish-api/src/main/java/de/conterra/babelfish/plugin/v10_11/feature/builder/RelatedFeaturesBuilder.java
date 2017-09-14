@@ -15,7 +15,7 @@ import java.util.Set;
  * defines a builder of a list of all related {@link Feature}s
  *
  * @author ChrissW-R1
- * @version 0.2.0
+ * @version 0.4.0
  * @since 0.2.0
  */
 public class RelatedFeaturesBuilder {
@@ -41,7 +41,7 @@ public class RelatedFeaturesBuilder {
 	 * @see de.conterra.babelfish.plugin.v10_02.feature.builder.RelatedFeaturesBuilder#build(Relationship, CoordinateReferenceSystem, Set, String)
 	 * @since 0.1.0
 	 */
-	public static <O extends FeatureObject, D extends FeatureObject> ObjectValue build(Relationship<O, D> relationship, CoordinateReferenceSystem crs, Set<? extends Integer> featureIds, String whereClause) {
+	public static <O extends FeatureObject, D extends FeatureObject> ObjectValue build(Relationship<O, D> relationship, CoordinateReferenceSystem crs, Set<? extends Long> featureIds, String whereClause) {
 		ObjectValue result = de.conterra.babelfish.plugin.v10_02.feature.builder.RelatedFeaturesBuilder.build(relationship, crs, featureIds, whereClause);
 		
 		result.addContent("hasZ", new BooleanValue((new LayerWrapper<>(relationship.getDestinationLayer())).getEnvelope().getDimension() >= 3), "fields", false);

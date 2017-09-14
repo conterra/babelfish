@@ -101,11 +101,11 @@ public class MasterBuilder
 		
 		String whereClause = parameters.get("where");
 		
-		Set<Integer> objectIds = new LinkedHashSet<>();
+		Set<Long> objectIds = new LinkedHashSet<>();
 		parameter = parameters.get("objectIds");
 		if (parameter != null) {
-			for (String objectId : parameters.get("objectIds").replaceAll("[^0-9,]", StringUtils.EMPTY).split(",")) {
-				objectIds.add(Integer.parseInt(objectId));
+			for (String objectId : parameters.get("objectIds").replaceAll("[^\\d,]", StringUtils.EMPTY).split(",")) {
+				objectIds.add(Long.parseLong(objectId));
 			}
 		}
 		
@@ -201,7 +201,7 @@ public class MasterBuilder
 													"rawtypes",
 													"unchecked"
 											})
-									Feature<? extends FeatureObject> feature = (new LayerWrapper(layer)).getFeature(Integer.parseInt(path[1]));
+									Feature<? extends FeatureObject> feature = (new LayerWrapper(layer)).getFeature(Long.parseLong(path[1]));
 									
 									if (feature != null) {
 										FeatureWrapper<? extends FeatureObject> featureWrapper = new FeatureWrapper<>(feature);

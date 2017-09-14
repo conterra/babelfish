@@ -24,7 +24,7 @@ import java.util.Set;
  * defines a builder of feature {@link Query} requests
  *
  * @author ChrissW-R1
- * @version 0.2.0
+ * @version 0.4.0
  * @since 0.1.0
  */
 public class QueryBuilder {
@@ -52,7 +52,7 @@ public class QueryBuilder {
 	 * @throws QueryParseException if an {@link Exception} occurred, while execute the {@link Query}
 	 * @since 0.2.0
 	 */
-	public static <T extends FeatureObject> ObjectValue build(Layer<T> layer, CoordinateReferenceSystem crs, GeometryObject geometry, String whereClause, Set<? extends Integer> featureIds, boolean idsOnly, boolean countOnly)
+	public static <T extends FeatureObject> ObjectValue build(Layer<T> layer, CoordinateReferenceSystem crs, GeometryObject geometry, String whereClause, Set<? extends Long> featureIds, boolean idsOnly, boolean countOnly)
 	throws QueryParseException {
 		ObjectValue     result       = new ObjectValue();
 		LayerWrapper<T> layerWrapper = new LayerWrapper<>(layer);
@@ -66,7 +66,7 @@ public class QueryBuilder {
 		if (featureIds == null || featureIds.isEmpty()) {
 			queryFeatures.addAll(layer.getFeatures());
 		} else {
-			for (int featureId : featureIds) {
+			for (long featureId : featureIds) {
 				queryFeatures.add(layerWrapper.getFeature(featureId));
 			}
 		}

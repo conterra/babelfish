@@ -123,7 +123,7 @@ public class LayerWrapper<T extends FeatureObject> {
 	 *
 	 * @since 0.1.0
 	 */
-	public Feature<T> getFeature(int id) {
+	public Feature<T> getFeature(long id) {
 		Field objectIdField = this.layer.getObjectIdField();
 		if (objectIdField == null) {
 			objectIdField = LayerWrapper.DEFAULT_OBJECT_ID_FIELD;
@@ -139,10 +139,10 @@ public class LayerWrapper<T extends FeatureObject> {
 			if (value instanceof Number) {
 				number = (Number) value;
 			} else if (value instanceof String) {
-				number = Integer.parseInt((String) value);
+				number = Long.parseLong((String) value);
 			}
 			
-			if (number != null && number.intValue() == id) {
+			if (number != null && number.longValue() == id) {
 				return feature;
 			}
 		}

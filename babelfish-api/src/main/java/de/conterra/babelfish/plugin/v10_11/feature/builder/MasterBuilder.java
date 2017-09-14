@@ -65,11 +65,11 @@ public class MasterBuilder
 				}
 				
 				if (layer != null) {
-					Set<Integer> objectIds = new LinkedHashSet<>();
-					String       parameter = parameters.get("objectIds");
+					Set<Long> objectIds = new LinkedHashSet<>();
+					String    parameter = parameters.get("objectIds");
 					if (parameter != null) {
-						for (String objectId : parameters.get("objectIds").replaceAll("[^0-9,]", StringUtils.EMPTY).split(",")) {
-							objectIds.add(Integer.parseInt(objectId));
+						for (String objectId : parameters.get("objectIds").replaceAll("[^\\d,]", StringUtils.EMPTY).split(",")) {
+							objectIds.add(Long.parseLong(objectId));
 						}
 					}
 					
