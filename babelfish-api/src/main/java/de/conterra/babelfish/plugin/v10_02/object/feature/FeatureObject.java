@@ -141,10 +141,10 @@ public class FeatureObject {
 	 *
 	 * @since 0.1.0
 	 */
-	public String get(String id) {
+	public Object get(String id) {
 		for (Field field : this.getAttributes().keySet()) {
 			if (field.getName().equalsIgnoreCase(id)) {
-				return this.getAttribute(field).toString();
+				return this.getAttribute(field);
 			}
 		}
 		
