@@ -360,7 +360,7 @@ public class GeoUtils {
 		for (int i = 0; i < positions.length - 1; i++) {
 			curves.add(new CurveImpl(new LineSegmentImpl(positions[i].getDirectPosition(), positions[i + 1].getDirectPosition(), 0)));
 		}
-		if (positions.length >= 2) {
+		if (positions.length >= 2 && !(positions[0].equals(positions[positions.length - 1]))) {
 			log.debug("Adds a line from the last to the first point to the ring.");
 			
 			curves.add(new CurveImpl(new LineSegmentImpl(positions[positions.length - 1].getDirectPosition(), positions[0].getDirectPosition(), 0)));
