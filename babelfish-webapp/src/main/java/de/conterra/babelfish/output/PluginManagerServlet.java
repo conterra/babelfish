@@ -5,6 +5,7 @@ import de.conterra.babelfish.config.Config;
 import de.conterra.babelfish.plugin.Plugin;
 import de.conterra.babelfish.plugin.PluginAdapter;
 import de.conterra.babelfish.plugin.ServiceContainer;
+import de.conterra.babelfish.util.DataUtils;
 import de.conterra.babelfish.util.ServletUtils;
 import de.conterra.babelfish.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -93,8 +94,8 @@ public class PluginManagerServlet
 						
 						IOUtils.copy(is, os);
 						
-						is.close();
-						os.close();
+						DataUtils.closeStream(is);
+						DataUtils.closeStream(os);
 						
 						log.debug("A file with name " + name + " was uploaded.");
 						

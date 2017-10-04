@@ -4,6 +4,7 @@ import de.conterra.babelfish.config.Config;
 import de.conterra.babelfish.config.ObjectFactory;
 import de.conterra.babelfish.plugin.Plugin;
 import de.conterra.babelfish.plugin.PluginAdapter;
+import de.conterra.babelfish.util.DataUtils;
 import de.conterra.babelfish.util.ReschedulableTimer;
 import lombok.extern.slf4j.Slf4j;
 
@@ -17,6 +18,7 @@ import javax.xml.bind.Unmarshaller;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -152,7 +154,9 @@ public class Initializer {
 		if (Initializer.PROPERTIES == null) {
 			Initializer.PROPERTIES = new Properties();
 			try {
-				Initializer.PROPERTIES.load(context.getResourceAsStream("/WEB-INF/classes/project.properties"));
+				InputStream propertiesStream = context.getResourceAsStream("/WEB-INF/classes/project.properties");
+				Initializer.PROPERTIES.load(propertiesStream);
+				DataUtils.closeStream(propertiesStream);
 			} catch (IOException e) {
 				log.error("Unable to load project properties!", e);
 				

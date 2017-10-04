@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.awt.*;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -67,8 +68,11 @@ public class MainServlet
 			try {
 				JSONObject json = new JSONObject(parameter);
 				
-				String url        = json.getString("url");
-				byte[] remoteData = DataUtils.toByteArray((new URL(url)).openStream());
+				String      url         = json.getString("url");
+				InputStream inputStream = (new URL(url)).openStream();
+				byte[]      remoteData  = DataUtils.toByteArray(inputStream);
+				
+				DataUtils.closeStream(inputStream);
 				
 				if (remoteData.length <= 0) {
 					throw new IOException("No external file found!");

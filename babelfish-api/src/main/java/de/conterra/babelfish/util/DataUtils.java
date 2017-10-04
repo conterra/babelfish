@@ -7,10 +7,7 @@ import org.apache.commons.io.IOUtils;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 
 /**
  * defines an utility class with data stream operations
@@ -70,7 +67,10 @@ public class DataUtils {
 			log.warn("An exception occurred while copy from input to output stream!", e);
 		}
 		
-		return os.toByteArray();
+		byte[] res = os.toByteArray();
+		
+		DataUtils.closeStream(os);
+		return res;
 	}
 	
 	/**
@@ -92,12 +92,7 @@ public class DataUtils {
 		
 		byte[] result = os.toByteArray();
 		
-		try {
-			os.close();
-		} catch (IOException e) {
-			log.warn("An exception occurred while close the output stream!", e);
-		}
-		
+		DataUtils.closeStream(os);
 		return result;
 	}
 	
@@ -114,7 +109,10 @@ public class DataUtils {
 		BufferedImage result;
 		
 		try {
-			result = ImageIO.read(new ByteArrayInputStream(data));
+			ByteArrayInputStream inputStream = new ByteArrayInputStream(data);
+			result = ImageIO.read(inputStream);
+			
+			DataUtils.closeStream(inputStream);
 			
 			log.debug("Image successfully created.");
 		} catch (IllegalArgumentException | IOException e) {
@@ -150,5 +148,28 @@ public class DataUtils {
 		bGr.dispose();
 		
 		return bimage;
+	}
+	
+	/**
+	 * Closes streams safely
+	 *
+	 * @param stream the stream to close
+	 * @return {@code true} if {@code stream} was closed correctly, {@code false} otherwise
+	 *
+	 * @since 0.4.0
+	 */
+	public static boolean closeStream(Closeable stream) {
+		if (stream == null) {
+			return true;
+		}
+		
+		try {
+			stream.close();
+			return true;
+		} catch (IOException e) {
+			log.warn("Output stream couldn't closed right!", e);
+		}
+		
+		return false;
 	}
 }

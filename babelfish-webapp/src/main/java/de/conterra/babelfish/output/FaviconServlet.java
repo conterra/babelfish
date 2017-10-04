@@ -46,7 +46,7 @@ public class FaviconServlet
 		log.debug("Transform the icon into a byte array of ICO format.");
 		ICOEncoder.write(DataUtils.toBufferedImage(Initializer.getDefaultIcon().getScaledInstance(picSize, picSize, Image.SCALE_SMOOTH)), outByte);
 		byte[] data = outByte.toByteArray();
-		outByte.close();
+		DataUtils.closeStream(outByte);
 		
 		log.debug("Set header information.");
 		response.setContentType("image/vnd.microsoft.icon");
@@ -55,6 +55,6 @@ public class FaviconServlet
 		OutputStream outStream = response.getOutputStream();
 		log.debug("Write image byte data to output stream.");
 		outStream.write(data);
-		outStream.close();
+		DataUtils.closeStream(outStream);
 	}
 }

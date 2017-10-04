@@ -1,8 +1,8 @@
 package de.conterra.babelfish.plugin;
 
+import de.conterra.babelfish.util.DataUtils;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.IOException;
 import java.net.URLClassLoader;
 import java.util.jar.JarFile;
 
@@ -21,13 +21,13 @@ public class PluginWrapper
 	 *
 	 * @since 0.1.0
 	 */
-	private final Plugin plugin;
+	private final Plugin         plugin;
 	/**
 	 * the {@link JarFile}
 	 *
 	 * @since 0.1.0
 	 */
-	private final JarFile file;
+	private final JarFile        file;
 	/**
 	 * the {@link URLClassLoader}
 	 *
@@ -66,13 +66,14 @@ public class PluginWrapper
 	
 	@Override
 	public boolean shutdown() {
-		String name = this.getName();
+		String  name   = this.getName();
 		boolean result = this.getPlugin().shutdown();
 		
-		if (result)
+		if (result) {
 			log.debug("Successfully executed build-in shutdown process of the plugin " + name + ".");
-		else
+		} else {
 			log.error("Couldn't shutdown the plugin " + name + " itself!");
+		}
 		
 		boolean notUsedByOther = true;
 		for (Plugin plugin : PluginAdapter.getPlugins()) {
@@ -88,13 +89,9 @@ public class PluginWrapper
 		}
 		
 		if (notUsedByOther) {
-			try {
-				this.getClassLoader().close();
-				this.getFile().close();
-			} catch (IOException e) {
-				log.error("Couldn't unload plugin " + name + "!", e);
-				
-				return false;
+			boolean unloaded = DataUtils.closeStream(this.classLoader) && DataUtils.closeStream(this.file);
+			if (!unloaded) {
+				log.error("Couldn't unload plugin " + name + "! Closing of streams failed!");
 			}
 		}
 		

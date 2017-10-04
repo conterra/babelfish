@@ -1,5 +1,7 @@
 package de.conterra.babelfish.util;
 
+import java.nio.charset.Charset;
+
 /**
  * defines an utility class with {@link String} functions
  *
@@ -13,19 +15,25 @@ public class StringUtils {
 	 *
 	 * @since 0.4.0
 	 */
-	public static final String EMPTY                  = "";
+	public static final String  EMPTY                  = "";
+	/**
+	 * default UTF-8 {@link Charset}
+	 *
+	 * @since 0.4.0
+	 */
+	public static final Charset UTF8                   = Charset.forName("UTF-8");
 	/**
 	 * the character, which is in the RegEx group 'word' and could use as delimiter
 	 *
 	 * @since 0.4.0
 	 */
-	public static final String NEUTRAL_WORD_DELIMITER = "_";
+	public static final String  NEUTRAL_WORD_DELIMITER = "_";
 	/**
 	 * RegEx pattern group of all non-alphanumeric characters
 	 *
 	 * @since 0.4.0
 	 */
-	public static final String NON_ALPHA_NUM_REGEX    = "[^\\p{L}\\d]";
+	public static final String  NON_ALPHA_NUM_REGEX    = "[^\\p{L}\\d]";
 	
 	/**
 	 * private standard constructor, to prevent initialization

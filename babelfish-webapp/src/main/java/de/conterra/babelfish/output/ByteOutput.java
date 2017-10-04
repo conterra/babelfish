@@ -1,6 +1,7 @@
 package de.conterra.babelfish.output;
 
 import de.conterra.babelfish.interchange.DataValue;
+import de.conterra.babelfish.util.DataUtils;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.jmimemagic.Magic;
 import net.sf.jmimemagic.MagicException;
@@ -39,7 +40,7 @@ public class ByteOutput {
 	 * @since 0.2.3
 	 */
 	public static void output(DataValue dataValue, HttpServletResponse response, String filename)
-			throws IOException {
+	throws IOException {
 		if (dataValue.isEmpty()) {
 			String msg = "The requested ressource is an empty data set!";
 			log.warn(msg);
@@ -67,6 +68,6 @@ public class ByteOutput {
 		
 		ServletOutputStream outStream = response.getOutputStream();
 		outStream.write(data);
-		outStream.close();
+		DataUtils.closeStream(outStream);
 	}
 }

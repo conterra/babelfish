@@ -1,5 +1,6 @@
 package de.conterra.babelfish.plugin;
 
+import de.conterra.babelfish.util.DataUtils;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
@@ -230,8 +231,8 @@ public class PluginAdapter {
 			}
 			
 			if (result.isEmpty()) {
-				cl.close();
-				jarFile.close();
+				DataUtils.closeStream(cl);
+				DataUtils.closeStream(jarFile);
 			}
 			
 			if (noPlugin) {
