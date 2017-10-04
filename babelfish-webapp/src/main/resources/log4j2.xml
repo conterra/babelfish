@@ -5,12 +5,12 @@
 			<ThresholdFilter level="${logging.log4j.appender.console.level}" onMatch="ACCEPT" onMismatch="DENY" />
 			<PatternLayout pattern="[%-5p] %d{ISO8601} [%t] %c - %m%n" />
 		</Console>
-		<RollingFile name="BabelfishFileAppender" fileName="${catalina.base}/logs/babelfish.log" filePattern="${catalina.base}/logs/babelfish-%d{yyyy-MM-dd}.log">
+		<RollingFile name="BabelfishFileAppender" fileName="${sys:catalina.home}/logs/babelfish.log" filePattern="${sys:catalina.home}/logs/babelfish-%d{yyyy-MM-dd}.log">
 			<PatternLayout>
 				<pattern>[%-5p] %d{ISO8601} [%t] %c - %m%n</pattern>
 			</PatternLayout>
 			<Policies>
-				<TimeBasedTriggeringPolicy interval="1" modulate="true" />
+				<TimeBasedTriggeringPolicy />
 			</Policies>
 		</RollingFile>
 	</Appenders>
