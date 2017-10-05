@@ -66,7 +66,7 @@ public class DefaultQuery<T extends FeatureObject>
 					List<FeatureObject> featureObject = new LinkedList<>();
 					featureObject.add(feature.getFeature());
 					
-					if (sqlQuery.execute(featureObject).getResults().size() <= 0) {
+					if (sqlQuery.execute(featureObject).getResults().isEmpty()) {
 						continue;
 					}
 				} catch (QueryExecutionException e) {

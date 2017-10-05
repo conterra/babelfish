@@ -50,7 +50,7 @@ public class ServiceWrapper
 	@Override
 	public ServiceBuilder getBuilder(String restName)
 	throws ServiceNotAvailableException {
-		ServiceBuilder builder;
+		/*ServiceBuilder builder;*/
 		
 		switch (restName) {
 			/*case FeatureService.REST_NAME:

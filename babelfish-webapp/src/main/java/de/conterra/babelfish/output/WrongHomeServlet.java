@@ -57,24 +57,24 @@ public class WrongHomeServlet
 		log.debug("Get redirect address from main servlet.");
 		String root = MainServlet.class.getAnnotation(WebServlet.class).urlPatterns()[0];
 		root = root.substring(1, root.length() - 1) + "services/";
-		String dest = root;
+		StringBuilder destBuilder = new StringBuilder(root);
 		
 		Matcher matcher = Pattern.compile("/").matcher(path);
 		matcher.find();
 		while (matcher.find()) {
-			dest = "../" + dest;
+			destBuilder.insert(0, "../");
 		}
 		
 		String subPath = path.substring(1);
 		
 		if (!(root.toLowerCase(Locale.ROOT).contains(subPath.toLowerCase(Locale.ROOT)))) {
-			dest += subPath;
+			destBuilder.append(subPath);
 			
 			log.debug("Find user fault, by part of right root address. (auto-complete)");
 		}
 		
 		log.debug("Redirect user to right root address.");
 		
-		response.sendRedirect(ServletUtils.getPathWithParameters(dest, parameterMap));
+		response.sendRedirect(ServletUtils.getPathWithParameters(destBuilder.toString(), parameterMap));
 	}
 }

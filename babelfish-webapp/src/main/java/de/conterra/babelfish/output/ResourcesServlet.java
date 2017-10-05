@@ -81,8 +81,6 @@ public class ResourcesServlet
 			filename = "logoLettering.png";
 		}
 		
-		if (path != null || filename != null) {
-			ByteOutput.output(new DataValue(DataUtils.toByteArray(ImageIO.read(this.getServletContext().getResource("/WEB-INF/classes/" + path)))), response, filename);
-		}
+		ByteOutput.output(new DataValue(DataUtils.toByteArray(ImageIO.read(this.getServletContext().getResource("/WEB-INF/classes/" + path)))), response, filename);
 	}
 }

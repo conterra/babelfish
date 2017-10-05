@@ -2,7 +2,10 @@ package de.conterra.babelfish.util;
 
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -77,12 +80,7 @@ public class SqlUtils {
 			}
 		}
 		
-		Collections.sort(list, new Comparator<String>() {
-			@Override
-			public int compare(String first, String second) {
-				return second.length() - first.length();
-			}
-		});
+		Collections.sort(list, (first, second) -> second.length() - first.length());
 		
 		String[] result = new String[list.size()];
 		
@@ -117,8 +115,8 @@ public class SqlUtils {
 		for (String operator : operators) {
 			log.debug("Execute column id replacement at operator " + operator + ". Current statement: " + result);
 			
-			String maskedOperator = SqlUtils.maskSql(operator);
-			String newSql         = StringUtils.EMPTY;
+			String        maskedOperator = SqlUtils.maskSql(operator);
+			StringBuilder builder        = new StringBuilder();
 			
 			String[] parts = result.split(maskedOperator);
 			for (int i = 0; i < parts.length - 1; i++) {
@@ -136,10 +134,10 @@ public class SqlUtils {
 				
 				log.debug("Found cloumn id at " + spaceIndex + " in " + cleanPart);
 				
-				newSql += cleanPart.substring(0, spaceIndex) + method + "('" + cleanPart.substring(spaceIndex) + "') " + maskedOperator + " ";
+				builder.append(cleanPart.substring(0, spaceIndex) + method + "('" + cleanPart.substring(spaceIndex) + "') " + maskedOperator + " ");
 			}
 			
-			result = newSql + parts[parts.length - 1];
+			result = builder.toString() + parts[parts.length - 1];
 			
 			log.debug("All column ids of operator " + operator + " replaced. New statement: " + result);
 		}

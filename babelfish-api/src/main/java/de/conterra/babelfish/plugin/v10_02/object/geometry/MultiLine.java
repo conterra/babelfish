@@ -61,8 +61,9 @@ public class MultiLine
 			Set<LineString> thisLines = new HashSet<>();
 			thisLines.addAll(this.getLines());
 			
-			if (otherLines.size() != thisLines.size())
+			if (otherLines.size() != thisLines.size()) {
 				return false;
+			}
 			
 			for (LineString otherLine : otherLines) {
 				boolean found = false;
@@ -73,8 +74,9 @@ public class MultiLine
 						break;
 					}
 					
-					if (!found)
+					if (!found) {
 						return false;
+					}
 				}
 			}
 		}
@@ -84,14 +86,14 @@ public class MultiLine
 	
 	@Override
 	public String toString() {
-		String res = "[\r\n";
+		StringBuilder builder = new StringBuilder("[\r\n");
+		for (LineString line : this.getLines()) {
+			builder.append("\t" + line + "\r\n");
+		}
 		
-		for (LineString line : this.getLines())
-			res += "\t" + line + "\r\n";
+		builder.append("]");
 		
-		res += "]";
-		
-		return res;
+		return builder.toString();
 	}
 	
 	@Override
@@ -108,8 +110,9 @@ public class MultiLine
 	public Geometry toGeometry(CoordinateReferenceSystem crs) {
 		List<com.vividsolutions.jts.geom.LineString> jtsLines = new LinkedList<>();
 		
-		for (LineString line : this.getLines())
+		for (LineString line : this.getLines()) {
 			jtsLines.add((com.vividsolutions.jts.geom.LineString) ((new Polyline(line)).toGeometry()));
+		}
 		
 		return new MultiLineString(jtsLines.toArray(new com.vividsolutions.jts.geom.LineString[jtsLines.size()]), JTSFactoryFinder.getGeometryFactory());
 	}
@@ -159,8 +162,9 @@ public class MultiLine
 	public PointArray getControlPoints() {
 		List<Position> positions = new LinkedList<>();
 		
-		for (LineString line : this.getLines())
+		for (LineString line : this.getLines()) {
 			positions.addAll(line.getControlPoints());
+		}
 		
 		return new PointArrayImpl(positions);
 	}

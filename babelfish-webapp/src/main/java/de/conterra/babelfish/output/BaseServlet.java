@@ -42,25 +42,24 @@ public abstract class BaseServlet
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 	throws ServletException, IOException {
-		this.setDefaultHeaders(req, resp);
+		this.setDefaultHeaders(resp);
 		this.doRequest(req, resp);
 	}
 	
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 	throws ServletException, IOException {
-		this.setDefaultHeaders(req, resp);
+		this.setDefaultHeaders(resp);
 		this.doRequest(req, resp);
 	}
 	
 	/**
 	 * set all default headers to all {@link HttpServletResponse}s
 	 *
-	 * @param request  the {@link HttpServletRequest} from the client
 	 * @param response the {@link HttpServletResponse}, which will be sent to the client
 	 * @since 0.4.0
 	 */
-	public void setDefaultHeaders(HttpServletRequest request, HttpServletResponse response) {
+	public void setDefaultHeaders(HttpServletResponse response) {
 		response.addHeader("Access-Control-Allow-Origin", "*");
 	}
 	

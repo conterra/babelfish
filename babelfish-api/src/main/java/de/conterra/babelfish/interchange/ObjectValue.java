@@ -77,33 +77,35 @@ public class ObjectValue
 	 * @since 0.1.0
 	 */
 	public Value addContent(String id, Value value, String nextId, boolean emptyCheck) {
-		if (emptyCheck) {
-			if (value == null || value.isEmpty())
-				return null;
+		if (emptyCheck && (value == null || value.isEmpty())) {
+			return null;
 		}
 		
 		int pos = -1;
-		if (nextId != null)
+		if (nextId != null) {
 			pos = new LinkedList<>(this.body.keySet()).indexOf(nextId);
+		}
 		
 		Value prevValue;
 		
-		if (pos < 0)
+		if (pos < 0) {
 			prevValue = this.body.put(id, value);
-		else {
+		} else {
 			prevValue = this.body.remove(id);
 			
 			LinkedHashMap<String, Value> newBody = new LinkedHashMap<>();
 			
-			ArrayList<String> keys = new ArrayList<>(this.body.keySet());
-			ArrayList<Value> values = new ArrayList<>(this.body.values());
-			for (int i = 0; i < pos; i++)
+			ArrayList<String> keys   = new ArrayList<>(this.body.keySet());
+			ArrayList<Value>  values = new ArrayList<>(this.body.values());
+			for (int i = 0; i < pos; i++) {
 				newBody.put(keys.get(i), values.get(i));
+			}
 			
 			newBody.put(id, value);
 			
-			for (int i = pos; i < this.body.size(); i++)
+			for (int i = pos; i < this.body.size(); i++) {
 				newBody.put(keys.get(i), values.get(i));
+			}
 			
 			this.body = newBody;
 		}
@@ -156,8 +158,9 @@ public class ObjectValue
 	public boolean isEmpty() {
 		if (!(this.body.isEmpty())) {
 			for (Value value : this.body.values()) {
-				if (!(value.isEmpty()))
+				if (!(value.isEmpty())) {
 					return false;
+				}
 			}
 		}
 		

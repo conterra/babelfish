@@ -6,7 +6,7 @@ import de.conterra.babelfish.plugin.v10_02.feature.Layer;
  * describes the {@link Cardinality} i.e. between two {@link Layer}s
  *
  * @author ChrissW-R1
- * @version 0.1.0
+ * @version 0.4.0
  * @see <a href="http://resources.arcgis.com/en/help/rest/apiref/fslayer.html">ArcGIS REST API</a>
  * @since 0.1.0
  */
@@ -16,19 +16,19 @@ public enum Cardinality {
 	 *
 	 * @since 0.1.0
 	 */
-	OneToOne("OneToOne"),
+	ONE_TO_ONE("OneToOne"),
 	/**
 	 * a 1:n relation
 	 *
 	 * @since 0.1.0
 	 */
-	OneToMany("OneToMany"),
+	ONE_TO_MANY("OneToMany"),
 	/**
 	 * a m:n relation
 	 *
 	 * @since 0.1.0
 	 */
-	ManyToMany("ManyToMany");
+	MANY_TO_MANY("ManyToMany");
 	
 	/**
 	 * the unique identifier to the {@link Cardinality}

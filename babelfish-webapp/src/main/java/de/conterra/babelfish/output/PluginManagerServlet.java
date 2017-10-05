@@ -191,11 +191,9 @@ public class PluginManagerServlet
 	 *
 	 * @param writer the {@link PrintWriter} to write to
 	 * @param url    the request {@link URL}
-	 * @throws IOException if an {@link IOException} occurred while writing
 	 * @since 0.1.0
 	 */
-	private void writeHeader(PrintWriter writer, String url)
-	throws IOException {
+	private void writeHeader(PrintWriter writer, String url) {
 		String rootPath = ServletUtils.getRootUrl(url, PluginManagerServlet.class.getAnnotation(WebServlet.class).urlPatterns()[0]);
 		
 		writer.println("<!DOCTYPE html>");
@@ -212,18 +210,16 @@ public class PluginManagerServlet
 	 * writes the footer (closing tags, etc.)
 	 *
 	 * @param writer the {@link PrintWriter} to write to
-	 * @throws IOException if an {@link IOException} occurred while writing
 	 * @since 0.1.0
 	 */
-	private void writeFooter(PrintWriter writer)
-	throws IOException {
+	private void writeFooter(PrintWriter writer) {
 		writer.println("</body></html>");
 	}
 	
 	@Override
 	protected void doRequest(HttpServletRequest request, HttpServletResponse response)
 	throws IOException {
-		this.setDefaultHeaders(request, response);
+		this.setDefaultHeaders(response);
 		
 		PrintWriter writer         = response.getWriter();
 		String      rootPath       = ServletUtils.getRootUrl(ServletUtils.getUrl(request), PluginManagerServlet.class.getAnnotation(WebServlet.class).urlPatterns()[0]);
@@ -235,7 +231,7 @@ public class PluginManagerServlet
 		writer.println("<h1 align=\"center\">Plugin Manager</h1>");
 		writer.println("<h2>Loaded Plugins</h2>");
 		writer.println("<table border=\"1\"><thead><tr><th>Plugin</th><th>Operations</th></tr></thead><tbody>");
-		if (plugins.size() > 0) {
+		if (!(plugins.isEmpty())) {
 			for (Plugin plugin : plugins) {
 				String pluginName = ServiceContainer.toUrlSaveString(plugin.getName());
 				

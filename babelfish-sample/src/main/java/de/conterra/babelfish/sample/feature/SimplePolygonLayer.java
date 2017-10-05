@@ -89,7 +89,7 @@ public class SimplePolygonLayer
 						new DirectPosition2D(crs, 51.9352012, 7.6525288),
 						new DirectPosition2D(crs, 51.9352201, 7.6525002),
 						new DirectPosition2D(crs, 51.9352943, 7.652628),
-				};
+						};
 		Position[][] interior = new Position[][]
 				{
 						new DirectPosition[]
@@ -102,10 +102,10 @@ public class SimplePolygonLayer
 										new DirectPosition2D(crs, 51.9350057, 7.6523041),
 										new DirectPosition2D(crs, 51.9349703, 7.652358),
 										new DirectPosition2D(crs, 51.9350655, 7.6525213),
-								},
-				};
-		List<Ring> interiorRings = new LinkedList<>(SimplePolygonLayer.createRings(interior));
-		GeometryFeatureObject<Polygon> polygon = new GeometryFeatureObject<Polygon>(new Polygon(new PolygonImpl(new SurfaceBoundaryImpl(crs, GeoUtils.createRing(exterior), interiorRings))));
+										},
+						};
+		List<Ring>                     interiorRings = new LinkedList<>(SimplePolygonLayer.createRings(interior));
+		GeometryFeatureObject<Polygon> polygon       = new GeometryFeatureObject<>(new Polygon(new PolygonImpl(new SurfaceBoundaryImpl(crs, GeoUtils.createRing(exterior), interiorRings))));
 		polygon.addAttribute(LayerWrapper.DEFAULT_OBJECT_ID_FIELD, 11);
 		polygon.addAttribute(SimpleField.TYPE_FIELD, "building");
 		polygon.addAttribute(SimpleField.NAME_FIELD, "Deilmannpark");
@@ -136,7 +136,7 @@ public class SimplePolygonLayer
 						new DirectPosition2D(crs, 51.9348278, 7.6530985),
 						new DirectPosition2D(crs, 51.9348632, 7.6530453),
 						new DirectPosition2D(crs, 51.9349371, 7.6531722),
-				};
+						};
 		interior = new Position[][]
 				{
 						new DirectPosition[]
@@ -157,10 +157,10 @@ public class SimplePolygonLayer
 										new DirectPosition2D(crs, 51.9347364, 7.6528981),
 										new DirectPosition2D(crs, 51.9347275, 7.6528829),
 										new DirectPosition2D(crs, 51.9347494, 7.6528494),
-								},
-				};
+										},
+						};
 		interiorRings = new LinkedList<>(SimplePolygonLayer.createRings(interior));
-		polygon = new GeometryFeatureObject<Polygon>(new Polygon(new PolygonImpl(new SurfaceBoundaryImpl(crs, GeoUtils.createRing(exterior), interiorRings))));
+		polygon = new GeometryFeatureObject<>(new Polygon(new PolygonImpl(new SurfaceBoundaryImpl(crs, GeoUtils.createRing(exterior), interiorRings))));
 		polygon.addAttribute(LayerWrapper.DEFAULT_OBJECT_ID_FIELD, 12);
 		polygon.addAttribute(SimpleField.TYPE_FIELD, "building");
 		polygon.addAttribute(SimpleField.NAME_FIELD, "Agentur für Arbeit");
@@ -185,12 +185,12 @@ public class SimplePolygonLayer
 						new DirectPosition2D(crs, 51.9346918, 7.6524587),
 						new DirectPosition2D(crs, 51.934423, 7.6528685),
 						new DirectPosition2D(crs, 51.9343728, 7.6527824),
-				};
+						};
 		interior = new Position[][]
 				{
 				};
 		interiorRings = new LinkedList<>(SimplePolygonLayer.createRings(interior));
-		polygon = new GeometryFeatureObject<Polygon>(new Polygon(new PolygonImpl(new SurfaceBoundaryImpl(crs, GeoUtils.createRing(exterior), interiorRings))));
+		polygon = new GeometryFeatureObject<>(new Polygon(new PolygonImpl(new SurfaceBoundaryImpl(crs, GeoUtils.createRing(exterior), interiorRings))));
 		polygon.addAttribute(LayerWrapper.DEFAULT_OBJECT_ID_FIELD, 21);
 		polygon.addAttribute(SimpleField.TYPE_FIELD, "parking");
 		SimplePolygonLayer.polygons.add(new SimpleFeature<>(polygon));
@@ -245,12 +245,12 @@ public class SimplePolygonLayer
 						new DirectPosition2D(crs, 51.9357380, 7.6508973),
 						new DirectPosition2D(crs, 51.9358275, 7.6510251),
 						new DirectPosition2D(crs, 51.9358704, 7.6511354),
-				};
+						};
 		interior = new Position[][]
 				{
 				};
 		interiorRings = new LinkedList<>(SimplePolygonLayer.createRings(interior));
-		polygon = new GeometryFeatureObject<Polygon>(new Polygon(new PolygonImpl(new SurfaceBoundaryImpl(crs, GeoUtils.createRing(exterior), interiorRings))));
+		polygon = new GeometryFeatureObject<>(new Polygon(new PolygonImpl(new SurfaceBoundaryImpl(crs, GeoUtils.createRing(exterior), interiorRings))));
 		polygon.addAttribute(LayerWrapper.DEFAULT_OBJECT_ID_FIELD, 31);
 		polygon.addAttribute(SimpleField.TYPE_FIELD, "water");
 		polygon.addAttribute(SimpleField.NAME_FIELD, "Friedenssee");
@@ -302,8 +302,9 @@ public class SimplePolygonLayer
 	private static Collection<? extends Ring> createRings(Position[][] positions) {
 		List<Ring> result = new LinkedList<>();
 		
-		for (Position[] pos : positions)
+		for (Position[] pos : positions) {
 			result.add(GeoUtils.createRing(pos));
+		}
 		
 		return result;
 	}

@@ -179,7 +179,7 @@ public class GeoUtils {
 	 * @since 0.1.0
 	 */
 	public static int decodeEpsg(String wkt) {
-		String str = wkt.substring(wkt.indexOf("[") + 1, wkt.lastIndexOf("]"));
+		String str = wkt.substring(wkt.indexOf('[') + 1, wkt.lastIndexOf(']'));
 		
 		int     count = 0;
 		boolean run   = true;
@@ -196,7 +196,7 @@ public class GeoUtils {
 					if (count <= 0 && checkStr.startsWith("AUTHORITY")) {
 						log.debug("Found authority of the root WKT element.");
 						
-						String authStr = checkStr.substring(checkStr.indexOf("[") + 1, checkStr.indexOf("]"));
+						String authStr = checkStr.substring(checkStr.indexOf('[') + 1, checkStr.indexOf(']'));
 						authStr = authStr.replaceAll("[ \"]", StringUtils.EMPTY);
 						String[] strs = authStr.split(",");
 						

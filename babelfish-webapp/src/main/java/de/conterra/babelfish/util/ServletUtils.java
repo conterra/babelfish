@@ -35,16 +35,17 @@ public class ServletUtils {
 	 * @since 0.1.0
 	 */
 	public static String getPathWithParameters(String path, Map<? extends String, ? extends String[]> parameters) {
-		String result = path;
+		StringBuilder builder = new StringBuilder(path);
 		
 		for (String key : parameters.keySet()) {
 			log.debug("Add parameter " + key + " to the URL.");
-			for (String value : (String[]) (parameters.get(key)))
-				result += "&" + key + "=" + value;
+			for (String value : (String[]) (parameters.get(key))) {
+				builder.append("&" + key + "=" + value);
+			}
 		}
 		
 		log.debug("Replace first '&' in URL to '?'.");
-		result = result.replaceFirst("&", "?");
+		String result = builder.toString().replaceFirst("&", "?");
 		
 		return result;
 	}
@@ -60,8 +61,9 @@ public class ServletUtils {
 	public static String getUrl(HttpServletRequest request) {
 		String baseUrl = request.getScheme() + "://" + request.getServerName();
 		
-		if (request.getServerPort() != 80 && request.getServerPort() != 443)
+		if (request.getServerPort() != 80 && request.getServerPort() != 443) {
 			baseUrl += ":" + request.getServerPort();
+		}
 		
 		baseUrl += request.getContextPath();
 		
@@ -78,8 +80,9 @@ public class ServletUtils {
 	 * @since 0.1.0
 	 */
 	public static String getRootUrl(String requestUrl, String servletPath) {
-		if (requestUrl.endsWith(servletPath))
+		if (requestUrl.endsWith(servletPath)) {
 			return requestUrl.substring(0, requestUrl.length() - servletPath.length());
+		}
 		
 		return requestUrl;
 	}

@@ -58,26 +58,27 @@ public class SimplePopup
 	
 	@Override
 	public String getContent() {
-		String result = "<html>"
-				+ " <body>"
-				+ "  <h2>Object-Info</h2>"
-				+ "  <p>Object: <b>" + this.objectName + "</b></p>"
-				+ "  <table>"
-				+ "   <tr>"
-				+ "    <th>key</th>"
-				+ "    <th>value</th>"
-				+ "   </tr>";
+		StringBuilder builder = new StringBuilder("<html>"
+		                                          + " <body>"
+		                                          + "  <h2>Object-Info</h2>"
+		                                          + "  <p>Object: <b>" + this.objectName + "</b></p>"
+		                                          + "  <table>"
+		                                          + "   <tr>"
+		                                          + "    <th>key</th>"
+		                                          + "    <th>value</th>"
+		                                          + "   </tr>");
 		
-		for (String key : this.attributes.keySet())
-			result += "   <tr>"
-					+ "    <td>" + key + "</td>"
-					+ "    <td>" + this.attributes.get(key) + "</td>"
-					+ "   </tr>";
+		for (String key : this.attributes.keySet()) {
+			builder.append("   <tr>"
+			               + "    <td>" + key + "</td>"
+			               + "    <td>" + this.attributes.get(key) + "</td>"
+			               + "   </tr>");
+		}
 		
-		result += "  </table>"
-				+ " </body>"
-				+ "</html>";
+		builder.append("  </table>"
+		               + " </body>"
+		               + "</html>");
 		
-		return result;
+		return builder.toString();
 	}
 }

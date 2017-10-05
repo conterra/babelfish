@@ -133,8 +133,8 @@ public class Initializer {
 				} else if ("JAR".equalsIgnoreCase(scheme)) {
 					String path = uri.toString();
 					path = path.substring(0, path.indexOf("!/"));
-					path = path.substring(0, path.lastIndexOf("."));
-					path = path.substring(path.indexOf(":") + 1);
+					path = path.substring(0, path.lastIndexOf('.'));
+					path = path.substring(path.indexOf(':') + 1);
 					
 					Initializer.BASE_URL = new URL(path);
 				} else if ("JNDI".equalsIgnoreCase(scheme)) {

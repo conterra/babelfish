@@ -59,7 +59,7 @@ public class QueryBuilder {
 		
 		Query<T> query = layer.getQuery();
 		if (query == null) {
-			query = new DefaultQuery<T>();
+			query = new DefaultQuery<>();
 		}
 		
 		Set<Feature<T>> queryFeatures = new LinkedHashSet<>();

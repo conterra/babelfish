@@ -13,6 +13,13 @@ import lombok.Setter;
 public abstract class BaseSymbol
 		extends SymbolObject {
 	/**
+	 * prefix of a symbol type
+	 *
+	 * @since 0.4.0
+	 */
+	public static final String TYPE_PREFIX = "esri";
+	
+	/**
 	 * the {@link ColorSymbol}
 	 *
 	 * @since 0.1.0
@@ -29,6 +36,6 @@ public abstract class BaseSymbol
 	 * @since 0.1.0
 	 */
 	public String getType() {
-		return "esri";
+		return BaseSymbol.TYPE_PREFIX;
 	}
 }
