@@ -1,5 +1,7 @@
 package de.conterra.babelfish.plugin.v10_02.object.domain;
 
+import lombok.Getter;
+
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -7,7 +9,7 @@ import java.util.Map;
  * defines a Coded Value Domain
  *
  * @author ChrissW-R1
- * @version 0.1.0
+ * @version 0.4.0
  * @since 0.1.0
  */
 public class CodedValueDomain
@@ -17,6 +19,7 @@ public class CodedValueDomain
 	 *
 	 * @since 0.1.0
 	 */
+	@Getter
 	private final String name;
 	/**
 	 * the coded values
@@ -51,17 +54,6 @@ public class CodedValueDomain
 	@Override
 	public String getType() {
 		return "codedValue";
-	}
-	
-	/**
-	 * gives the name
-	 *
-	 * @return the name
-	 *
-	 * @since 0.1.0
-	 */
-	public String getName() {
-		return this.name;
 	}
 	
 	/**

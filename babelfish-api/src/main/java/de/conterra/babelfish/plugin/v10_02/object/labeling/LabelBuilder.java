@@ -32,7 +32,7 @@ public class LabelBuilder {
 		
 		result.addContent("labelPlacement", new StringValue(lblClass.getPlacement().toString()));
 		result.addContentNotEmpty("labelExpression", new StringValue(lblClass.getExpression()));
-		result.addContentNotEmpty("useCodedValues", new BooleanValue(lblClass.usesCodedValues()));
+		result.addContentNotEmpty("useCodedValues", new BooleanValue(lblClass.isCodedValues()));
 		result.addContent("symbol", SymbolBuilder.buildNonColor(lblClass.getSymbol()));
 		result.addContentNotEmpty("minScale", new NumberValue(lblClass.getMinScale()));
 		result.addContentNotEmpty("maxScale", new NumberValue(lblClass.getMaxScale()));
@@ -49,13 +49,15 @@ public class LabelBuilder {
 	 * @since 0.1.0
 	 */
 	public static ArrayValue build(LabelingInfo info) {
-		if (info == null)
+		if (info == null) {
 			return null;
+		}
 		
 		ArrayValue result = new ArrayValue();
 		
-		for (LabelClass lblClass : info.getClasses())
+		for (LabelClass lblClass : info.getClasses()) {
 			result.addValueNotNull(LabelBuilder.build(lblClass));
+		}
 		
 		return result;
 	}

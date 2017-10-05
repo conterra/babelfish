@@ -1,5 +1,7 @@
 package de.conterra.babelfish.plugin.v10_02.object.labeling;
 
+import lombok.Getter;
+
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -7,7 +9,7 @@ import java.util.Set;
  * defines a {@link Set} of {@link LabelClass}es
  *
  * @author ChrissW-R1
- * @version 0.1.0
+ * @version 0.4.0
  * @see <a href="http://help.arcgis.com/en/arcgisserver/10.0/apis/rest/label.html">ArcGIS REST API</a>
  * @since 0.1.0
  */
@@ -17,6 +19,7 @@ public class LabelingInfo {
 	 *
 	 * @since 0.1.0
 	 */
+	@Getter
 	private final Set<LabelClass> classes = new LinkedHashSet<>();
 	
 	/**
@@ -36,17 +39,6 @@ public class LabelingInfo {
 	public LabelingInfo(Set<? extends LabelClass> classes) {
 		this();
 		this.classes.addAll(classes);
-	}
-	
-	/**
-	 * gives a {@link Set} of all {@link LabelClass}es
-	 *
-	 * @return a {@link Set} of all {@link LabelClass}es
-	 *
-	 * @since 0.1.0
-	 */
-	public Set<? extends LabelClass> getClasses() {
-		return this.classes;
 	}
 	
 	/**

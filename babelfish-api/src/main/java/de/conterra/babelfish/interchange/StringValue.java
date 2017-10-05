@@ -1,12 +1,14 @@
 package de.conterra.babelfish.interchange;
 
 import de.conterra.babelfish.util.StringUtils;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * defines a {@link Value}, which contains a {@link String}
  *
  * @author ChrissW-R1
- * @version 0.1.0
+ * @version 0.4.0
  * @since 0.1.0
  */
 public class StringValue
@@ -16,6 +18,8 @@ public class StringValue
 	 *
 	 * @since 0.1.0
 	 */
+	@Getter
+	@Setter
 	private String value;
 	
 	/**
@@ -35,27 +39,6 @@ public class StringValue
 	 */
 	public StringValue() {
 		this(StringUtils.EMPTY);
-	}
-	
-	/**
-	 * gives the value
-	 *
-	 * @return the value
-	 *
-	 * @since 0.1.0
-	 */
-	public String getValue() {
-		return this.value;
-	}
-	
-	/**
-	 * sets the value
-	 *
-	 * @param value the value to set
-	 * @since 0.1.0
-	 */
-	public void setValue(String value) {
-		this.value = value;
 	}
 	
 	@Override

@@ -1,6 +1,7 @@
 package de.conterra.babelfish.plugin;
 
 import de.conterra.babelfish.util.DataUtils;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.net.URLClassLoader;
@@ -21,18 +22,21 @@ public class PluginWrapper
 	 *
 	 * @since 0.1.0
 	 */
+	@Getter
 	private final Plugin         plugin;
 	/**
 	 * the {@link JarFile}
 	 *
 	 * @since 0.1.0
 	 */
+	@Getter
 	private final JarFile        file;
 	/**
 	 * the {@link URLClassLoader}
 	 *
 	 * @since 0.1.0
 	 */
+	@Getter
 	private final URLClassLoader classLoader;
 	
 	/**
@@ -96,38 +100,5 @@ public class PluginWrapper
 		}
 		
 		return result;
-	}
-	
-	/**
-	 * gives the {@link Plugin}
-	 *
-	 * @return the {@link Plugin}
-	 *
-	 * @since 0.1.0
-	 */
-	public Plugin getPlugin() {
-		return this.plugin;
-	}
-	
-	/**
-	 * gives the {@link JarFile}
-	 *
-	 * @return the {@link JarFile}
-	 *
-	 * @since 0.1.0
-	 */
-	public JarFile getFile() {
-		return this.file;
-	}
-	
-	/**
-	 * gives the {@link URLClassLoader}
-	 *
-	 * @return the {@link URLClassLoader}
-	 *
-	 * @since 0.1.0
-	 */
-	public URLClassLoader getClassLoader() {
-		return this.classLoader;
 	}
 }

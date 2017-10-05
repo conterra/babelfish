@@ -1,10 +1,13 @@
 package de.conterra.babelfish.plugin.v10_02.object.symbol;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * defines the base version of a {@link SymbolObject}
  *
  * @author ChrissW-R1
- * @version 0.1.0
+ * @version 0.4.0
  * @since 0.1.0
  */
 public abstract class BaseSymbol
@@ -14,6 +17,8 @@ public abstract class BaseSymbol
 	 *
 	 * @since 0.1.0
 	 */
+	@Getter
+	@Setter
 	private ColorSymbol color = null;
 	
 	/**
@@ -25,26 +30,5 @@ public abstract class BaseSymbol
 	 */
 	public String getType() {
 		return "esri";
-	}
-	
-	/**
-	 * gives the {@link ColorSymbol}
-	 *
-	 * @return the {@link ColorSymbol}
-	 *
-	 * @since 0.1.0
-	 */
-	public ColorSymbol getColor() {
-		return this.color;
-	}
-	
-	/**
-	 * sets the {@link ColorSymbol}
-	 *
-	 * @param color the {@link ColorSymbol} to set
-	 * @since 0.1.0
-	 */
-	public void setColor(ColorSymbol color) {
-		this.color = color;
 	}
 }

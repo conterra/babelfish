@@ -1,5 +1,7 @@
 package de.conterra.babelfish.interchange;
 
+import lombok.Getter;
+
 import java.awt.*;
 import java.io.File;
 
@@ -8,7 +10,7 @@ import java.io.File;
  * For example, to send {@link Image}s or {@link File}s
  *
  * @author ChrissW-R1
- * @version 0.1.0
+ * @version 0.4.0
  * @since 0.1.0
  */
 public class DataValue
@@ -18,6 +20,7 @@ public class DataValue
 	 *
 	 * @since 0.1.0
 	 */
+	@Getter
 	private final byte[] data;
 	
 	/**
@@ -27,25 +30,15 @@ public class DataValue
 	 * @since 0.1.0
 	 */
 	public DataValue(byte[] data) {
-		if (data != null)
+		if (data != null) {
 			this.data = data;
-		else
+		} else {
 			this.data = new byte[0];
+		}
 	}
 	
 	@Override
 	public boolean isEmpty() {
 		return this.data.length <= 0;
-	}
-	
-	/**
-	 * gives the data
-	 *
-	 * @return the data, which will be sent to the client
-	 *
-	 * @since 0.1.0
-	 */
-	public byte[] getData() {
-		return this.data;
 	}
 }

@@ -1,12 +1,15 @@
 package de.conterra.babelfish.plugin.v10_02.object.symbol;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.awt.*;
 
 /**
  * defines a Picture Fill Symbol
  *
  * @author ChrissW-R1
- * @version 0.1.0
+ * @version 0.4.0
  * @since 0.1.0
  */
 public class PictureFillSymbol
@@ -16,18 +19,24 @@ public class PictureFillSymbol
 	 *
 	 * @since 0.1.0
 	 */
+	@Getter
+	@Setter
 	private SimpleLineSymbol outline;
 	/**
 	 * the scale of the {@link Image} in x-direction
 	 *
 	 * @since 0.1.0
 	 */
+	@Getter
+	@Setter
 	private double xScale = 0;
 	/**
 	 * the scale of the {@link Image} in y-direction
 	 *
 	 * @since 0.1.0
 	 */
+	@Getter
+	@Setter
 	private double yScale = 0;
 	
 	/**
@@ -43,68 +52,5 @@ public class PictureFillSymbol
 	@Override
 	public String getType() {
 		return super.getType() + "PFS";
-	}
-	
-	/**
-	 * gives the outline
-	 *
-	 * @return the outline
-	 *
-	 * @since 0.1.0
-	 */
-	public SimpleLineSymbol getOutline() {
-		return this.outline;
-	}
-	
-	/**
-	 * sets the outline
-	 *
-	 * @param outline the outline to set
-	 * @since 0.1.0
-	 */
-	public void setOutline(SimpleLineSymbol outline) {
-		this.outline = outline;
-	}
-	
-	/**
-	 * gives the scale of the {@link Image} in x-direction
-	 *
-	 * @return the scale in x-direction
-	 *
-	 * @since 0.1.0
-	 */
-	public double getxScale() {
-		return this.xScale;
-	}
-	
-	/**
-	 * sets the scale of the {@link Image} in x-direction
-	 *
-	 * @param xScale the scale to set
-	 * @since 0.1.0
-	 */
-	public void setxScale(double xScale) {
-		this.xScale = xScale;
-	}
-	
-	/**
-	 * gives the scale of the {@link Image} in y-direction
-	 *
-	 * @return the scale of the {@link Image} in y-direction
-	 *
-	 * @since 0.1.0
-	 */
-	public double getyScale() {
-		return this.yScale;
-	}
-	
-	/**
-	 * sets the scale of the {@link Image} in y-direction
-	 *
-	 * @param yScale the scale to set
-	 * @since 0.1.0
-	 */
-	public void setyScale(double yScale) {
-		this.yScale = yScale;
 	}
 }

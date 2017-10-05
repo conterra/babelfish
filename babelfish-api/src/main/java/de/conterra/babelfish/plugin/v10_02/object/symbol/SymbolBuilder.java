@@ -95,8 +95,8 @@ public class SymbolBuilder {
 		ObjectValue result = SymbolBuilder.buildBase(symbol);
 		
 		result.addContentNotEmpty("angle", new NumberValue(symbol.getAngle()));
-		result.addContentNotEmpty("xoffset", new NumberValue(symbol.getxOffset()));
-		result.addContentNotEmpty("yoffset", new NumberValue(symbol.getyOffset()));
+		result.addContentNotEmpty("xoffset", new NumberValue(symbol.getXOffset()));
+		result.addContentNotEmpty("yoffset", new NumberValue(symbol.getYOffset()));
 		
 		return result;
 	}
@@ -148,8 +148,8 @@ public class SymbolBuilder {
 			
 			result.addContentNotEmpty("size", new NumberValue(subSymbol.getSize()));
 			result.addContentNotEmpty("angle", new NumberValue(subSymbol.getAngle()));
-			result.addContentNotEmpty("xoffset", new NumberValue(subSymbol.getxOffset()));
-			result.addContentNotEmpty("yoffset", new NumberValue(subSymbol.getyOffset()));
+			result.addContentNotEmpty("xoffset", new NumberValue(subSymbol.getXOffset()));
+			result.addContentNotEmpty("yoffset", new NumberValue(subSymbol.getYOffset()));
 			result.addContentNotEmpty("outline", SymbolBuilder.buildNonColor(subSymbol.getOutline()));
 		} else if (symbol instanceof SimpleLineSymbol) {
 			SimpleLineSymbol subSymbol = (SimpleLineSymbol) symbol;
@@ -163,15 +163,15 @@ public class SymbolBuilder {
 			PictureFillSymbol subSymbol = (PictureFillSymbol) symbol;
 			
 			result.addContent("outline", SymbolBuilder.buildNonColor(subSymbol.getOutline()), "width", true);
-			result.addContentNotEmpty("xscale", new NumberValue(subSymbol.getxScale()));
-			result.addContentNotEmpty("yscale", new NumberValue(subSymbol.getyScale()));
+			result.addContentNotEmpty("xscale", new NumberValue(subSymbol.getXScale()));
+			result.addContentNotEmpty("yscale", new NumberValue(subSymbol.getYScale()));
 		} else if (symbol instanceof TextSymbol) {
 			TextSymbol subSymbol = (TextSymbol) symbol;
 			
 			result.addContent("backgroundColor", SymbolBuilder.buildColor(subSymbol.getBgColor()), "angle", false);
 			result.addContent("borderLineColor", SymbolBuilder.buildColor(subSymbol.getBorderLineColor()), "angle", false);
-			result.addContent("verticalAlignment", new StringValue(subSymbol.getvAlign().toString()), "angle", false);
-			result.addContent("horizontalAlignment", new StringValue(subSymbol.gethAlign().toString()), "angle", false);
+			result.addContent("verticalAlignment", new StringValue(subSymbol.getVAlign().toString()), "angle", false);
+			result.addContent("horizontalAlignment", new StringValue(subSymbol.getHAlign().toString()), "angle", false);
 			result.addContent("rightToLeft", new BooleanValue(subSymbol.isRightToLeft()), "angle", false);
 			result.addContent("kerning", new BooleanValue(subSymbol.isKerning()));
 			

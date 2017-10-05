@@ -9,6 +9,9 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.security.AccessController;
+import java.security.PrivilegedActionException;
+import java.security.PrivilegedExceptionAction;
 import java.util.Enumeration;
 import java.util.LinkedHashSet;
 import java.util.Map;
@@ -179,10 +182,12 @@ public class PluginAdapter {
 		try {
 			JarFile jarFile = new JarFile(file);
 			
-			URLClassLoader cl = new URLClassLoader(new URL[]
-					                                       {
-							                                       new URL("jar:file:" + path + "!/")
-					                                       }, PluginAdapter.class.getClassLoader());
+			URLClassLoader cl = AccessController.doPrivileged((PrivilegedExceptionAction<URLClassLoader>) () ->
+					new URLClassLoader(
+							new URL[]{
+									new URL("jar:file:" + path + "!/")
+							}, PluginAdapter.class.getClassLoader()
+					));
 			
 			boolean noPlugin = true;
 			
@@ -238,10 +243,11 @@ public class PluginAdapter {
 			if (noPlugin) {
 				throw new IOException("Couldn't found any plugin implementation in file " + path + "!");
 			}
-		} catch (MalformedURLException e) {
-			String msg = "An error occurred on create a class loader of file " + path + "!";
-			log.error(msg, e);
-			throw new IOException(msg, e);
+		} catch (PrivilegedActionException e) {
+			Exception urlException = e.getException();
+			String    msg          = "An error occurred on create a class loader of file " + path + "!";
+			log.error(msg, urlException);
+			throw new IOException(msg, urlException);
 		} catch (SecurityException e) {
 			String msg = "Have no access rights of the file " + path + "!";
 			log.error(msg, e);

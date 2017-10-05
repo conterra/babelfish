@@ -1,10 +1,12 @@
 package de.conterra.babelfish.interchange;
 
+import lombok.Setter;
+
 /**
  * defines a {@link Value}, which stores a {@code boolean}
  *
  * @author ChrissW-R1
- * @version 0.1.0
+ * @version 0.4.0
  * @since 0.1.0
  */
 public class BooleanValue
@@ -14,6 +16,7 @@ public class BooleanValue
 	 *
 	 * @since 0.1.0
 	 */
+	@Setter
 	private boolean value;
 	
 	/**
@@ -35,16 +38,6 @@ public class BooleanValue
 	 */
 	public boolean getValue() {
 		return this.value;
-	}
-	
-	/**
-	 * sets the value
-	 *
-	 * @param value the value to set
-	 * @since 0.1.0
-	 */
-	public void setValue(boolean value) {
-		this.value = value;
 	}
 	
 	@Override

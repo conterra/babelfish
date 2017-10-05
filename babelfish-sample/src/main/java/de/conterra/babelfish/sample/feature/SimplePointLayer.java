@@ -22,7 +22,7 @@ import java.util.Set;
  * defines {@link SimpleFeatureLayer} with {@link Point}s
  *
  * @author ChrissW-R1
- * @version 0.1.0
+ * @version 0.4.0
  * @since 0.1.0
  */
 public class SimplePointLayer
@@ -42,48 +42,16 @@ public class SimplePointLayer
 			crs = null;
 		}
 		
-		GeometryFeatureObject<Point> point = new GeometryFeatureObject<>(new Point(new PointImpl(new DirectPosition2D(crs, 51.9350718, 7.6513469))));
-		point.addAttribute(SimpleField.TYPE_FIELD, "railway_crossing");
-		SimplePointLayer.points.add(new SimpleFeature<>(point));
-		
-		point = new GeometryFeatureObject<>(new Point(new PointImpl(new DirectPosition2D(crs, 51.9352402, 7.6498429))));
-		point.addAttribute(SimpleField.TYPE_FIELD, "railway_crossing");
-		SimplePointLayer.points.add(new SimpleFeature<>(point));
-		
-		point = new GeometryFeatureObject<>(new Point(new PointImpl(new DirectPosition2D(crs, 51.9348068, 7.6517225))));
-		point.addAttribute(SimpleField.TYPE_FIELD, "street_lamp");
-		SimplePointLayer.points.add(new SimpleFeature<>(point));
-		
-		point = new GeometryFeatureObject<>(new Point(new PointImpl(new DirectPosition2D(crs, 51.9345782, 7.6520727))));
-		point.addAttribute(SimpleField.TYPE_FIELD, "street_lamp");
-		SimplePointLayer.points.add(new SimpleFeature<>(point));
-		
-		point = new GeometryFeatureObject<>(new Point(new PointImpl(new DirectPosition2D(crs, 51.9343469, 7.6524293))));
-		point.addAttribute(SimpleField.TYPE_FIELD, "street_lamp");
-		SimplePointLayer.points.add(new SimpleFeature<>(point));
-		
-		point = new GeometryFeatureObject<>(new Point(new PointImpl(new DirectPosition2D(crs, 51.934667, 7.6522797))));
-		point.addAttribute(SimpleField.TYPE_FIELD, "bollard");
-		SimplePointLayer.points.add(new SimpleFeature<>(point));
-		
-		point = new GeometryFeatureObject<>(new Point(new PointImpl(new DirectPosition2D(crs, 51.9345116, 7.6525727))));
-		point.addAttribute(SimpleField.TYPE_FIELD, "bollard");
-		SimplePointLayer.points.add(new SimpleFeature<>(point));
-		
-		point = new GeometryFeatureObject<>(new Point(new PointImpl(new DirectPosition2D(crs, 51.9342212, 7.6526496))));
-		point.addAttribute(SimpleField.TYPE_FIELD, "bus_stop");
-		point.addAttribute(SimpleField.NAME_FIELD, "Friedenspark");
-		SimplePointLayer.points.add(new SimpleFeature<>(point));
-		
-		point = new GeometryFeatureObject<>(new Point(new PointImpl(new DirectPosition2D(crs, 51.9342608, 7.6530949))));
-		point.addAttribute(SimpleField.TYPE_FIELD, "bus_stop");
-		point.addAttribute(SimpleField.NAME_FIELD, "Friedenspark");
-		SimplePointLayer.points.add(new SimpleFeature<>(point));
-		
-		point = new GeometryFeatureObject<>(new Point(new PointImpl(new DirectPosition2D(crs, 51.9353012, 7.6502938))));
-		point.addAttribute(SimpleField.TYPE_FIELD, "tree");
-		point.addAttribute(SimpleField.NAME_FIELD, "Friedenskastanie");
-		SimplePointLayer.points.add(new SimpleFeature<>(point));
+		SimplePointLayer.createPoint(crs, 51.9350718, 7.6513469, "railway_crossing", null);
+		SimplePointLayer.createPoint(crs, 51.9352402, 7.6498429, "railway_crossing", null);
+		SimplePointLayer.createPoint(crs, 51.9348068, 7.6517225, "street_lamp", null);
+		SimplePointLayer.createPoint(crs, 51.9345782, 7.6520727, "street_lamp", null);
+		SimplePointLayer.createPoint(crs, 51.9343469, 7.6524293, "street_lamp", null);
+		SimplePointLayer.createPoint(crs, 51.9346670, 7.6522797, "bollard", null);
+		SimplePointLayer.createPoint(crs, 51.9345116, 7.6525727, "bollard", null);
+		SimplePointLayer.createPoint(crs, 51.9342212, 7.6526496, "bus_stop", "Friedenspark");
+		SimplePointLayer.createPoint(crs, 51.9342608, 7.6530949, "bus_stop", "Friedenspark");
+		SimplePointLayer.createPoint(crs, 51.9353012, 7.6502938, "tree", "Friedenskastanie");
 	}
 	
 	/**
@@ -120,5 +88,26 @@ public class SimplePointLayer
 	@Override
 	public Set<? extends Feature<GeometryFeatureObject<Point>>> getFeatures() {
 		return new LinkedHashSet<>(SimplePointLayer.points);
+	}
+	
+	/**
+	 * creates a new {@link Point} and adds it to the {@link Set}
+	 *
+	 * @param crs  the {@link CoordinateReferenceSystem}
+	 * @param x    the x-ordinate
+	 * @param y    the y-ordinate
+	 * @param type the type {@link String}
+	 * @param name the name of the {@link Feature}
+	 * @since 0.4.0
+	 */
+	private static void createPoint(CoordinateReferenceSystem crs, double x, double y, String type, String name) {
+		GeometryFeatureObject<Point> point = new GeometryFeatureObject<>(new Point(new PointImpl(new DirectPosition2D(crs, x, y))));
+		point.addAttribute(SimpleField.TYPE_FIELD, type);
+		
+		if (!(name == null || name.isEmpty())) {
+			point.addAttribute(SimpleField.NAME_FIELD, name);
+		}
+		
+		SimplePointLayer.points.add(new SimpleFeature<>(point));
 	}
 }

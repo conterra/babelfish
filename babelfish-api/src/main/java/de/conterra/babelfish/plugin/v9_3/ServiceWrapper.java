@@ -45,12 +45,17 @@ public class ServiceWrapper
 	
 	@Override
 	public ServiceBuilder getBuilder(String restName)
-			throws ServiceNotAvailableException {
+	throws ServiceNotAvailableException {
+		ServiceBuilder builder;
+		
 		switch (restName) {
 			case MapService.REST_NAME:
 				log.error(MapService.REST_NAME + " currently not implemented.");
 			default:
 				throw new ServiceNotAvailableException("Unkown service type! No registered handler!");
 		}
+		
+		/*log.debug("Used builder " + builder.getClass().getName() + " for " + restName + ".");
+		return builder;*/
 	}
 }

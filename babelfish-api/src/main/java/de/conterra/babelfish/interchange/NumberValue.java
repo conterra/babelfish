@@ -1,10 +1,13 @@
 package de.conterra.babelfish.interchange;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * defines a {@link Value}, which stores a {@link Number}
  *
  * @author ChrissW-R1
- * @version 0.1.0
+ * @version 0.4.0
  * @since 0.1.0
  */
 public class NumberValue
@@ -14,6 +17,8 @@ public class NumberValue
 	 *
 	 * @since 0.1.0
 	 */
+	@Getter
+	@Setter
 	private Number value;
 	
 	/**
@@ -23,27 +28,6 @@ public class NumberValue
 	 * @since 0.1.0
 	 */
 	public NumberValue(Number value) {
-		this.value = value;
-	}
-	
-	/**
-	 * gives the value
-	 *
-	 * @return the value
-	 *
-	 * @since 0.1.0
-	 */
-	public Number getValue() {
-		return this.value;
-	}
-	
-	/**
-	 * sets the value
-	 *
-	 * @param value the value to set
-	 * @since 0.1.0
-	 */
-	public void setValue(Number value) {
 		this.value = value;
 	}
 	

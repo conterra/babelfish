@@ -13,12 +13,14 @@ import org.geotools.geometry.iso.primitive.CurveImpl;
 import org.geotools.geometry.iso.primitive.PointImpl;
 import org.geotools.geometry.iso.primitive.RingImpl;
 import org.geotools.referencing.CRS;
+import org.geotools.referencing.GeodeticCalculator;
 import org.geotools.referencing.crs.DefaultGeographicCRS;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.opengis.geometry.DirectPosition;
 import org.opengis.geometry.Envelope;
 import org.opengis.geometry.MismatchedDimensionException;
+import org.opengis.geometry.coordinate.LineString;
 import org.opengis.geometry.coordinate.Position;
 import org.opengis.geometry.primitive.OrientableCurve;
 import org.opengis.geometry.primitive.Point;
@@ -343,6 +345,54 @@ public class GeoUtils {
 			
 			return new Coordinate(pos.getOrdinate(0), pos.getOrdinate(1));
 		}
+	}
+	
+	/**
+	 * calculates the distance between two {@link Position}s
+	 *
+	 * @param pos1 the first {@link Position}
+	 * @param pos2 the second {@link Position}
+	 * @return the distance between {@code pos1} and {@code pos2} in meters
+	 *
+	 * @throws TransformException if the start and end point couldn't transformed on same base
+	 * @since 0.4.0
+	 */
+	public static double getDistance(Position pos1, Position pos2)
+	throws TransformException {
+		DirectPosition dirPos1 = pos1.getDirectPosition();
+		DirectPosition dirPos2 = pos2.getDirectPosition();
+		
+		try {
+			GeodeticCalculator geoCalc = null;
+			
+			try {
+				geoCalc = new GeodeticCalculator(dirPos1.getCoordinateReferenceSystem());
+				geoCalc.setStartingPosition(dirPos1);
+				geoCalc.setDestinationPosition(dirPos2);
+			} catch (TransformException e1) {
+				geoCalc = new GeodeticCalculator(dirPos2.getCoordinateReferenceSystem());
+				geoCalc.setStartingPosition(dirPos2);
+				geoCalc.setDestinationPosition(dirPos1);
+			}
+			
+			return Math.abs(geoCalc.getOrthodromicDistance());
+		} catch (TransformException | IllegalStateException e) {
+			throw new TransformException("Couldn't transform " + pos1 + " and " + pos2 + " on same base!", e);
+		}
+	}
+	
+	/**
+	 * checks, if a {@link LineString} is closed
+	 *
+	 * @param line the {@link LineString} to check
+	 * @return {@code true} if {@code line} is closed, {@code false} otherwise
+	 *
+	 * @throws TransformException if the start and end point couldn't transformed on same base
+	 * @since 0.4.0
+	 */
+	public static boolean isClosed(LineString line)
+	throws TransformException {
+		return GeoUtils.getDistance(line.getStartPoint(), line.getEndPoint()) <= 0;
 	}
 	
 	/**
