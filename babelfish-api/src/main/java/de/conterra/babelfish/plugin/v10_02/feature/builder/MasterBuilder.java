@@ -44,28 +44,8 @@ public class MasterBuilder
 		
 		FeatureService featureService = (FeatureService) service;
 		
-		CoordinateReferenceSystem outCrs;
-		String                    parameter = parameters.get("outSR");
-		if (parameter == null) {
-			parameter = "102100";
-		}
-		try {
-			outCrs = GeoUtils.decodeCrs(parameter);
-		} catch (FactoryException e) {
-			try {
-				outCrs = JsonParser.parseCrs(new JSONObject(parameter));
-			} catch (JSONException e2) {
-				outCrs = null;
-			}
-		}
-		if (outCrs == null) {
-			log.warn("Wasn't able to decode outSR parameter " + parameter + " as a CRS!");
-		} else {
-			log.debug("Decoded given outSR parameter " + parameter + " as the following CRS: " + outCrs.toWKT());
-		}
-		
 		CoordinateReferenceSystem inCrs;
-		parameter = parameters.get("inSR");
+		String                    parameter = parameters.get("inSR");
 		try {
 			inCrs = GeoUtils.decodeCrs(parameter);
 		} catch (FactoryException e) {
@@ -81,6 +61,35 @@ public class MasterBuilder
 		}
 		if (inCrs != null) {
 			log.debug("Decoded given inSR parameter " + parameter + " as the following CRS: " + inCrs.toWKT());
+		}
+		
+		CoordinateReferenceSystem outCrs;
+		parameter = parameters.get("outSR");
+		try {
+			if (parameter == null || parameter.isEmpty() || (new JSONObject(parameter)).length() <= 0) {
+				parameter = "102100";
+			}
+		} catch (JSONException e) {
+		}
+		try {
+			outCrs = GeoUtils.decodeCrs(parameter);
+		} catch (FactoryException e) {
+			try {
+				outCrs = JsonParser.parseCrs(new JSONObject(parameter));
+			} catch (JSONException e2) {
+				outCrs = null;
+			}
+		}
+		if (outCrs == null) {
+			log.warn("Wasn't able to decode outSR parameter " + parameter + " as a CRS! Using inSR instead!");
+			
+			outCrs = inCrs;
+		} else {
+			log.debug("Decoded given outSR parameter " + parameter + " as the following CRS: " + outCrs.toWKT());
+		}
+		
+		if (inCrs == null) {
+			inCrs = outCrs;
 		}
 		
 		parameter = parameters.get("geometry");

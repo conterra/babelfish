@@ -76,17 +76,4 @@ public class LabelClass {
 		this.expression = expression;
 		this.symbol = symbol;
 	}
-	
-	/**
-	 * is this {@link LabelClass} using coded values?
-	 *
-	 * @return {@code true}, if this {@link LabelClass} using coded values
-	 *
-	 * @since 0.1.0
-	 * @deprecated Use {@link LabelClass#isCodedValues()} instead
-	 */
-	@Deprecated
-	public boolean usesCodedValues() {
-		return this.codedValues;
-	}
 }
